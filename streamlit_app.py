@@ -152,23 +152,21 @@ def load_outlet_master():
 
     worksheet = get_master_sheet()
 
-    records = worksheet.get_all_records()
+    # Read only columns A, B and C.
+    # This avoids problems caused by blank/extra worksheet columns.
+    values = worksheet.get("A:C")
 
     outlets = {}
 
-    for row in records:
+    # Row 1 contains the headings, so start from Row 2.
+    for row in values[1:]:
 
-        code = str(
-            row.get("Outlet Code", "")
-        ).strip().upper()
+        if len(row) < 3:
+            row = row + [""] * (3 - len(row))
 
-        name = str(
-            row.get("Outlet Name", "")
-        ).strip()
-
-        active = str(
-            row.get("Active", "Yes")
-        ).strip().lower()
+        code = str(row[0]).strip().upper()
+        name = str(row[1]).strip()
+        active = str(row[2]).strip().lower()
 
         if (
             code
