@@ -2,17 +2,21 @@ import streamlit as st
 import pandas as pd
 import re
 from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
+
 import gspread
 from google.oauth2.service_account import Credentials
 
+
 # ============================================================
-# FINORA - LOBBY ACTIVITY MANAGEMENT
+# FINORA CONFIGURATION
 # ============================================================
 
 st.set_page_config(
     page_title="FINORA | Lobby Activity",
     page_icon="💠",
     layout="wide",
+    initial_sidebar_state="collapsed",
 )
 
 ACTIVITY_SHEET = "Activity"
@@ -31,23 +35,145 @@ ACTIVITY_HEADERS = [
 
 
 # ============================================================
-# GOOGLE SHEETS CONNECTION
+# DESIGN
+# ============================================================
+
+st.markdown(
+    """
+<style>
+
+/* Compact centered dashboard */
+.block-container {
+    max-width: 1250px;
+    padding-top: 0.8rem;
+    padding-bottom: 2rem;
+}
+
+/* Header */
+.finora-header {
+    background: linear-gradient(120deg,#08223b,#0b5961);
+    padding: 18px 24px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+}
+
+.finora-title {
+    color: white;
+    font-size: 30px;
+    font-weight: 800;
+    margin: 0;
+}
+
+.finora-subtitle {
+    color: #d9f5f1;
+    font-size: 14px;
+    margin-top: 3px;
+}
+
+/* Reduce whitespace */
+h1, h2, h3 {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Compact metrics */
+div[data-testid="stMetric"] {
+    border: 1px solid #e5e7eb;
+    background: white;
+    padding: 9px 12px;
+    border-radius: 12px;
+    min-height: 85px;
+}
+
+div[data-testid="stMetricLabel"] {
+    font-size: 12px;
+}
+
+div[data-testid="stMetricValue"] {
+    font-size: 23px;
+}
+
+/* Status boxes */
+.status-box {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px 16px;
+    background: white;
+    margin-bottom: 10px;
+}
+
+.pending-box {
+    border-left: 5px solid #e24a4a;
+}
+
+.received-box {
+    border-left: 5px solid #25a56a;
+}
+
+.small-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 7px;
+}
+
+.code-pill {
+    display: inline-block;
+    padding: 4px 9px;
+    margin: 3px;
+    border-radius: 12px;
+    background: #f3f4f6;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Make dataframe area compact */
+div[data-testid="stDataFrame"] {
+    border-radius: 10px;
+}
+
+/* Hide Streamlit decoration */
+#MainMenu {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+<div class="finora-header">
+    <div class="finora-title">FINORA</div>
+    <div class="finora-subtitle">
+        Lobby Activity • Outlet Monitoring Dashboard
+    </div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+
+# ============================================================
+# GOOGLE SHEETS
 # ============================================================
 
 @st.cache_resource
 def get_spreadsheet():
 
-    service_account_info = dict(
+    info = dict(
         st.secrets["google_service_account"]
     )
 
-    scopes = [
-        "https://www.googleapis.com/auth/spreadsheets"
-    ]
-
     credentials = Credentials.from_service_account_info(
-        service_account_info,
-        scopes=scopes,
+        info,
+        scopes=[
+            "https://www.googleapis.com/auth/spreadsheets"
+        ],
     )
 
     client = gspread.authorize(credentials)
@@ -58,15 +184,19 @@ def get_spreadsheet():
 
 
 def get_activity_sheet():
-    return get_spreadsheet().worksheet(ACTIVITY_SHEET)
+    return get_spreadsheet().worksheet(
+        ACTIVITY_SHEET
+    )
 
 
 def get_master_sheet():
-    return get_spreadsheet().worksheet(OUTLET_MASTER_SHEET)
+    return get_spreadsheet().worksheet(
+        OUTLET_MASTER_SHEET
+    )
 
 
 # ============================================================
-# BASIC HELPERS
+# HELPERS
 # ============================================================
 
 def clean_number(value):
@@ -74,15 +204,16 @@ def clean_number(value):
     if value is None:
         return 0
 
-    text = str(value)
-
-    text = text.replace(",", "")
-    text = text.replace("₹", "")
-    text = text.strip()
+    text = (
+        str(value)
+        .replace(",", "")
+        .replace("₹", "")
+        .strip()
+    )
 
     match = re.search(
         r"-?\d+(?:\.\d+)?",
-        text
+        text,
     )
 
     if not match:
@@ -90,10 +221,11 @@ def clean_number(value):
 
     number = float(match.group())
 
-    if number.is_integer():
-        return int(number)
-
-    return number
+    return (
+        int(number)
+        if number.is_integer()
+        else number
+    )
 
 
 def money(value):
@@ -106,9 +238,9 @@ def money(value):
 
 def normalize_date(value):
 
-    value = str(value).strip()
+    text = str(value).strip()
 
-    if not value:
+    if not text:
         return ""
 
     formats = [
@@ -125,23 +257,30 @@ def normalize_date(value):
 
         try:
             return datetime.strptime(
-                value,
-                fmt
+                text,
+                fmt,
             ).date().isoformat()
 
         except ValueError:
             pass
 
     try:
-
         return pd.to_datetime(
-            value,
-            dayfirst=True
+            text,
+            dayfirst=True,
         ).date().isoformat()
 
     except Exception:
+        return text
 
-        return value
+
+def now_ist():
+
+    return datetime.now(
+        ZoneInfo("Asia/Kolkata")
+    ).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
 
 
 # ============================================================
@@ -152,32 +291,43 @@ def load_outlet_master():
 
     worksheet = get_master_sheet()
 
-    # Read only columns A, B and C.
-    # This avoids problems caused by blank/extra worksheet columns.
+    # Only A:C are required.
     values = worksheet.get("A:C")
 
     outlets = {}
 
-    # Row 1 contains the headings, so start from Row 2.
+    if len(values) < 2:
+        return outlets
+
     for row in values[1:]:
 
-        if len(row) < 3:
-            row = row + [""] * (3 - len(row))
+        row = row + [""] * (
+            3 - len(row)
+        )
 
-        code = str(row[0]).strip().upper()
-        name = str(row[1]).strip()
-        active = str(row[2]).strip().lower()
+        code = str(
+            row[0]
+        ).strip().upper()
+
+        name = str(
+            row[1]
+        ).strip()
+
+        active = str(
+            row[2]
+        ).strip().lower()
 
         if (
             code
             and name
-            and active in [
+            and active
+            in {
                 "yes",
                 "y",
                 "true",
                 "1",
                 "active",
-            ]
+            }
         ):
             outlets[code] = name
 
@@ -185,7 +335,7 @@ def load_outlet_master():
 
 
 # ============================================================
-# WHATSAPP MESSAGE RECOGNITION
+# WHATSAPP PARSER
 # ============================================================
 
 def extract_field(text, labels):
@@ -195,41 +345,42 @@ def extract_field(text, labels):
         pattern = (
             rf"(?im)^\s*"
             rf"{re.escape(label)}"
-            rf"\s*[:\-]\s*(.+?)\s*$"
+            rf"\s*[:\-]\s*(.*?)\s*$"
         )
 
         match = re.search(
             pattern,
-            text
+            text,
         )
 
         if match:
-            return match.group(1).strip()
+            return (
+                match.group(1)
+                .strip()
+            )
 
     return ""
 
 
 def detect_outlet(text, outlets):
 
-    upper_text = text.upper()
+    upper = text.upper()
 
-    # First detect outlet code
+    # Detect outlet code first
     for code, name in outlets.items():
 
         if re.search(
             rf"(?<![A-Z0-9])"
             rf"{re.escape(code)}"
             rf"(?![A-Z0-9])",
-            upper_text,
+            upper,
         ):
-
             return code, name
 
-    # Then try outlet name
+    # Then outlet name
     for code, name in outlets.items():
 
-        if name.upper() in upper_text:
-
+        if name.upper() in upper:
             return code, name
 
     return None, None
@@ -239,100 +390,96 @@ def parse_activity(text, outlets):
 
     code, name = detect_outlet(
         text,
-        outlets
-    )
-
-    therapist = extract_field(
-        text,
-        [
-            "Therapist",
-            "Therapist Name",
-            "Name of Therapist",
-            "Staff",
-        ],
-    )
-
-    shift = extract_field(
-        text,
-        [
-            "Shift",
-            "Shift Timing",
-            "Shift Timings",
-            "Timing",
-            "Timings",
-        ],
-    )
-
-    guests = clean_number(
-        extract_field(
-            text,
-            [
-                "Guests Interacted",
-                "Guest Interacted",
-                "Guests",
-                "Guest",
-                "No of Guests",
-                "No. of Guests",
-            ],
-        )
-    )
-
-    conversions = clean_number(
-        extract_field(
-            text,
-            [
-                "Conversions",
-                "Conversion",
-                "Converted",
-            ],
-        )
-    )
-
-    appointment = clean_number(
-        extract_field(
-            text,
-            [
-                "Appointment Value",
-                "Appointment Amount",
-                "Appointment",
-                "Value",
-            ],
-        )
+        outlets,
     )
 
     return {
         "Outlet Code": code,
         "Outlet Name": name,
-        "Therapist": therapist,
-        "Shift Timings": shift,
-        "Guests Interacted": guests,
-        "Conversions": conversions,
-        "Appointment Value": appointment,
+
+        "Therapist": extract_field(
+            text,
+            [
+                "Therapist",
+                "Therapist Name",
+                "Name of Therapist",
+                "Staff",
+            ],
+        ),
+
+        "Shift Timings": extract_field(
+            text,
+            [
+                "Shift",
+                "Shift Timing",
+                "Shift Timings",
+                "Timing",
+                "Timings",
+            ],
+        ),
+
+        "Guests Interacted": clean_number(
+            extract_field(
+                text,
+                [
+                    "Guests Interacted",
+                    "Guest Interacted",
+                    "Guests",
+                    "Guest",
+                    "No of Guests",
+                    "No. of Guests",
+                ],
+            )
+        ),
+
+        "Conversions": clean_number(
+            extract_field(
+                text,
+                [
+                    "Conversions",
+                    "Conversion",
+                    "Converted",
+                ],
+            )
+        ),
+
+        "Appointment Value": clean_number(
+            extract_field(
+                text,
+                [
+                    "Appointment Value",
+                    "Appointment Amount",
+                    "Appointment",
+                    "Value",
+                ],
+            )
+        ),
     }
 
 
 # ============================================================
-# READ ACTIVITY DATA
+# ACTIVITY SHEET
 # ============================================================
 
 def read_activity():
 
     worksheet = get_activity_sheet()
 
-    values = worksheet.get_all_values()
+    values = worksheet.get(
+        "A:H"
+    )
 
     if not values:
 
         worksheet.append_row(
             ACTIVITY_HEADERS
         )
-
         return []
-
-    headers = values[0]
 
     records = []
 
+    # Use our fixed expected column order instead of
+    # depending on blank/duplicate Sheet headers.
     for row_number, row in enumerate(
         values[1:],
         start=2,
@@ -341,16 +488,14 @@ def read_activity():
         if not any(row):
             continue
 
-        if len(row) < len(headers):
-
-            row = row + (
-                [""] *
-                (len(headers) - len(row))
-            )
-
-        record = dict(
-            zip(headers, row)
+        row = row + [""] * (
+            8 - len(row)
         )
+
+        record = {
+            ACTIVITY_HEADERS[i]: row[i]
+            for i in range(8)
+        }
 
         record["_row"] = row_number
 
@@ -359,15 +504,14 @@ def read_activity():
     return records
 
 
-# ============================================================
-# IDENTIFY OUTLET FROM OLD/NEW SHEET RECORD
-# ============================================================
+def sheet_outlet_code(
+    value,
+    outlets,
+):
 
-def sheet_outlet_code(value, outlets):
-
-    value = str(value).strip()
-
-    upper_value = value.upper()
+    upper = str(
+        value
+    ).strip().upper()
 
     for code in outlets:
 
@@ -375,22 +519,20 @@ def sheet_outlet_code(value, outlets):
             rf"(?<![A-Z0-9])"
             rf"{re.escape(code)}"
             rf"(?![A-Z0-9])",
-            upper_value,
+            upper,
         ):
-
             return code
 
     for code, name in outlets.items():
 
-        if name.upper() == upper_value:
-
+        if name.upper() == upper:
             return code
 
     return None
 
 
 # ============================================================
-# SAVE / UPDATE / REMOVE DUPLICATES
+# SAVE / UPDATE / DUPLICATE CONTROL
 # ============================================================
 
 def save_activity(
@@ -403,9 +545,13 @@ def save_activity(
 
     records = read_activity()
 
-    target_date = activity_date.isoformat()
+    target_date = (
+        activity_date.isoformat()
+    )
 
-    target_code = parsed["Outlet Code"]
+    target_code = parsed[
+        "Outlet Code"
+    ]
 
     matches = []
 
@@ -414,30 +560,27 @@ def save_activity(
         record_date = normalize_date(
             record.get(
                 "Date",
-                ""
+                "",
             )
         )
 
         record_code = sheet_outlet_code(
             record.get(
                 "Outlet",
-                ""
+                "",
             ),
             outlets,
         )
 
         if (
-            record_date == target_date
-            and record_code == target_code
+            record_date
+            == target_date
+            and record_code
+            == target_code
         ):
-
             matches.append(
                 record["_row"]
             )
-
-    saved_at = datetime.now().strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
 
     values = [
         target_date,
@@ -447,10 +590,9 @@ def save_activity(
         parsed["Guests Interacted"],
         parsed["Conversions"],
         parsed["Appointment Value"],
-        saved_at,
+        now_ist(),
     ]
 
-    # Existing outlet/date
     if matches:
 
         main_row = matches[0]
@@ -462,131 +604,121 @@ def save_activity(
             values=[values],
         )
 
-        # Remove old duplicate rows
         duplicates = matches[1:]
 
-        for row in sorted(
+        # Delete from bottom upwards.
+        for row_number in sorted(
             duplicates,
             reverse=True,
         ):
-
-            worksheet.delete_rows(row)
+            worksheet.delete_rows(
+                row_number
+            )
 
         return (
             "updated",
-            len(duplicates)
+            len(duplicates),
         )
 
-    # New outlet/date
     worksheet.append_row(
         values,
-        value_input_option="USER_ENTERED",
+        value_input_option=(
+            "USER_ENTERED"
+        ),
     )
 
-    return (
-        "saved",
-        0
-    )
+    return "saved", 0
 
 
 # ============================================================
-# DAILY DATA
+# DEDUPED ACTIVITY
 # ============================================================
+
+def build_unique_activity(outlets):
+
+    records = read_activity()
+
+    unique = {}
+
+    duplicates = 0
+
+    for record in records:
+
+        day = normalize_date(
+            record.get(
+                "Date",
+                "",
+            )
+        )
+
+        code = sheet_outlet_code(
+            record.get(
+                "Outlet",
+                "",
+            ),
+            outlets,
+        )
+
+        if not day or not code:
+            continue
+
+        key = (
+            day,
+            code,
+        )
+
+        if key in unique:
+            duplicates += 1
+
+        # Later row wins.
+        unique[key] = record
+
+    return unique, duplicates
+
 
 def daily_activity(
     selected_date,
     outlets,
 ):
 
-    target = selected_date.isoformat()
+    unique, duplicates = (
+        build_unique_activity(
+            outlets
+        )
+    )
 
-    records = read_activity()
+    target = (
+        selected_date.isoformat()
+    )
 
     daily = {}
 
-    for record in records:
+    for (
+        record_date,
+        code,
+    ), record in unique.items():
 
-        if normalize_date(
-            record.get(
-                "Date",
-                ""
-            )
-        ) != target:
+        if record_date == target:
+            daily[code] = record
 
-            continue
-
-        code = sheet_outlet_code(
-            record.get(
-                "Outlet",
-                ""
-            ),
-            outlets,
-        )
-
-        if not code:
-            continue
-
-        # Latest duplicate wins for dashboard.
-        daily[code] = record
-
-    return daily
+    return daily, duplicates
 
 
 # ============================================================
-# DATE RANGE REPORT
+# PERIOD DATA
 # ============================================================
 
-def date_range_report(
+def period_activity(
     start_date,
     end_date,
     outlets,
 ):
 
-    records = read_activity()
-
-    received_dates = {
-        code: set()
-        for code in outlets
-    }
-
-    for record in records:
-
-        normalized = normalize_date(
-            record.get(
-                "Date",
-                ""
-            )
+    unique, duplicate_count = (
+        build_unique_activity(
+            outlets
         )
-
-        try:
-            record_date = datetime.strptime(
-                normalized,
-                "%Y-%m-%d"
-            ).date()
-
-        except Exception:
-            continue
-
-        if not (
-            start_date
-            <= record_date
-            <= end_date
-        ):
-            continue
-
-        code = sheet_outlet_code(
-            record.get(
-                "Outlet",
-                ""
-            ),
-            outlets,
-        )
-
-        if code in received_dates:
-
-            received_dates[code].add(
-                record_date
-            )
+    )
 
     all_dates = []
 
@@ -594,117 +726,182 @@ def date_range_report(
 
     while current <= end_date:
 
-        all_dates.append(current)
+        all_dates.append(
+            current
+        )
 
-        current += timedelta(days=1)
+        current += timedelta(
+            days=1
+        )
 
-    rows = []
+    outlet_rows = []
 
-    for code, name in outlets.items():
+    daily_rows = []
 
-        received = received_dates[
-            code
-        ]
+    for day in all_dates:
 
-        missing = [
-            day
-            for day in all_dates
-            if day not in received
-        ]
+        day_key = (
+            day.isoformat()
+        )
 
-        rows.append(
+        day_records = []
+
+        for code in outlets:
+
+            record = unique.get(
+                (
+                    day_key,
+                    code,
+                )
+            )
+
+            if record:
+                day_records.append(
+                    record
+                )
+
+        guests = sum(
+            clean_number(
+                r.get(
+                    "Guests Interacted",
+                    0,
+                )
+            )
+            for r in day_records
+        )
+
+        conversions = sum(
+            clean_number(
+                r.get(
+                    "Conversions",
+                    0,
+                )
+            )
+            for r in day_records
+        )
+
+        appointment = sum(
+            clean_number(
+                r.get(
+                    "Appointment Value",
+                    0,
+                )
+            )
+            for r in day_records
+        )
+
+        daily_rows.append(
             {
-                "Code": code,
-                "Outlet": name,
-                "Days Expected":
-                    len(all_dates),
-                "Days Received":
-                    len(received),
-                "Days Pending":
-                    len(missing),
-                "Pending Dates":
-                    ", ".join(
-                        day.strftime(
-                            "%d-%b"
-                        )
-                        for day in missing
-                    )
-                    if missing
-                    else "✅ Complete",
+                "Date":
+                    day.strftime(
+                        "%d %b"
+                    ),
+                "Received":
+                    len(day_records),
+                "Pending":
+                    len(outlets)
+                    - len(day_records),
+                "Guests":
+                    guests,
+                "Conversions":
+                    conversions,
+                "Appointment Value":
+                    appointment,
             }
         )
 
-    return pd.DataFrame(rows)
+    for code, name in outlets.items():
+
+        received_dates = []
+
+        missing_dates = []
+
+        guests = 0
+        conversions = 0
+        appointment = 0
+
+        for day in all_dates:
+
+            record = unique.get(
+                (
+                    day.isoformat(),
+                    code,
+                )
+            )
+
+            if record:
+
+                received_dates.append(
+                    day
+                )
+
+                guests += clean_number(
+                    record.get(
+                        "Guests Interacted",
+                        0,
+                    )
+                )
+
+                conversions += clean_number(
+                    record.get(
+                        "Conversions",
+                        0,
+                    )
+                )
+
+                appointment += clean_number(
+                    record.get(
+                        "Appointment Value",
+                        0,
+                    )
+                )
+
+            else:
+
+                missing_dates.append(
+                    day
+                )
+
+        outlet_rows.append(
+            {
+                "Code": code,
+                "Outlet": name,
+                "Received":
+                    len(received_dates),
+                "Pending":
+                    len(missing_dates),
+                "Guests":
+                    guests,
+                "Conversions":
+                    conversions,
+                "Appointment Value":
+                    appointment,
+                "Missing Dates":
+                    ", ".join(
+                        d.strftime(
+                            "%d-%b"
+                        )
+                        for d
+                        in missing_dates
+                    )
+                    if missing_dates
+                    else "Complete",
+            }
+        )
+
+    return (
+        pd.DataFrame(
+            outlet_rows
+        ),
+        pd.DataFrame(
+            daily_rows
+        ),
+        duplicate_count,
+    )
 
 
 # ============================================================
-# DESIGN
-# ============================================================
-
-st.markdown(
-    """
-    <style>
-
-    .block-container {
-        padding-top: 1.2rem;
-        padding-bottom: 3rem;
-    }
-
-    .finora-header {
-        padding: 23px 28px;
-        border-radius: 18px;
-        background:
-        linear-gradient(
-            120deg,
-            #071b33 0%,
-            #0d3550 55%,
-            #116b6d 100%
-        );
-        margin-bottom: 20px;
-    }
-
-    .finora-title {
-        color: white;
-        font-size: 36px;
-        font-weight: 800;
-    }
-
-    .finora-subtitle {
-        color: #d6f4ee;
-        font-size: 15px;
-    }
-
-    div[data-testid="stMetric"] {
-        border: 1px solid #e5e8ed;
-        padding: 14px;
-        border-radius: 14px;
-    }
-
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-st.markdown(
-    """
-    <div class="finora-header">
-
-    <div class="finora-title">
-    FINORA
-    </div>
-
-    <div class="finora-subtitle">
-    Lobby Activity • Outlet Monitoring Dashboard
-    </div>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-# ============================================================
-# CONNECT
+# CONNECTION
 # ============================================================
 
 try:
@@ -714,33 +911,31 @@ try:
     if not outlets:
 
         st.error(
-            "No active outlets found in "
-            "'Outlet Master'."
+            "No active outlets found "
+            "in 'Outlet Master'."
         )
-
         st.stop()
 
 except Exception as error:
 
     st.error(
-        "FINORA cannot connect to "
-        "Google Sheets."
+        "FINORA cannot connect "
+        "to Google Sheets."
     )
 
     with st.expander(
         "Technical details"
     ):
-
         st.code(str(error))
 
     st.stop()
 
 
 # ============================================================
-# MAIN TABS
+# TABS
 # ============================================================
 
-entry_tab, daily_tab, range_tab = st.tabs(
+entry_tab, daily_tab, period_tab = st.tabs(
     [
         "📝 Enter Activity",
         "📊 Daily Dashboard",
@@ -750,64 +945,78 @@ entry_tab, daily_tab, range_tab = st.tabs(
 
 
 # ============================================================
-# ENTRY TAB
+# ENTER ACTIVITY
 # ============================================================
 
 with entry_tab:
 
     st.subheader(
-        "Paste WhatsApp Lobby Activity"
+        "Enter Lobby Activity"
     )
 
-    activity_date = st.date_input(
-        "Activity Date",
-        value=date.today(),
-        format="DD/MM/YYYY",
+    left, right = st.columns(
+        [1, 2]
     )
 
-    whatsapp_text = st.text_area(
-        "WhatsApp Activity",
-        height=260,
-        placeholder="""Example:
+    with left:
 
-JIAL-Lobby Activity
+        activity_date = (
+            st.date_input(
+                "Activity Date",
+                value=date.today(),
+                format="DD/MM/YYYY",
+            )
+        )
 
-Therapist: Neha
-Shift Timings: 1 PM to 10 PM
-Guests Interacted: 2
-Conversions: 1
-Appointment Value: 3381
-""",
-    )
+        uploaded_photo = (
+            st.file_uploader(
+                "Optional photo",
+                type=[
+                    "jpg",
+                    "jpeg",
+                    "png",
+                ],
+            )
+        )
 
-    uploaded_photo = st.file_uploader(
-        "Optional photo",
-        type=[
-            "jpg",
-            "jpeg",
-            "png",
-        ],
-    )
+        if uploaded_photo:
 
-    if uploaded_photo:
+            st.caption(
+                "The photo is temporary. "
+                "FINORA does not save the "
+                "photo or photo link."
+            )
 
-        st.info(
-            "Photo received temporarily. "
-            "FINORA does not save the "
-            "photograph or photo link."
+    with right:
+
+        whatsapp_text = (
+            st.text_area(
+                "Paste WhatsApp Activity",
+                height=190,
+                placeholder=(
+                    "JIAL-Lobby Activity\n\n"
+                    "Therapist: Neha\n"
+                    "Shift Timings: 1 PM to 10 PM\n"
+                    "Guests Interacted: 5\n"
+                    "Conversions: 2\n"
+                    "Appointment Value: 7918"
+                ),
+            )
         )
 
     if st.button(
-        "✨ FINORA - Read & Save Activity",
+        "✨ Read & Save Activity",
         type="primary",
         use_container_width=True,
     ):
 
-        if not whatsapp_text.strip():
+        if not (
+            whatsapp_text.strip()
+        ):
 
             st.error(
-                "Please paste the "
-                "WhatsApp activity."
+                "Paste the WhatsApp "
+                "activity first."
             )
 
         else:
@@ -823,7 +1032,9 @@ Appointment Value: 3381
 
                 st.error(
                     "FINORA could not "
-                    "recognise the outlet code."
+                    "recognise the outlet. "
+                    "Check that the outlet "
+                    "code is in the message."
                 )
 
             else:
@@ -839,8 +1050,9 @@ Appointment Value: 3381
                 if action == "saved":
 
                     st.success(
-                        "✅ New activity saved: "
-                        f"{parsed['Outlet Code']} - "
+                        "✅ Activity saved — "
+                        f"{parsed['Outlet Code']} "
+                        f"| "
                         f"{parsed['Outlet Name']}"
                     )
 
@@ -848,68 +1060,52 @@ Appointment Value: 3381
 
                     st.success(
                         "🔄 Existing activity "
-                        "updated: "
-                        f"{parsed['Outlet Code']} - "
+                        "updated — "
+                        f"{parsed['Outlet Code']} "
+                        f"| "
                         f"{parsed['Outlet Name']}"
                     )
 
                 if removed:
 
                     st.info(
-                        f"FINORA removed "
                         f"{removed} duplicate "
-                        f"record(s)."
+                        f"record(s) removed."
                     )
 
-                col1, col2 = st.columns(2)
+                a, b, c, d = (
+                    st.columns(4)
+                )
 
-                with col1:
+                a.metric(
+                    "Outlet",
+                    parsed[
+                        "Outlet Code"
+                    ],
+                )
 
-                    st.write(
-                        "**Outlet:**",
+                b.metric(
+                    "Guests",
+                    parsed[
+                        "Guests Interacted"
+                    ],
+                )
+
+                c.metric(
+                    "Conversions",
+                    parsed[
+                        "Conversions"
+                    ],
+                )
+
+                d.metric(
+                    "Appointment Value",
+                    money(
                         parsed[
-                            "Outlet Name"
-                        ],
-                    )
-
-                    st.write(
-                        "**Therapist:**",
-                        parsed[
-                            "Therapist"
-                        ] or "-",
-                    )
-
-                    st.write(
-                        "**Shift:**",
-                        parsed[
-                            "Shift Timings"
-                        ] or "-",
-                    )
-
-                with col2:
-
-                    st.write(
-                        "**Guests:**",
-                        parsed[
-                            "Guests Interacted"
-                        ],
-                    )
-
-                    st.write(
-                        "**Conversions:**",
-                        parsed[
-                            "Conversions"
-                        ],
-                    )
-
-                    st.write(
-                        "**Appointment Value:**",
-                        money(
-                            parsed[
-                                "Appointment Value"
-                            ]
-                        ),
-                    )
+                            "Appointment Value"
+                        ]
+                    ),
+                )
 
 
 # ============================================================
@@ -918,60 +1114,66 @@ Appointment Value: 3381
 
 with daily_tab:
 
-    st.subheader(
-        "Daily Lobby Activity Dashboard"
+    top1, top2 = st.columns(
+        [1, 3]
     )
 
-    selected_date = st.date_input(
-        "Select Date",
-        value=date.today(),
-        format="DD/MM/YYYY",
-        key="daily_date",
+    with top1:
+
+        selected_date = (
+            st.date_input(
+                "Dashboard Date",
+                value=date.today(),
+                format="DD/MM/YYYY",
+                key="daily_date",
+            )
+        )
+
+    daily, duplicate_count = (
+        daily_activity(
+            selected_date,
+            outlets,
+        )
     )
 
-    daily = daily_activity(
-        selected_date,
-        outlets,
-    )
-
-    received_codes = set(
+    received_codes = list(
         daily.keys()
     )
 
     pending_codes = [
         code
         for code in outlets
-        if code not in received_codes
+        if code not in daily
     ]
 
     total_guests = sum(
         clean_number(
-            record.get(
+            r.get(
                 "Guests Interacted",
                 0,
             )
         )
-        for record in daily.values()
+        for r in daily.values()
     )
 
     total_conversions = sum(
         clean_number(
-            record.get(
+            r.get(
                 "Conversions",
                 0,
             )
         )
-        for record in daily.values()
+        for r in daily.values()
     )
 
     total_value = sum(
         clean_number(
-            record.get(
+            r.get(
                 "Appointment Value",
                 0,
             )
         )
-        for record in daily.values()
+        for r in daily.values()
     )
 
     conversion_rate = (
@@ -983,307 +1185,182 @@ with daily_tab:
     )
 
     st.markdown(
-        "### "
-        + selected_date.strftime(
-            "%d %B %Y"
-        )
+        f"### {selected_date.strftime('%d %B %Y')}"
     )
 
-    c1, c2, c3 = st.columns(3)
+    # Compact KPI row
+    k1, k2, k3, k4, k5, k6, k7 = (
+        st.columns(7)
+    )
 
-    c1.metric(
-        "Total Outlets",
+    k1.metric(
+        "Outlets",
         len(outlets),
     )
 
-    c2.metric(
+    k2.metric(
         "Received",
         len(received_codes),
     )
 
-    c3.metric(
+    k3.metric(
         "Pending",
         len(pending_codes),
     )
 
-    c4, c5, c6, c7 = st.columns(4)
-
-    c4.metric(
+    k4.metric(
         "Guests",
         int(total_guests),
     )
 
-    c5.metric(
+    k5.metric(
         "Conversions",
         int(total_conversions),
     )
 
-    c6.metric(
-        "Conversion Rate",
+    k6.metric(
+        "Conversion %",
         f"{conversion_rate:.1f}%",
     )
 
-    c7.metric(
-        "Appointment Value",
+    k7.metric(
+        "Appt. Value",
         money(total_value),
     )
-    # ========================================================
-    # DAILY VISUAL DASHBOARD
-    # ========================================================
 
-    st.markdown("### 📈 Daily Performance")
+    # --------------------------------------------------------
+    # RECEIVED / PENDING VISUAL
+    # --------------------------------------------------------
 
-    # -------------------------------
-    # RECEIVED VS PENDING
-    # -------------------------------
-
-    status_chart = pd.DataFrame(
-        {
-            "Status": ["Received", "Pending"],
-            "Outlets": [
-                len(received_codes),
-                len(pending_codes),
-            ],
-        }
+    left, right = st.columns(
+        [1, 2]
     )
 
-    st.markdown("#### Outlet Submission Status")
-
-    st.bar_chart(
-        status_chart,
-        x="Status",
-        y="Outlets",
-        use_container_width=True,
-    )
-
-    # -------------------------------
-    # GUESTS VS CONVERSIONS
-    # -------------------------------
-
-    performance_rows = []
-
-    for code, record in daily.items():
-
-        performance_rows.append(
-            {
-                "Outlet": code,
-                "Guests": clean_number(
-                    record.get(
-                        "Guests Interacted",
-                        0,
-                    )
-                ),
-                "Conversions": clean_number(
-                    record.get(
-                        "Conversions",
-                        0,
-                    )
-                ),
-            }
-        )
-
-    if performance_rows:
-
-        performance_df = pd.DataFrame(
-            performance_rows
-        )
+    with left:
 
         st.markdown(
-            "#### Guests vs Conversions by Outlet"
+            "#### Submission Status"
         )
 
-        st.bar_chart(
-            performance_df.set_index("Outlet")[
-                ["Guests", "Conversions"]
-            ],
-            use_container_width=True,
-        )
-
-    else:
-
-        st.info(
-            "Performance charts will appear "
-            "when activity is received."
-        )
-
-    # -------------------------------
-    # APPOINTMENT VALUE
-    # -------------------------------
-
-    value_rows = []
-
-    for code, record in daily.items():
-
-        value_rows.append(
+        status_df = pd.DataFrame(
             {
-                "Outlet": code,
-                "Appointment Value":
-                    clean_number(
-                        record.get(
-                            "Appointment Value",
-                            0,
-                        )
-                    ),
+                "Status": [
+                    "Received",
+                    "Pending",
+                ],
+                "Outlets": [
+                    len(received_codes),
+                    len(pending_codes),
+                ],
             }
+        ).set_index(
+            "Status"
         )
 
-    if value_rows:
-
-        value_df = pd.DataFrame(
-            value_rows
+        # Small compact chart
+        st.bar_chart(
+            status_df,
+            height=210,
         )
 
-        value_df = value_df.sort_values(
-            "Appointment Value",
-            ascending=False,
-        )
+    with right:
 
         st.markdown(
-            "#### Appointment Value by Outlet"
+            f"#### 🔴 Pending Today "
+            f"({len(pending_codes)})"
         )
 
-        st.bar_chart(
-            value_df.set_index("Outlet"),
-            use_container_width=True,
-        )
+        if pending_codes:
 
-    # -------------------------------
-    # WHATSAPP READY SUMMARY
-    # -------------------------------
-
-    st.markdown("### 📱 WhatsApp Summary")
-
-    if pending_codes:
-
-        pending_text = ", ".join(
-            pending_codes
-        )
-
-    else:
-
-        pending_text = "None - All Received ✅"
-
-    whatsapp_summary = (
-        f"FINORA - Lobby Activity\n"
-        f"{selected_date.strftime('%d %b %Y')}\n\n"
-        f"Total Outlets: {len(outlets)}\n"
-        f"Received: {len(received_codes)}\n"
-        f"Pending: {len(pending_codes)}\n"
-        f"Guests: {int(total_guests)}\n"
-        f"Conversions: {int(total_conversions)}\n"
-        f"Conversion Rate: {conversion_rate:.1f}%\n"
-        f"Appointment Value: {money(total_value)}\n\n"
-        f"Pending Outlets: {pending_text}"
-    )
-
-    st.code(
-        whatsapp_summary,
-        language=None,
-    )
-    st.divider()
-
-    # -------------------------------
-    # PENDING OUTLETS
-    # -------------------------------
-
-    st.subheader(
-        f"🔴 Pending Outlets "
-        f"({len(pending_codes)})"
-    )
-
-    if pending_codes:
-
-        pending_df = pd.DataFrame(
-            [
-                {
-                    "Code": code,
-                    "Outlet":
-                        outlets[code],
-                    "Status":
-                        "⏳ Pending",
-                }
+            pending_html = "".join(
+                (
+                    '<span class="code-pill">'
+                    f'{code} · {outlets[code]}'
+                    '</span>'
+                )
                 for code
                 in pending_codes
-            ]
+            )
+
+            st.markdown(
+                (
+                    '<div class="status-box '
+                    'pending-box">'
+                    f'{pending_html}'
+                    '</div>'
+                ),
+                unsafe_allow_html=True,
+            )
+
+        else:
+
+            st.success(
+                "All outlets have "
+                "submitted. 🎉"
+            )
+
+        st.markdown(
+            f"#### 🟢 Received "
+            f"({len(received_codes)})"
         )
 
-        st.dataframe(
-            pending_df,
-            use_container_width=True,
-            hide_index=True,
-        )
+        if received_codes:
 
-    else:
-
-        st.success(
-            "🎉 All active outlets "
-            "have submitted activity."
-        )
-
-    st.divider()
-
-    # -------------------------------
-    # ALL OUTLETS
-    # -------------------------------
-
-    st.subheader(
-        "All Outlet Status"
-    )
-
-    rows = []
-
-    for code, name in outlets.items():
-
-        record = daily.get(code)
-
-        if record:
-
-            guests = clean_number(
-                record.get(
-                    "Guests Interacted",
-                    0,
+            received_html = "".join(
+                (
+                    '<span class="code-pill">'
+                    f'{code} · {outlets[code]}'
+                    '</span>'
                 )
+                for code
+                in received_codes
             )
 
-            conversions = clean_number(
-                record.get(
-                    "Conversions",
-                    0,
-                )
+            st.markdown(
+                (
+                    '<div class="status-box '
+                    'received-box">'
+                    f'{received_html}'
+                    '</div>'
+                ),
+                unsafe_allow_html=True,
             )
 
-            rate = (
-                conversions
-                / guests
-                * 100
-                if guests
-                else 0
+        else:
+
+            st.caption(
+                "No submissions yet."
             )
 
-            rows.append(
+    # --------------------------------------------------------
+    # PERFORMANCE CHARTS
+    # --------------------------------------------------------
+
+    if daily:
+
+        performance = []
+
+        for code, record in daily.items():
+
+            performance.append(
                 {
-                    "Code": code,
-                    "Outlet": name,
-                    "Status":
-                        "✅ Received",
-                    "Therapist":
-                        record.get(
-                            "Therapist",
-                            "",
-                        ),
-                    "Shift":
-                        record.get(
-                            "Shift Timings",
-                            "",
-                        ),
+                    "Outlet": code,
                     "Guests":
-                        guests,
+                        clean_number(
+                            record.get(
+                                "Guests Interacted",
+                                0,
+                            )
+                        ),
                     "Conversions":
-                        conversions,
-                    "Conversion %":
-                        f"{rate:.1f}%",
+                        clean_number(
+                            record.get(
+                                "Conversions",
+                                0,
+                            )
+                        ),
                     "Appointment Value":
-                        money(
+                        clean_number(
                             record.get(
                                 "Appointment Value",
                                 0,
@@ -1292,172 +1369,445 @@ with daily_tab:
                 }
             )
 
-        else:
+        performance_df = (
+            pd.DataFrame(
+                performance
+            )
+        )
 
-            rows.append(
-                {
-                    "Code": code,
-                    "Outlet": name,
-                    "Status":
-                        "⏳ Pending",
-                    "Therapist": "",
-                    "Shift": "",
-                    "Guests": "",
-                    "Conversions": "",
-                    "Conversion %": "",
-                    "Appointment Value": "",
-                }
+        chart1, chart2 = st.columns(
+            2
+        )
+
+        with chart1:
+
+            st.markdown(
+                "#### Guests vs Conversions"
             )
 
-    st.dataframe(
-        pd.DataFrame(rows),
-        use_container_width=True,
-        hide_index=True,
-        height=750,
+            st.bar_chart(
+                performance_df
+                .set_index(
+                    "Outlet"
+                )[
+                    [
+                        "Guests",
+                        "Conversions",
+                    ]
+                ],
+                height=260,
+            )
+
+        with chart2:
+
+            st.markdown(
+                "#### Appointment Value"
+            )
+
+            value_chart = (
+                performance_df[
+                    [
+                        "Outlet",
+                        "Appointment Value",
+                    ]
+                ]
+                .sort_values(
+                    "Appointment Value",
+                    ascending=False,
+                )
+                .set_index(
+                    "Outlet"
+                )
+            )
+
+            st.bar_chart(
+                value_chart,
+                height=260,
+            )
+
+    # --------------------------------------------------------
+    # WHATSAPP READY SUMMARY
+    # --------------------------------------------------------
+
+    st.markdown(
+        "#### 📱 WhatsApp Status"
     )
+
+    pending_text = (
+        ", ".join(
+            pending_codes
+        )
+        if pending_codes
+        else "None"
+    )
+
+    whatsapp_summary = (
+        f"FINORA - Lobby Activity | "
+        f"{selected_date.strftime('%d %b %Y')}\n"
+        f"Received: "
+        f"{len(received_codes)}/{len(outlets)} | "
+        f"Pending: {len(pending_codes)} | "
+        f"Guests: {int(total_guests)} | "
+        f"Conversions: {int(total_conversions)} | "
+        f"Conversion: {conversion_rate:.1f}% | "
+        f"Appointment Value: {money(total_value)}\n"
+        f"Pending: {pending_text}"
+    )
+
+    st.code(
+        whatsapp_summary,
+        language=None,
+    )
+
+    # --------------------------------------------------------
+    # DETAILS
+    # --------------------------------------------------------
+
+    with st.expander(
+        "View outlet-wise details",
+        expanded=False,
+    ):
+
+        rows = []
+
+        for code, name in (
+            outlets.items()
+        ):
+
+            record = daily.get(
+                code
+            )
+
+            if record:
+
+                guests = clean_number(
+                    record.get(
+                        "Guests Interacted",
+                        0,
+                    )
+                )
+
+                conversions = (
+                    clean_number(
+                        record.get(
+                            "Conversions",
+                            0,
+                        )
+                    )
+                )
+
+                rows.append(
+                    {
+                        "Code": code,
+                        "Outlet": name,
+                        "Status":
+                            "Received",
+                        "Therapist":
+                            record.get(
+                                "Therapist",
+                                "",
+                            ),
+                        "Shift":
+                            record.get(
+                                "Shift Timings",
+                                "",
+                            ),
+                        "Guests":
+                            guests,
+                        "Conversions":
+                            conversions,
+                        "Appointment Value":
+                            clean_number(
+                                record.get(
+                                    "Appointment Value",
+                                    0,
+                                )
+                            ),
+                    }
+                )
+
+            else:
+
+                rows.append(
+                    {
+                        "Code": code,
+                        "Outlet": name,
+                        "Status":
+                            "Pending",
+                        "Therapist": "",
+                        "Shift": "",
+                        "Guests": "",
+                        "Conversions": "",
+                        "Appointment Value": "",
+                    }
+                )
+
+        st.dataframe(
+            pd.DataFrame(rows),
+            use_container_width=True,
+            hide_index=True,
+            height=430,
+        )
+
+    if duplicate_count:
+
+        st.caption(
+            f"FINORA ignored "
+            f"{duplicate_count} duplicate "
+            f"historical record(s) while "
+            f"calculating the dashboard."
+        )
 
 
 # ============================================================
 # PERIOD DASHBOARD
 # ============================================================
 
-with range_tab:
+with period_tab:
 
     st.subheader(
-        "Period Submission Dashboard"
+        "Period Dashboard"
     )
 
-    col1, col2 = st.columns(2)
+    d1, d2, spacer = st.columns(
+        [1, 1, 2]
+    )
 
-    with col1:
+    with d1:
 
         start_date = st.date_input(
-            "From Date",
+            "From",
             value=date.today(),
             format="DD/MM/YYYY",
-            key="range_start",
+            key="period_from",
         )
 
-    with col2:
+    with d2:
 
         end_date = st.date_input(
-            "To Date",
+            "To",
             value=date.today(),
             format="DD/MM/YYYY",
-            key="range_end",
+            key="period_to",
         )
 
     if end_date < start_date:
 
         st.error(
-            "To Date cannot be "
-            "before From Date."
+            "The To date cannot be "
+            "before the From date."
         )
 
     else:
 
-        number_of_days = (
-            end_date
-            - start_date
-        ).days + 1
-
-        range_df = date_range_report(
+        (
+            outlet_df,
+            daily_df,
+            period_duplicates,
+        ) = period_activity(
             start_date,
             end_date,
             outlets,
         )
 
-        total_expected = (
-            len(outlets)
-            * number_of_days
+        days = (
+            end_date
+            - start_date
+        ).days + 1
+
+        expected = (
+            days
+            * len(outlets)
         )
 
-        total_received = int(
-            range_df[
-                "Days Received"
+        received = int(
+            outlet_df[
+                "Received"
             ].sum()
         )
 
-        total_pending = (
-            total_expected
-            - total_received
+        pending = (
+            expected
+            - received
         )
 
-        p1, p2, p3, p4 = (
-            st.columns(4)
+        guests = int(
+            outlet_df[
+                "Guests"
+            ].sum()
+        )
+
+        conversions = int(
+            outlet_df[
+                "Conversions"
+            ].sum()
+        )
+
+        value = float(
+            outlet_df[
+                "Appointment Value"
+            ].sum()
+        )
+
+        rate = (
+            conversions
+            / guests
+            * 100
+            if guests
+            else 0
+        )
+
+        p1, p2, p3, p4, p5, p6 = (
+            st.columns(6)
         )
 
         p1.metric(
-            "Active Outlets",
-            len(outlets),
+            "Days",
+            days,
         )
 
         p2.metric(
-            "Days",
-            number_of_days,
+            "Expected",
+            expected,
         )
 
         p3.metric(
-            "Submissions Received",
-            total_received,
+            "Received",
+            received,
         )
 
         p4.metric(
-            "Submissions Pending",
-            total_pending,
+            "Pending",
+            pending,
         )
 
-        st.divider()
-
-        st.subheader(
-            "Outlet-wise Pending Report"
+        p5.metric(
+            "Conversion %",
+            f"{rate:.1f}%",
         )
 
-        st.dataframe(
-            range_df,
-            use_container_width=True,
-            hide_index=True,
-            height=750,
+        p6.metric(
+            "Appt. Value",
+            money(value),
         )
 
-        incomplete = range_df[
-            range_df[
-                "Days Pending"
+        # Daily trend charts
+        if not daily_df.empty:
+
+            c1, c2 = st.columns(
+                2
+            )
+
+            with c1:
+
+                st.markdown(
+                    "#### Submission Trend"
+                )
+
+                st.line_chart(
+                    daily_df.set_index(
+                        "Date"
+                    )[
+                        [
+                            "Received",
+                            "Pending",
+                        ]
+                    ],
+                    height=250,
+                )
+
+            with c2:
+
+                st.markdown(
+                    "#### Guests & Conversions"
+                )
+
+                st.line_chart(
+                    daily_df.set_index(
+                        "Date"
+                    )[
+                        [
+                            "Guests",
+                            "Conversions",
+                        ]
+                    ],
+                    height=250,
+                )
+
+            st.markdown(
+                "#### Appointment Value Trend"
+            )
+
+            st.line_chart(
+                daily_df.set_index(
+                    "Date"
+                )[
+                    [
+                        "Appointment Value"
+                    ]
+                ],
+                height=220,
+            )
+
+        # Pending follow-up
+        pending_df = outlet_df[
+            outlet_df[
+                "Pending"
             ] > 0
-        ]
+        ].copy()
 
-        st.subheader(
-            "🔴 Outlets Requiring Follow-up"
+        st.markdown(
+            f"#### 🔴 Follow-up Required "
+            f"({len(pending_df)} outlets)"
         )
 
-        if incomplete.empty:
+        if pending_df.empty:
 
             st.success(
-                "🎉 No pending activity "
+                "No pending lobby activity "
                 "for this period."
             )
 
         else:
 
             st.dataframe(
-                incomplete[
+                pending_df[
                     [
                         "Code",
                         "Outlet",
-                        "Days Pending",
-                        "Pending Dates",
+                        "Received",
+                        "Pending",
+                        "Missing Dates",
                     ]
                 ],
                 use_container_width=True,
                 hide_index=True,
+                height=320,
+            )
+
+        with st.expander(
+            "View complete period details"
+        ):
+
+            st.dataframe(
+                outlet_df,
+                use_container_width=True,
+                hide_index=True,
+                height=430,
+            )
+
+        if period_duplicates:
+
+            st.caption(
+                f"FINORA ignored "
+                f"{period_duplicates} duplicate "
+                f"historical record(s)."
             )
 
 
 # ============================================================
 # FOOTER
 # ============================================================
-
-st.divider()
 
 st.caption(
     "FINORA • Lobby Activity Management"
