@@ -12,6 +12,26 @@ ACTIVITY_SHEET = "Activity"
 MASTER_SHEET = "Outlet Master"
 HEADERS = ["Date","Outlet","Therapist","Shift Timings","Guests Interacted","Conversions","Appointment Value","Saved At"]
 
+ADMIN_EMAIL = "funnybytes445@gmail.com"
+
+# FINORA secure Google sign-in
+if not st.user.is_logged_in:
+    st.markdown("## 💠 FINORA")
+    st.markdown("### Secure Sign In")
+    st.write("Sign in with your approved Google account to continue.")
+    if st.button("Continue with Google", type="primary"):
+        st.login()
+    st.stop()
+
+USER_EMAIL = str(getattr(st.user, "email", "") or "").strip().lower()
+IS_ADMIN = USER_EMAIL == ADMIN_EMAIL
+if not IS_ADMIN:
+    st.error("Access not approved. Please contact the FINORA administrator.")
+    st.write(f"Signed in as: {USER_EMAIL or 'Unknown Google account'}")
+    if st.button("Sign out"):
+        st.logout()
+    st.stop()
+
 st.markdown("""
 <style>
 :root{--navy:#07345a;--navy2:#092744;--bg:#f5f7fb;--text:#17324d;--muted:#6f8093}
@@ -76,6 +96,9 @@ with st.sidebar:
         if st.button(label, key="nav_"+name, use_container_width=True):
             goto(name); st.rerun()
     st.markdown('<div class="status">● &nbsp; FINORA Online</div>', unsafe_allow_html=True)
+    st.caption(f"👑 Admin  •  {USER_EMAIL}")
+    if st.button("↪ Sign out", key="finora_logout", use_container_width=True):
+        st.logout()
 
 @st.cache_resource
 def spreadsheet():
