@@ -21,8 +21,12 @@ st.markdown("""
 header[data-testid="stHeader"]{background:#fff;border-bottom:1px solid #e6ebf1}
 section[data-testid="stSidebar"]{background:linear-gradient(180deg,#063657 0%,#082743 100%);border-right:0}
 section[data-testid="stSidebar"] .stButton>button{width:100%;min-height:46px;justify-content:flex-start!important;text-align:left!important;border:0;border-radius:5px;background:transparent;color:#eaf4fb;font-size:15px;font-weight:650;padding:0 15px;margin:2px 0}
-section[data-testid="stSidebar"] .stButton>button p{text-align:left!important;width:100%!important;margin:0!important}
-section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"]{text-align:left!important}
+section[data-testid="stSidebar"] .stButton>button{display:flex!important;align-items:center!important;justify-content:flex-start!important;text-align:left!important;padding-left:8px!important}
+section[data-testid="stSidebar"] .stButton>button div{display:flex!important;justify-content:flex-start!important;width:100%!important;text-align:left!important}
+section[data-testid="stSidebar"] .stButton>button p{text-align:left!important;width:100%!important;margin:0!important;padding:0!important}
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"]{text-align:left!important;width:100%!important}
+section[data-testid="stSidebar"] [data-testid="stVerticalBlock"]{align-items:stretch!important}
+section[data-testid="stSidebar"] .element-container{width:100%!important;text-align:left!important}
 section[data-testid="stSidebar"] .stButton>button:hover{background:#0b506d;color:#fff}
 section[data-testid="stSidebar"] p{color:#d9e9f5}
 .brand{font-size:28px!important;font-weight:850!important;color:white!important;margin:6px 0 0}
