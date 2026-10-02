@@ -38,100 +38,452 @@ ACTIVITY_HEADERS = [
 # DESIGN
 # ============================================================
 
+# ============================================================
+# PREMIUM FINORA DESIGN
+# ============================================================
+
 st.markdown(
     """
 <style>
 
-/* Compact centered dashboard */
-.block-container {
-    max-width: 1250px;
-    padding-top: 0.8rem;
-    padding-bottom: 2rem;
+/* ==========================================================
+   PAGE
+   ========================================================== */
+
+.stApp {
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(15, 118, 110, 0.08),
+            transparent 30%
+        ),
+        linear-gradient(
+            180deg,
+            #f8fbfd 0%,
+            #ffffff 42%,
+            #f7fafc 100%
+        );
 }
 
-/* Header */
+.block-container {
+    max-width: 1450px;
+    padding-top: 1.3rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    padding-bottom: 3rem;
+}
+
+
+/* ==========================================================
+   FINORA HERO HEADER
+   ========================================================== */
+
 .finora-header {
-    background: linear-gradient(120deg,#08223b,#0b5961);
-    padding: 18px 24px;
-    border-radius: 16px;
-    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            120deg,
+            #071c33 0%,
+            #0b3650 48%,
+            #08736f 100%
+        );
+
+    padding: 34px 30px;
+    border-radius: 24px;
+
+    margin-top: 4px;
+    margin-bottom: 22px;
+
+    text-align: center;
+
+    box-shadow:
+        0 16px 40px
+        rgba(7, 28, 51, 0.14);
+}
+
+.finora-header::before {
+    content: "";
+    position: absolute;
+
+    width: 230px;
+    height: 230px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.05);
+
+    top: -150px;
+    right: -40px;
+}
+
+.finora-header::after {
+    content: "";
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(53, 211, 190, 0.08);
+
+    bottom: -120px;
+    left: 40px;
 }
 
 .finora-title {
-    color: white;
-    font-size: 30px;
-    font-weight: 800;
+    position: relative;
+
+    color: #ffffff;
+
+    font-size: 46px;
+    line-height: 1.05;
+
+    font-weight: 850;
+    letter-spacing: 3px;
+
     margin: 0;
 }
 
 .finora-subtitle {
-    color: #d9f5f1;
-    font-size: 14px;
-    margin-top: 3px;
+    position: relative;
+
+    color: #d8f5f0;
+
+    font-size: 17px;
+    font-weight: 450;
+
+    margin-top: 10px;
+
+    letter-spacing: 0.3px;
 }
 
-/* Reduce whitespace */
+
+/* ==========================================================
+   TYPOGRAPHY
+   ========================================================== */
+
 h1, h2, h3 {
-    margin-top: 0.5rem !important;
-    margin-bottom: 0.5rem !important;
+    color: #102a43;
+    letter-spacing: -0.3px;
 }
 
-/* Compact metrics */
+h2 {
+    font-size: 27px !important;
+    font-weight: 750 !important;
+}
+
+h3 {
+    font-size: 21px !important;
+    font-weight: 700 !important;
+}
+
+p, label {
+    color: #334e68;
+}
+
+
+/* ==========================================================
+   TABS
+   ========================================================== */
+
+button[data-baseweb="tab"] {
+    height: 54px;
+
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+
+    border-radius: 12px 12px 0 0;
+
+    font-size: 15px !important;
+    font-weight: 650 !important;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+    background:
+        linear-gradient(
+            180deg,
+            #edf9f7,
+            #ffffff
+        );
+
+    color: #08736f !important;
+}
+
+div[data-baseweb="tab-list"] {
+    gap: 8px;
+}
+
+
+/* ==========================================================
+   INPUTS
+   ========================================================== */
+
+div[data-baseweb="input"] {
+    border-radius: 12px !important;
+}
+
+textarea {
+    border-radius: 14px !important;
+
+    font-size: 15px !important;
+
+    padding: 14px !important;
+
+    background: #fbfdff !important;
+}
+
+div[data-testid="stFileUploader"] {
+    border-radius: 14px;
+}
+
+
+/* ==========================================================
+   PRIMARY BUTTON
+   ========================================================== */
+
+div.stButton > button[kind="primary"] {
+
+    min-height: 52px;
+
+    border: 0;
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            100deg,
+            #08736f,
+            #0d8f83
+        );
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: 750;
+
+    box-shadow:
+        0 8px 20px
+        rgba(8, 115, 111, 0.20);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+div.stButton > button[kind="primary"]:hover {
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 11px 25px
+        rgba(8, 115, 111, 0.28);
+
+    color: white;
+}
+
+
+/* ==========================================================
+   KPI CARDS
+   ========================================================== */
+
 div[data-testid="stMetric"] {
-    border: 1px solid #e5e7eb;
-    background: white;
-    padding: 9px 12px;
-    border-radius: 12px;
-    min-height: 85px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f8fbfc
+        );
+
+    border:
+        1px solid #e3edf2;
+
+    padding:
+        16px 17px;
+
+    border-radius:
+        16px;
+
+    min-height:
+        105px;
+
+    box-shadow:
+        0 5px 16px
+        rgba(22, 50, 72, 0.055);
 }
 
 div[data-testid="stMetricLabel"] {
-    font-size: 12px;
+
+    font-size:
+        13px;
+
+    font-weight:
+        650;
+
+    color:
+        #627d98;
 }
 
 div[data-testid="stMetricValue"] {
-    font-size: 23px;
+
+    font-size:
+        27px;
+
+    font-weight:
+        800;
+
+    color:
+        #102a43;
 }
 
-/* Status boxes */
+
+/* ==========================================================
+   STATUS CARDS
+   ========================================================== */
+
 .status-box {
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-    padding: 14px 16px;
-    background: white;
-    margin-bottom: 10px;
+
+    background:
+        rgba(255,255,255,0.94);
+
+    border:
+        1px solid #e4ebf0;
+
+    border-radius:
+        16px;
+
+    padding:
+        17px;
+
+    margin-bottom:
+        12px;
+
+    box-shadow:
+        0 5px 16px
+        rgba(22, 50, 72, 0.05);
 }
 
 .pending-box {
-    border-left: 5px solid #e24a4a;
+    border-left:
+        5px solid #e45858;
 }
 
 .received-box {
-    border-left: 5px solid #25a56a;
+    border-left:
+        5px solid #1ca47a;
 }
 
-.small-title {
-    font-size: 16px;
-    font-weight: 700;
-    margin-bottom: 7px;
-}
+
+/* ==========================================================
+   OUTLET PILLS
+   ========================================================== */
 
 .code-pill {
-    display: inline-block;
-    padding: 4px 9px;
-    margin: 3px;
-    border-radius: 12px;
-    background: #f3f4f6;
-    font-size: 12px;
-    font-weight: 600;
+
+    display:
+        inline-block;
+
+    padding:
+        6px 10px;
+
+    margin:
+        4px 3px;
+
+    border-radius:
+        20px;
+
+    background:
+        #edf5f7;
+
+    border:
+        1px solid #dcebed;
+
+    color:
+        #153b4b;
+
+    font-size:
+        12px;
+
+    font-weight:
+        650;
 }
 
-/* Make dataframe area compact */
+
+/* ==========================================================
+   DATA TABLES
+   ========================================================== */
+
 div[data-testid="stDataFrame"] {
-    border-radius: 10px;
+
+    background:
+        white;
+
+    border:
+        1px solid #e5edf2;
+
+    border-radius:
+        15px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 5px 15px
+        rgba(22, 50, 72, 0.04);
 }
 
-/* Hide Streamlit decoration */
+
+/* ==========================================================
+   EXPANDERS
+   ========================================================== */
+
+div[data-testid="stExpander"] {
+
+    background:
+        white;
+
+    border:
+        1px solid #e4ebf0;
+
+    border-radius:
+        14px;
+}
+
+
+/* ==========================================================
+   INFO / SUCCESS / ERROR
+   ========================================================== */
+
+div[data-testid="stAlert"] {
+
+    border-radius:
+        14px;
+}
+
+
+/* ==========================================================
+   CODE / WHATSAPP SUMMARY
+   ========================================================== */
+
+div[data-testid="stCode"] {
+
+    border-radius:
+        14px;
+
+    border:
+        1px solid #e1eaee;
+}
+
+
+/* ==========================================================
+   REMOVE STREAMLIT BRANDING
+   ========================================================== */
+
 #MainMenu {
     visibility: hidden;
 }
@@ -140,18 +492,59 @@ footer {
     visibility: hidden;
 }
 
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+
+@media (max-width: 900px) {
+
+    .block-container {
+
+        padding-left:
+            1rem;
+
+        padding-right:
+            1rem;
+    }
+
+    .finora-header {
+
+        padding:
+            25px 16px;
+    }
+
+    .finora-title {
+
+        font-size:
+            36px;
+    }
+
+    .finora-subtitle {
+
+        font-size:
+            14px;
+    }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
 )
 
+
 st.markdown(
     """
 <div class="finora-header">
-    <div class="finora-title">FINORA</div>
-    <div class="finora-subtitle">
-        Lobby Activity • Outlet Monitoring Dashboard
+
+    <div class="finora-title">
+        FINORA
     </div>
+
+    <div class="finora-subtitle">
+        Lobby Activity Intelligence • Outlet Performance & Monitoring
+    </div>
+
 </div>
 """,
     unsafe_allow_html=True,
