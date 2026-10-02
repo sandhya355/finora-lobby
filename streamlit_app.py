@@ -1027,7 +1027,159 @@ with daily_tab:
         "Appointment Value",
         money(total_value),
     )
+    # ========================================================
+    # DAILY VISUAL DASHBOARD
+    # ========================================================
 
+    st.markdown("### 📈 Daily Performance")
+
+    # -------------------------------
+    # RECEIVED VS PENDING
+    # -------------------------------
+
+    status_chart = pd.DataFrame(
+        {
+            "Status": ["Received", "Pending"],
+            "Outlets": [
+                len(received_codes),
+                len(pending_codes),
+            ],
+        }
+    )
+
+    st.markdown("#### Outlet Submission Status")
+
+    st.bar_chart(
+        status_chart,
+        x="Status",
+        y="Outlets",
+        use_container_width=True,
+    )
+
+    # -------------------------------
+    # GUESTS VS CONVERSIONS
+    # -------------------------------
+
+    performance_rows = []
+
+    for code, record in daily.items():
+
+        performance_rows.append(
+            {
+                "Outlet": code,
+                "Guests": clean_number(
+                    record.get(
+                        "Guests Interacted",
+                        0,
+                    )
+                ),
+                "Conversions": clean_number(
+                    record.get(
+                        "Conversions",
+                        0,
+                    )
+                ),
+            }
+        )
+
+    if performance_rows:
+
+        performance_df = pd.DataFrame(
+            performance_rows
+        )
+
+        st.markdown(
+            "#### Guests vs Conversions by Outlet"
+        )
+
+        st.bar_chart(
+            performance_df.set_index("Outlet")[
+                ["Guests", "Conversions"]
+            ],
+            use_container_width=True,
+        )
+
+    else:
+
+        st.info(
+            "Performance charts will appear "
+            "when activity is received."
+        )
+
+    # -------------------------------
+    # APPOINTMENT VALUE
+    # -------------------------------
+
+    value_rows = []
+
+    for code, record in daily.items():
+
+        value_rows.append(
+            {
+                "Outlet": code,
+                "Appointment Value":
+                    clean_number(
+                        record.get(
+                            "Appointment Value",
+                            0,
+                        )
+                    ),
+            }
+        )
+
+    if value_rows:
+
+        value_df = pd.DataFrame(
+            value_rows
+        )
+
+        value_df = value_df.sort_values(
+            "Appointment Value",
+            ascending=False,
+        )
+
+        st.markdown(
+            "#### Appointment Value by Outlet"
+        )
+
+        st.bar_chart(
+            value_df.set_index("Outlet"),
+            use_container_width=True,
+        )
+
+    # -------------------------------
+    # WHATSAPP READY SUMMARY
+    # -------------------------------
+
+    st.markdown("### 📱 WhatsApp Summary")
+
+    if pending_codes:
+
+        pending_text = ", ".join(
+            pending_codes
+        )
+
+    else:
+
+        pending_text = "None - All Received ✅"
+
+    whatsapp_summary = (
+        f"FINORA - Lobby Activity\n"
+        f"{selected_date.strftime('%d %b %Y')}\n\n"
+        f"Total Outlets: {len(outlets)}\n"
+        f"Received: {len(received_codes)}\n"
+        f"Pending: {len(pending_codes)}\n"
+        f"Guests: {int(total_guests)}\n"
+        f"Conversions: {int(total_conversions)}\n"
+        f"Conversion Rate: {conversion_rate:.1f}%\n"
+        f"Appointment Value: {money(total_value)}\n\n"
+        f"Pending Outlets: {pending_text}"
+    )
+
+    st.code(
+        whatsapp_summary,
+        language=None,
+    )
     st.divider()
 
     # -------------------------------
