@@ -20,7 +20,9 @@ st.markdown("""
 #MainMenu,footer{visibility:hidden}
 header[data-testid="stHeader"]{background:#fff;border-bottom:1px solid #e6ebf1}
 section[data-testid="stSidebar"]{background:linear-gradient(180deg,#063657 0%,#082743 100%);border-right:0}
-section[data-testid="stSidebar"] .stButton>button{width:100%;min-height:46px;justify-content:flex-start;text-align:left;border:0;border-radius:5px;background:transparent;color:#eaf4fb;font-size:15px;font-weight:650;padding:0 15px;margin:2px 0}
+section[data-testid="stSidebar"] .stButton>button{width:100%;min-height:46px;justify-content:flex-start!important;text-align:left!important;border:0;border-radius:5px;background:transparent;color:#eaf4fb;font-size:15px;font-weight:650;padding:0 15px;margin:2px 0}
+section[data-testid="stSidebar"] .stButton>button p{text-align:left!important;width:100%!important;margin:0!important}
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"]{text-align:left!important}
 section[data-testid="stSidebar"] .stButton>button:hover{background:#0b506d;color:#fff}
 section[data-testid="stSidebar"] p{color:#d9e9f5}
 .brand{font-size:28px!important;font-weight:850!important;color:white!important;margin:6px 0 0}
@@ -277,14 +279,26 @@ elif st.session_state.project=="Lobby Activity":
                 st.subheader("⏳ Pending Outlets")
                 if pending:st.dataframe(pd.DataFrame([{"Code":c,"Outlet":outlets[c]} for c in pending]),hide_index=True,use_container_width=True)
                 else:st.success("All outlets submitted.")
+        st.subheader("📊 Lobby Performance Dashboard")
         if d:
             chart=pd.DataFrame([{"Outlet":c,"Guests":num(r["Guests Interacted"]),"Conversions":num(r["Conversions"]),"Appointment Value":num(r["Appointment Value"])} for c,r in d.items()]).set_index("Outlet")
-            c1,c2=st.columns(2)
+            c1,c2=st.columns(2,gap="large")
             with c1:
-                st.subheader("Guests vs Conversions");st.bar_chart(chart[["Guests","Conversions"]],height=280)
+                with st.container(border=True):
+                    st.markdown("#### 👥 Guests & Conversions")
+                    st.bar_chart(chart[["Guests","Conversions"]],height=300)
             with c2:
-                st.subheader("Appointment Value");st.bar_chart(chart[["Appointment Value"]],height=280)
-        st.subheader("WhatsApp Follow-up Summary")
+                with st.container(border=True):
+                    st.markdown("#### 💰 Appointment Value")
+                    st.bar_chart(chart[["Appointment Value"]],height=300)
+            st.markdown("#### 🏆 Outlet Performance")
+            perf=chart.reset_index()
+            perf["Conversion Rate %"]=perf.apply(lambda r: round((r["Conversions"]/r["Guests"]*100),1) if r["Guests"] else 0,axis=1)
+            perf=perf.sort_values(["Conversions","Appointment Value"],ascending=False)
+            st.dataframe(perf,hide_index=True,use_container_width=True,height=min(430,75+35*len(perf)))
+        else:
+            st.info("No Lobby Activity has been received for this date yet. The dashboard will populate automatically after activities are saved.")
+        st.subheader("📱 WhatsApp Follow-up Summary")
         st.code(f"""FINORA Lobby Activity | {selected.strftime('%d %b %Y')}
 Received: {len(received)}/{len(outlets)}
 Pending: {len(pending)}
