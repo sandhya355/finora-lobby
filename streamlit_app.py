@@ -41,6 +41,575 @@ ACTIVITY_HEADERS = [
 st.markdown(
     """
 <style>
+/* ==========================================================
+   FINORA PREMIUM VISUAL UPGRADE
+   ========================================================== */
+
+/* ---------- BODY FONT SIZE ---------- */
+
+/* Normal page text */
+.stApp p,
+.stApp span,
+.stApp label {
+    font-size: 16px;
+}
+
+/* Form labels */
+div[data-testid="stWidgetLabel"] p {
+    font-size: 16px !important;
+    font-weight: 650 !important;
+    color: #243b53 !important;
+}
+
+/* Captions */
+div[data-testid="stCaptionContainer"] p {
+    font-size: 14px !important;
+    color: #718096 !important;
+}
+
+/* Inputs */
+input {
+    font-size: 16px !important;
+}
+
+textarea {
+    font-size: 16px !important;
+    line-height: 1.6 !important;
+}
+
+/* File uploader text */
+div[data-testid="stFileUploader"] {
+    font-size: 15px !important;
+}
+
+/* Tabs */
+button[data-baseweb="tab"] {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+}
+
+/* Do NOT enlarge FINORA heading */
+.finora-logo {
+    font-size: 44px !important;
+}
+
+.finora-tagline {
+    font-size: 16px !important;
+}
+
+
+/* ==========================================================
+   PAGE BACKGROUND
+   ========================================================== */
+
+.stApp {
+    background:
+        radial-gradient(
+            circle at 8% 8%,
+            rgba(29, 139, 214, 0.08),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 92% 15%,
+            rgba(111, 76, 255, 0.07),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 50% 100%,
+            rgba(15, 157, 137, 0.07),
+            transparent 30%
+        ),
+        #f7f9fc;
+}
+
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+
+.finora-hero {
+    background:
+        linear-gradient(
+            115deg,
+            #071d35 0%,
+            #0b4160 38%,
+            #08786f 70%,
+            #4b55a5 100%
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.10);
+
+    box-shadow:
+        0 18px 45px
+        rgba(12, 39, 67, 0.18);
+}
+
+
+/* ==========================================================
+   TABS
+   ========================================================== */
+
+div[data-baseweb="tab-list"] {
+    background: #ffffff;
+
+    padding:
+        6px 8px 0 8px;
+
+    border-radius:
+        14px 14px 0 0;
+
+    box-shadow:
+        0 4px 14px
+        rgba(20, 45, 75, 0.04);
+}
+
+button[data-baseweb="tab"] {
+    color:
+        #52667a !important;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+
+    color:
+        #08766f !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e9faf6,
+            #edf6ff
+        ) !important;
+}
+
+
+/* ==========================================================
+   INPUT AREAS
+   ========================================================== */
+
+div[data-baseweb="input"],
+textarea {
+
+    background:
+        #ffffff !important;
+
+    border:
+        1px solid #dce6ed !important;
+
+    box-shadow:
+        0 3px 10px
+        rgba(20, 45, 75, 0.035);
+}
+
+div[data-baseweb="input"]:focus-within {
+
+    border:
+        1px solid #0d9488 !important;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(13, 148, 136, 0.10);
+}
+
+
+/* ==========================================================
+   FILE UPLOAD AREA
+   ========================================================== */
+
+div[data-testid="stFileUploader"] section {
+
+    background:
+        linear-gradient(
+            135deg,
+            #f3f9ff,
+            #f1fbf8
+        );
+
+    border:
+        1px dashed #8eb9c5;
+
+    padding:
+        16px;
+
+    border-radius:
+        14px;
+}
+
+
+/* ==========================================================
+   PRIMARY BUTTON
+   ========================================================== */
+
+div.stButton > button[kind="primary"] {
+
+    min-height:
+        55px;
+
+    font-size:
+        17px !important;
+
+    letter-spacing:
+        0.2px;
+
+    background:
+        linear-gradient(
+            100deg,
+            #08766f 0%,
+            #11988d 48%,
+            #2878b8 100%
+        );
+
+    box-shadow:
+        0 9px 22px
+        rgba(10, 118, 120, 0.22);
+}
+
+
+/* ==========================================================
+   KPI CARDS
+   ========================================================== */
+
+div[data-testid="stMetric"] {
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f8fbff
+        );
+
+    border:
+        1px solid #dfe8ef;
+
+    min-height:
+        112px;
+
+    box-shadow:
+        0 7px 20px
+        rgba(25, 50, 80, 0.07);
+}
+
+/* Metric label */
+div[data-testid="stMetricLabel"] p {
+
+    font-size:
+        15px !important;
+
+    font-weight:
+        700 !important;
+
+    color:
+        #52677b !important;
+}
+
+/* Metric number */
+div[data-testid="stMetricValue"] {
+
+    font-size:
+        29px !important;
+
+    font-weight:
+        800 !important;
+
+    color:
+        #102a43 !important;
+}
+
+
+/* ==========================================================
+   GIVE KPI CARDS DIFFERENT ACCENTS
+   ========================================================== */
+
+div[data-testid="stMetric"]:nth-of-type(1) {
+    border-top:
+        4px solid #2878b8;
+}
+
+div[data-testid="stMetric"]:nth-of-type(2) {
+    border-top:
+        4px solid #18a57b;
+}
+
+div[data-testid="stMetric"]:nth-of-type(3) {
+    border-top:
+        4px solid #ef6464;
+}
+
+
+/* ==========================================================
+   DASHBOARD CARDS
+   ========================================================== */
+
+.dashboard-card {
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fbfdff
+        );
+
+    border:
+        1px solid #dfe8ef;
+
+    box-shadow:
+        0 8px 22px
+        rgba(20, 45, 75, 0.065);
+
+    padding:
+        21px;
+}
+
+.card-title {
+
+    font-size:
+        19px !important;
+
+    color:
+        #183b56;
+}
+
+
+/* ==========================================================
+   RECEIVED / PENDING
+   ========================================================== */
+
+.status-received {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ddf8ed,
+            #effcf7
+        );
+
+    border:
+        1px solid #bcebd8;
+
+    color:
+        #087052;
+}
+
+.status-pending {
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffebeb,
+            #fff6f3
+        );
+
+    border:
+        1px solid #ffd0cb;
+
+    color:
+        #b33b3b;
+}
+
+.status-number {
+
+    font-size:
+        38px !important;
+}
+
+.status-label {
+
+    font-size:
+        14px !important;
+}
+
+
+/* ==========================================================
+   OUTLET PILLS
+   ========================================================== */
+
+.outlet-pill {
+
+    padding:
+        7px 12px;
+
+    margin:
+        5px 4px;
+
+    font-size:
+        14px !important;
+}
+
+.pending-pill {
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff0ef,
+            #fff7f4
+        );
+
+    border:
+        1px solid #ffc9c4;
+
+    color:
+        #a83c3c;
+}
+
+.received-pill {
+
+    background:
+        linear-gradient(
+            135deg,
+            #e2f8ef,
+            #f0fcf8
+        );
+
+    border:
+        1px solid #bfe8d8;
+
+    color:
+        #087052;
+}
+
+
+/* ==========================================================
+   TABLES
+   ========================================================== */
+
+div[data-testid="stDataFrame"] {
+
+    background:
+        white;
+
+    border:
+        1px solid #dfe8ef;
+
+    box-shadow:
+        0 7px 20px
+        rgba(20, 45, 75, 0.055);
+}
+
+
+/* ==========================================================
+   EXPANDERS
+   ========================================================== */
+
+div[data-testid="stExpander"] {
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #fafcff
+        );
+
+    border:
+        1px solid #dfe8ef;
+
+    box-shadow:
+        0 4px 12px
+        rgba(20, 45, 75, 0.04);
+}
+
+div[data-testid="stExpander"] summary p {
+
+    font-size:
+        16px !important;
+
+    font-weight:
+        650 !important;
+}
+
+
+/* ==========================================================
+   WHATSAPP SUMMARY
+   ========================================================== */
+
+div[data-testid="stCode"] {
+
+    background:
+        linear-gradient(
+            135deg,
+            #f0faf6,
+            #f3f8ff
+        ) !important;
+
+    border:
+        1px solid #cfe4dd;
+
+    box-shadow:
+        0 5px 15px
+        rgba(20, 70, 60, 0.05);
+}
+
+div[data-testid="stCode"] code {
+
+    font-size:
+        15px !important;
+
+    line-height:
+        1.6 !important;
+}
+
+
+/* ==========================================================
+   SUCCESS / WARNING / ERROR
+   ========================================================== */
+
+div[data-testid="stAlert"] p {
+
+    font-size:
+        16px !important;
+}
+
+
+/* ==========================================================
+   EXTRA SCREEN SPACE
+   ========================================================== */
+
+.block-container {
+
+    max-width:
+        1480px;
+
+    padding-left:
+        38px;
+
+    padding-right:
+        38px;
+
+    padding-bottom:
+        55px;
+}
+
+
+/* ==========================================================
+   MOBILE
+   ========================================================== */
+
+@media (max-width: 850px) {
+
+    .block-container {
+
+        padding-left:
+            15px;
+
+        padding-right:
+            15px;
+    }
+
+    .stApp p,
+    .stApp span,
+    .stApp label {
+
+        font-size:
+            15px;
+    }
+}
 
 /* ---------- PAGE ---------- */
 
