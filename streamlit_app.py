@@ -9,7 +9,7 @@ from google.oauth2.service_account import Credentials
 
 
 # ============================================================
-# FINORA - PAGE CONFIG
+# FINORA CONFIG
 # ============================================================
 
 st.set_page_config(
@@ -20,7 +20,7 @@ st.set_page_config(
 )
 
 ACTIVITY_SHEET = "Activity"
-OUTLET_MASTER_SHEET = "Outlet Master"
+MASTER_SHEET = "Outlet Master"
 
 ACTIVITY_HEADERS = [
     "Date",
@@ -35,833 +35,29 @@ ACTIVITY_HEADERS = [
 
 
 # ============================================================
-# PREMIUM FINORA DESIGN
+# DESIGN
 # ============================================================
 
-st.markdown(
-    """
+st.markdown("""
 <style>
 
-/* ----------------------------------------------------------
-   GLOBAL
----------------------------------------------------------- */
+/* ---------- GLOBAL ---------- */
 
 html, body, [class*="css"] {
     font-family: "Segoe UI", Arial, sans-serif;
 }
 
 .stApp {
-    background:
-        radial-gradient(circle at 95% 5%,
-            rgba(93, 91, 255, 0.06),
-            transparent 24%),
-        #f7f9fc;
+    background: #f6f8fc;
 }
 
 .block-container {
     max-width: 1500px;
-    padding-top: 1.1rem;
+    padding-top: 1.4rem;
     padding-left: 2.2rem;
     padding-right: 2.2rem;
     padding-bottom: 3rem;
 }
-
-
-/* ----------------------------------------------------------
-   SIDEBAR
----------------------------------------------------------- */
-
-section[data-testid="stSidebar"] {
-    background:
-        linear-gradient(
-            180deg,
-            #081d38 0%,
-            #0b2948 100%
-        );
-    border-right: 1px solid #173b5d;
-}
-
-section[data-testid="stSidebar"] > div {
-    padding-top: 18px;
-}
-
-section[data-testid="stSidebar"] * {
-    color: #ffffff;
-}
-
-.sidebar-brand {
-    padding: 14px 8px 24px 8px;
-    text-align: left;
-}
-
-.sidebar-logo-row {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-}
-
-.sidebar-logo-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 15px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 30px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #26d3a5,
-            #16a7bc
-        );
-
-    box-shadow:
-        0 8px 20px
-        rgba(0, 0, 0, 0.18);
-}
-
-.sidebar-finora {
-    color: white !important;
-    font-size: 29px !important;
-    font-weight: 800 !important;
-    letter-spacing: 1px;
-    line-height: 1;
-}
-
-.sidebar-tagline {
-    color: #9db5ca !important;
-    font-size: 14px !important;
-    margin-top: 6px;
-}
-
-.sidebar-section {
-    color: #6f8aa4 !important;
-    font-size: 12px !important;
-    font-weight: 700;
-    letter-spacing: 1.4px;
-    margin: 20px 5px 10px 5px;
-}
-
-.sidebar-menu {
-    padding: 12px 14px;
-    margin: 6px 0;
-
-    border-radius: 11px;
-
-    font-size: 16px;
-    font-weight: 600;
-
-    color: #cbd9e6 !important;
-}
-
-.sidebar-menu-active {
-    padding: 12px 14px;
-    margin: 6px 0;
-
-    border-radius: 11px;
-
-    font-size: 16px;
-    font-weight: 700;
-
-    color: white !important;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(39, 211, 170, 0.22),
-            rgba(62, 129, 232, 0.18)
-        );
-
-    border-left:
-        4px solid #2ad4a6;
-}
-
-.sidebar-status {
-    margin-top: 28px;
-
-    padding: 15px;
-
-    background:
-        rgba(255,255,255,0.06);
-
-    border:
-        1px solid rgba(255,255,255,0.08);
-
-    border-radius:
-        13px;
-}
-
-.status-dot {
-    display: inline-block;
-
-    width: 10px;
-    height: 10px;
-
-    border-radius: 50%;
-
-    background: #2dd79b;
-
-    margin-right: 7px;
-
-    box-shadow:
-        0 0 8px
-        rgba(45, 215, 155, 0.8);
-}
-
-
-/* ----------------------------------------------------------
-   TOP BRAND
----------------------------------------------------------- */
-
-.top-brand {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-
-    margin-bottom: 17px;
-}
-
-.top-logo {
-    width: 58px;
-    height: 58px;
-
-    border-radius: 17px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 32px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #27d3a8,
-            #18a7c4
-        );
-
-    box-shadow:
-        0 8px 20px
-        rgba(19, 167, 175, 0.20);
-}
-
-.top-finora {
-    font-size: 34px !important;
-    font-weight: 800 !important;
-    line-height: 1 !important;
-
-    color: #092a55 !important;
-
-    margin: 0 !important;
-}
-
-.top-tagline {
-    color: #73859a !important;
-    font-size: 16px !important;
-    margin-top: 6px;
-}
-
-
-/* ----------------------------------------------------------
-   PAGE HERO
----------------------------------------------------------- */
-
-.page-hero {
-    position: relative;
-    overflow: hidden;
-
-    padding: 25px 28px;
-
-    margin-top: 10px;
-    margin-bottom: 20px;
-
-    border-radius: 20px;
-
-    background:
-        linear-gradient(
-            120deg,
-            #092747 0%,
-            #105b73 60%,
-            #119486 100%
-        );
-
-    box-shadow:
-        0 12px 28px
-        rgba(8, 39, 72, 0.13);
-}
-
-.page-hero::after {
-    content: "";
-
-    position: absolute;
-
-    width: 180px;
-    height: 180px;
-
-    right: -60px;
-    top: -100px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255,255,255,0.08);
-}
-
-.hero-eyebrow {
-    color: #7debd1 !important;
-    font-size: 13px !important;
-    font-weight: 750;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-}
-
-.hero-title {
-    color: white !important;
-
-    font-size: 31px !important;
-    font-weight: 800 !important;
-
-    margin-top: 5px;
-}
-
-.hero-text {
-    color: #d9eef1 !important;
-
-    font-size: 16px !important;
-
-    margin-top: 5px;
-}
-
-
-/* ----------------------------------------------------------
-   TABS
----------------------------------------------------------- */
-
-div[data-baseweb="tab-list"] {
-
-    gap: 8px;
-
-    background: white;
-
-    padding: 7px;
-
-    border-radius: 14px;
-
-    border: 1px solid #e1e8ef;
-
-    box-shadow:
-        0 5px 16px
-        rgba(17, 44, 74, 0.045);
-}
-
-button[data-baseweb="tab"] {
-
-    height: 51px;
-
-    padding-left: 22px !important;
-    padding-right: 22px !important;
-
-    border-radius: 10px !important;
-
-    font-size: 16px !important;
-    font-weight: 650 !important;
-
-    color: #52677d !important;
-}
-
-button[data-baseweb="tab"][aria-selected="true"] {
-
-    color: #5b57f6 !important;
-
-    background:
-        linear-gradient(
-            135deg,
-            #efefff,
-            #eef8ff
-        ) !important;
-}
-
-
-/* ----------------------------------------------------------
-   NORMAL BODY TEXT
----------------------------------------------------------- */
-
-.stApp p {
-    font-size: 16px;
-}
-
-div[data-testid="stWidgetLabel"] p {
-
-    font-size: 16px !important;
-    font-weight: 650 !important;
-
-    color: #334e68 !important;
-}
-
-div[data-testid="stCaptionContainer"] p {
-
-    font-size: 14px !important;
-
-    color: #718096 !important;
-}
-
-
-/* ----------------------------------------------------------
-   SECTION TITLE
----------------------------------------------------------- */
-
-.section-title {
-
-    font-size: 26px !important;
-
-    font-weight: 800 !important;
-
-    color: #102a43 !important;
-
-    margin-top: 18px;
-    margin-bottom: 3px;
-}
-
-.section-subtitle {
-
-    font-size: 16px !important;
-
-    color: #718096 !important;
-
-    margin-bottom: 20px;
-}
-
-
-/* ----------------------------------------------------------
-   INPUTS
----------------------------------------------------------- */
-
-div[data-baseweb="input"] {
-
-    min-height: 48px;
-
-    border-radius: 11px !important;
-
-    background: white !important;
-
-    border: 1px solid #dce5ec !important;
-}
-
-input {
-
-    font-size: 16px !important;
-}
-
-textarea {
-
-    font-size: 16px !important;
-
-    line-height: 1.55 !important;
-
-    min-height: 210px !important;
-
-    border-radius: 13px !important;
-
-    background: white !important;
-
-    border: 1px solid #dce5ec !important;
-}
-
-div[data-testid="stFileUploader"] section {
-
-    background:
-        linear-gradient(
-            135deg,
-            #f1f8ff,
-            #effbf8
-        );
-
-    border:
-        1px dashed #9bbdca;
-
-    border-radius:
-        13px;
-
-    padding: 17px;
-}
-
-
-/* ----------------------------------------------------------
-   PRIMARY BUTTON
----------------------------------------------------------- */
-
-div.stButton > button[kind="primary"] {
-
-    min-height: 55px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    color: white;
-
-    font-size: 17px !important;
-    font-weight: 750 !important;
-
-    background:
-        linear-gradient(
-            90deg,
-            #5d5cf6 0%,
-            #5575ef 45%,
-            #19a997 100%
-        );
-
-    box-shadow:
-        0 8px 20px
-        rgba(78, 93, 230, 0.20);
-}
-
-div.stButton > button[kind="primary"]:hover {
-
-    color: white;
-
-    border: none;
-
-    transform:
-        translateY(-1px);
-}
-
-
-/* ----------------------------------------------------------
-   KPI CARDS
----------------------------------------------------------- */
-
-div[data-testid="stMetric"] {
-
-    position: relative;
-
-    overflow: hidden;
-
-    min-height: 112px;
-
-    padding: 16px 17px;
-
-    background: white;
-
-    border: 1px solid #e0e7ee;
-
-    border-radius: 16px;
-
-    box-shadow:
-        0 6px 18px
-        rgba(15, 42, 72, 0.055);
-}
-
-div[data-testid="stMetricLabel"] p {
-
-    font-size: 14px !important;
-
-    font-weight: 700 !important;
-
-    color: #66788b !important;
-}
-
-div[data-testid="stMetricValue"] {
-
-    font-size: 27px !important;
-
-    font-weight: 800 !important;
-
-    color: #102a43 !important;
-}
-
-
-/* ----------------------------------------------------------
-   CUSTOM CARDS
----------------------------------------------------------- */
-
-.fin-card {
-
-    background: white;
-
-    border:
-        1px solid #e1e8ef;
-
-    border-radius:
-        17px;
-
-    padding:
-        20px;
-
-    box-shadow:
-        0 6px 18px
-        rgba(15, 42, 72, 0.055);
-
-    margin-bottom:
-        14px;
-}
-
-.fin-card-title {
-
-    font-size:
-        19px !important;
-
-    font-weight:
-        800;
-
-    color:
-        #173b5e !important;
-
-    margin-bottom:
-        12px;
-}
-
-
-/* ----------------------------------------------------------
-   RECEIVED / PENDING
----------------------------------------------------------- */
-
-.status-wrap {
-
-    display: grid;
-
-    grid-template-columns:
-        1fr 1fr;
-
-    gap: 13px;
-}
-
-.received-card {
-
-    padding: 18px;
-
-    border-radius: 14px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #dff9ee,
-            #effcf7
-        );
-
-    border:
-        1px solid #b9ead7;
-}
-
-.pending-card {
-
-    padding: 18px;
-
-    border-radius: 14px;
-
-    text-align: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #ffeded,
-            #fff7f3
-        );
-
-    border:
-        1px solid #ffd0c9;
-}
-
-.status-big {
-
-    font-size:
-        35px !important;
-
-    font-weight:
-        850;
-}
-
-.status-small {
-
-    font-size:
-        13px !important;
-
-    font-weight:
-        750;
-
-    letter-spacing:
-        0.6px;
-}
-
-
-/* ----------------------------------------------------------
-   OUTLET PILLS
----------------------------------------------------------- */
-
-.outlet-pill {
-
-    display: inline-block;
-
-    padding:
-        7px 11px;
-
-    margin:
-        5px 4px;
-
-    border-radius:
-        20px;
-
-    font-size:
-        14px !important;
-
-    font-weight:
-        650;
-}
-
-.pending-pill {
-
-    color:
-        #a23a3a;
-
-    background:
-        #fff0ef;
-
-    border:
-        1px solid #ffc9c4;
-}
-
-.received-pill {
-
-    color:
-        #087052;
-
-    background:
-        #e4f9f0;
-
-    border:
-        1px solid #bce9d7;
-}
-
-
-/* ----------------------------------------------------------
-   TABLES / EXPANDERS
----------------------------------------------------------- */
-
-div[data-testid="stDataFrame"] {
-
-    background:
-        white;
-
-    border:
-        1px solid #e0e7ee;
-
-    border-radius:
-        14px;
-
-    overflow:
-        hidden;
-
-    box-shadow:
-        0 5px 16px
-        rgba(15, 42, 72, 0.045);
-}
-
-div[data-testid="stExpander"] {
-
-    background:
-        white;
-
-    border:
-        1px solid #e0e7ee;
-
-    border-radius:
-        14px;
-}
-
-div[data-testid="stExpander"] summary p {
-
-    font-size:
-        16px !important;
-
-    font-weight:
-        650 !important;
-}
-
-
-/* ----------------------------------------------------------
-   ALERTS
----------------------------------------------------------- */
-
-div[data-testid="stAlert"] {
-
-    border-radius:
-        13px;
-}
-
-div[data-testid="stAlert"] p {
-
-    font-size:
-        16px !important;
-}
-
-
-/* ----------------------------------------------------------
-   WHATSAPP BOX
----------------------------------------------------------- */
-
-.whatsapp-box {
-
-    padding:
-        18px 20px;
-
-    border-radius:
-        15px;
-
-    background:
-        linear-gradient(
-            135deg,
-            #eafaf3,
-            #eef8ff
-        );
-
-    border:
-        1px solid #cbe7db;
-
-    color:
-        #173b4f;
-
-    font-size:
-        16px !important;
-
-    line-height:
-        1.65;
-
-    white-space:
-        pre-line;
-}
-
-
-/* ----------------------------------------------------------
-   FOOTER
----------------------------------------------------------- */
-
-.finora-footer {
-
-    text-align:
-        center;
-
-    color:
-        #94a3b8 !important;
-
-    font-size:
-        13px !important;
-
-    margin-top:
-        35px;
-
-    padding:
-        15px;
-}
-
-
-/* ----------------------------------------------------------
-   HIDE STREAMLIT DEFAULTS
----------------------------------------------------------- */
 
 #MainMenu {
     visibility: hidden;
@@ -872,9 +68,750 @@ footer {
 }
 
 
-/* ----------------------------------------------------------
-   MOBILE
----------------------------------------------------------- */
+/* ---------- SIDEBAR ---------- */
+
+section[data-testid="stSidebar"] {
+    background:
+        linear-gradient(
+            180deg,
+            #071d38 0%,
+            #0a2c4e 100%
+        );
+
+    border-right: 1px solid #163a5c;
+}
+
+section[data-testid="stSidebar"] > div {
+    padding-top: 1.1rem;
+}
+
+.sidebar-brand {
+    padding: 10px 8px 24px 8px;
+}
+
+.brand-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.brand-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 29px;
+    font-weight: 850;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2dd6a6,
+            #17a8c0
+        );
+
+    box-shadow:
+        0 9px 22px
+        rgba(0,0,0,.18);
+}
+
+.brand-name {
+    color: white;
+    font-size: 28px;
+    font-weight: 850;
+    letter-spacing: .8px;
+    line-height: 1;
+}
+
+.brand-tagline {
+    color: #9db4ca;
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+.sidebar-label {
+    color: #6f91af;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+
+    margin:
+        8px 4px 8px 4px;
+}
+
+
+/* REAL STREAMLIT SIDEBAR BUTTONS */
+
+section[data-testid="stSidebar"] div.stButton > button {
+
+    width: 100%;
+    min-height: 48px;
+
+    justify-content: flex-start;
+
+    text-align: left;
+
+    padding:
+        0 14px;
+
+    margin-bottom:
+        4px;
+
+    border:
+        1px solid transparent;
+
+    border-radius:
+        11px;
+
+    background:
+        transparent;
+
+    color:
+        #d7e5f1;
+
+    font-size:
+        15px !important;
+
+    font-weight:
+        650;
+
+    box-shadow:
+        none;
+}
+
+section[data-testid="stSidebar"] div.stButton > button:hover {
+
+    background:
+        rgba(255,255,255,.07);
+
+    border-color:
+        rgba(255,255,255,.06);
+
+    color:
+        white;
+}
+
+.sidebar-online {
+
+    margin-top:
+        26px;
+
+    padding:
+        14px 15px;
+
+    border-radius:
+        13px;
+
+    background:
+        rgba(255,255,255,.06);
+
+    border:
+        1px solid rgba(255,255,255,.08);
+
+    color:
+        #dce9f4;
+
+    font-size:
+        14px;
+}
+
+.online-dot {
+
+    display:
+        inline-block;
+
+    width:
+        9px;
+
+    height:
+        9px;
+
+    border-radius:
+        50%;
+
+    margin-right:
+        8px;
+
+    background:
+        #2cda9d;
+
+    box-shadow:
+        0 0 8px
+        rgba(44,218,157,.8);
+}
+
+
+/* ---------- TOP BRAND ---------- */
+
+.top-brand {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        14px;
+
+    margin-bottom:
+        18px;
+}
+
+.top-icon {
+
+    width:
+        55px;
+
+    height:
+        55px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        16px;
+
+    color:
+        white;
+
+    font-size:
+        29px;
+
+    font-weight:
+        850;
+
+    background:
+        linear-gradient(
+            135deg,
+            #29d4a4,
+            #18a6c1
+        );
+
+    box-shadow:
+        0 8px 20px
+        rgba(22,167,185,.18);
+}
+
+.top-name {
+
+    color:
+        #082d5c;
+
+    font-size:
+        32px;
+
+    font-weight:
+        850;
+
+    line-height:
+        1;
+}
+
+.top-sub {
+
+    color:
+        #71849a;
+
+    font-size:
+        15px;
+
+    margin-top:
+        6px;
+}
+
+
+/* ---------- PROJECT HEADER ---------- */
+
+.project-header {
+
+    padding:
+        24px 27px;
+
+    margin-bottom:
+        19px;
+
+    border-radius:
+        19px;
+
+    color:
+        white;
+
+    background:
+        linear-gradient(
+            120deg,
+            #092844 0%,
+            #0e6073 55%,
+            #159989 100%
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(8,45,72,.12);
+}
+
+.project-small {
+
+    color:
+        #83ebd3;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.3px;
+
+    text-transform:
+        uppercase;
+}
+
+.project-title {
+
+    color:
+        white;
+
+    font-size:
+        30px;
+
+    font-weight:
+        850;
+
+    margin-top:
+        5px;
+}
+
+.project-description {
+
+    color:
+        #d9eff1;
+
+    font-size:
+        16px;
+
+    margin-top:
+        5px;
+}
+
+
+/* ---------- BODY ---------- */
+
+.page-title {
+
+    color:
+        #102a43;
+
+    font-size:
+        27px;
+
+    font-weight:
+        850;
+
+    margin-top:
+        16px;
+}
+
+.page-description {
+
+    color:
+        #718096;
+
+    font-size:
+        16px;
+
+    margin:
+        3px 0 18px 0;
+}
+
+.stApp p {
+    font-size: 16px;
+}
+
+div[data-testid="stWidgetLabel"] p {
+
+    color:
+        #334e68 !important;
+
+    font-size:
+        15px !important;
+
+    font-weight:
+        700 !important;
+}
+
+
+/* ---------- TABS ---------- */
+
+div[data-baseweb="tab-list"] {
+
+    gap:
+        6px;
+
+    padding:
+        6px;
+
+    background:
+        white;
+
+    border:
+        1px solid #e0e7ef;
+
+    border-radius:
+        13px;
+
+    box-shadow:
+        0 4px 14px
+        rgba(16,42,67,.04);
+}
+
+button[data-baseweb="tab"] {
+
+    height:
+        49px;
+
+    padding-left:
+        20px !important;
+
+    padding-right:
+        20px !important;
+
+    border-radius:
+        9px !important;
+
+    color:
+        #52677c !important;
+
+    font-size:
+        15px !important;
+
+    font-weight:
+        700 !important;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+
+    color:
+        #4f5cf1 !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef0ff,
+            #ecf8ff
+        ) !important;
+}
+
+
+/* ---------- INPUTS ---------- */
+
+textarea {
+
+    min-height:
+        225px !important;
+
+    font-size:
+        16px !important;
+
+    line-height:
+        1.6 !important;
+
+    background:
+        white !important;
+
+    border-radius:
+        12px !important;
+}
+
+input {
+    font-size: 16px !important;
+}
+
+div[data-testid="stFileUploader"] section {
+
+    padding:
+        16px;
+
+    border-radius:
+        12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f1f9ff,
+            #effbf7
+        );
+
+    border:
+        1px dashed #91b9c5;
+}
+
+
+/* ---------- MAIN BUTTON ---------- */
+
+div.stButton > button[kind="primary"] {
+
+    min-height:
+        54px;
+
+    border:
+        none;
+
+    border-radius:
+        11px;
+
+    color:
+        white;
+
+    font-size:
+        16px !important;
+
+    font-weight:
+        800 !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            #5d5cf6,
+            #4e7bea,
+            #16aa96
+        );
+
+    box-shadow:
+        0 8px 18px
+        rgba(78,91,220,.17);
+}
+
+
+/* ---------- METRICS ---------- */
+
+div[data-testid="stMetric"] {
+
+    min-height:
+        108px;
+
+    padding:
+        15px;
+
+    border-radius:
+        15px;
+
+    background:
+        white;
+
+    border:
+        1px solid #e0e7ef;
+
+    box-shadow:
+        0 5px 16px
+        rgba(16,42,67,.05);
+}
+
+div[data-testid="stMetricLabel"] p {
+
+    color:
+        #66788b !important;
+
+    font-size:
+        13px !important;
+
+    font-weight:
+        750 !important;
+}
+
+div[data-testid="stMetricValue"] {
+
+    color:
+        #102a43 !important;
+
+    font-size:
+        27px !important;
+
+    font-weight:
+        850 !important;
+}
+
+
+/* ---------- CARDS ---------- */
+
+.card {
+
+    padding:
+        19px;
+
+    margin-bottom:
+        14px;
+
+    border-radius:
+        16px;
+
+    background:
+        white;
+
+    border:
+        1px solid #e0e7ef;
+
+    box-shadow:
+        0 5px 16px
+        rgba(16,42,67,.05);
+}
+
+.card-title {
+
+    color:
+        #173b5e;
+
+    font-size:
+        18px;
+
+    font-weight:
+        800;
+
+    margin-bottom:
+        12px;
+}
+
+
+/* ---------- PILLS ---------- */
+
+.pill {
+
+    display:
+        inline-block;
+
+    margin:
+        4px;
+
+    padding:
+        7px 11px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+}
+
+.pending {
+
+    color:
+        #aa3c3c;
+
+    background:
+        #fff0ee;
+
+    border:
+        1px solid #ffc9c3;
+}
+
+.received {
+
+    color:
+        #087052;
+
+    background:
+        #e5f9f1;
+
+    border:
+        1px solid #bce8d7;
+}
+
+
+/* ---------- MODULE PLACEHOLDER ---------- */
+
+.module-box {
+
+    max-width:
+        850px;
+
+    padding:
+        35px;
+
+    margin-top:
+        25px;
+
+    border-radius:
+        20px;
+
+    text-align:
+        center;
+
+    background:
+        white;
+
+    border:
+        1px solid #e1e8ef;
+
+    box-shadow:
+        0 8px 25px
+        rgba(16,42,67,.06);
+}
+
+.module-icon {
+
+    font-size:
+        45px;
+}
+
+.module-name {
+
+    color:
+        #102a43;
+
+    font-size:
+        27px;
+
+    font-weight:
+        850;
+
+    margin-top:
+        8px;
+}
+
+.module-text {
+
+    color:
+        #718096;
+
+    font-size:
+        16px;
+
+    margin-top:
+        7px;
+}
+
+
+/* ---------- DATAFRAME ---------- */
+
+div[data-testid="stDataFrame"] {
+
+    border:
+        1px solid #e0e7ef;
+
+    border-radius:
+        13px;
+
+    overflow:
+        hidden;
+}
+
+
+/* ---------- MOBILE ---------- */
 
 @media (max-width: 900px) {
 
@@ -887,110 +824,105 @@ footer {
             14px;
     }
 
-    .top-finora {
-
-        font-size:
-            28px !important;
-    }
-
-    .status-wrap {
-
-        grid-template-columns:
-            1fr;
-    }
 }
 
 </style>
-""",
-    unsafe_allow_html=True,
-)
+""", unsafe_allow_html=True)
 
 
 # ============================================================
-# SIDEBAR - FINORA PLATFORM
+# SESSION STATE / PROJECT NAVIGATION
+# ============================================================
+
+if "project" not in st.session_state:
+    st.session_state.project = "Home"
+
+
+def open_project(name):
+    st.session_state.project = name
+
+
+# ============================================================
+# SIDEBAR
 # ============================================================
 
 with st.sidebar:
 
     st.markdown(
         """
-<div class="sidebar-brand">
-
-    <div class="sidebar-logo-row">
-
-        <div class="sidebar-logo-icon">
-            F
+        <div class="sidebar-brand">
+            <div class="brand-row">
+                <div class="brand-icon">F</div>
+                <div>
+                    <div class="brand-name">FINORA</div>
+                    <div class="brand-tagline">Your Finance AI</div>
+                </div>
+            </div>
         </div>
 
-        <div>
-
-            <div class="sidebar-finora">
-                FINORA
-            </div>
-
-            <div class="sidebar-tagline">
-                Your Finance AI
-            </div>
-
+        <div class="sidebar-label">
+            WORKSPACE
         </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    </div>
+    if st.button(
+        "🏠  Home",
+        use_container_width=True,
+    ):
+        open_project("Home")
+        st.rerun()
 
-</div>
+    if st.button(
+        "📊  Lobby Activity",
+        use_container_width=True,
+    ):
+        open_project("Lobby Activity")
+        st.rerun()
 
-<div class="sidebar-section">
-    WORKSPACE
-</div>
+    if st.button(
+        "🧾  GST Returns",
+        use_container_width=True,
+    ):
+        open_project("GST Returns")
+        st.rerun()
 
-<div class="sidebar-menu">
-    🏠 &nbsp; Home
-</div>
+    if st.button(
+        "📈  Zenoti Reports",
+        use_container_width=True,
+    ):
+        open_project("Zenoti Reports")
+        st.rerun()
 
-<div class="sidebar-menu-active">
-    📊 &nbsp; Lobby Activity
-</div>
+    if st.button(
+        "💰  Cash Reconciliation",
+        use_container_width=True,
+    ):
+        open_project("Cash Reconciliation")
+        st.rerun()
 
-<div class="sidebar-menu">
-    🧾 &nbsp; GST Returns
-</div>
+    if st.button(
+        "📁  Files",
+        use_container_width=True,
+    ):
+        open_project("Files")
+        st.rerun()
 
-<div class="sidebar-menu">
-    📈 &nbsp; Zenoti Reports
-</div>
+    if st.button(
+        "⚙️  Settings",
+        use_container_width=True,
+    ):
+        open_project("Settings")
+        st.rerun()
 
-<div class="sidebar-menu">
-    💰 &nbsp; Cash Reconciliation
-</div>
-
-<div class="sidebar-menu">
-    📁 &nbsp; Files
-</div>
-
-<div class="sidebar-menu">
-    ⚙️ &nbsp; Settings
-</div>
-
-<div class="sidebar-status">
-
-    <div style="
-        color:#8da8bf;
-        font-size:12px;
-        font-weight:700;
-        margin-bottom:8px;
-    ">
-        SYSTEM STATUS
-    </div>
-
-    <div style="
-        color:white;
-        font-size:15px;
-    ">
-        <span class="status-dot"></span>
-        FINORA Online
-    </div>
-
-</div>
-""",
+    st.markdown(
+        """
+        <div class="sidebar-online">
+            <span class="online-dot"></span>
+            FINORA Online
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
@@ -1001,26 +933,14 @@ with st.sidebar:
 
 st.markdown(
     """
-<div class="top-brand">
-
-    <div class="top-logo">
-        F
-    </div>
-
-    <div>
-
-        <div class="top-finora">
-            Finora
+    <div class="top-brand">
+        <div class="top-icon">F</div>
+        <div>
+            <div class="top-name">Finora</div>
+            <div class="top-sub">Your Finance AI</div>
         </div>
-
-        <div class="top-tagline">
-            Your Finance AI
-        </div>
-
     </div>
-
-</div>
-""",
+    """,
     unsafe_allow_html=True,
 )
 
@@ -1030,51 +950,39 @@ st.markdown(
 # ============================================================
 
 @st.cache_resource
-def get_spreadsheet():
+def connect_to_sheet():
 
-    info = dict(
-        st.secrets[
-            "google_service_account"
-        ]
+    service_account_info = dict(
+        st.secrets["google_service_account"]
     )
 
-    credentials = (
-        Credentials.from_service_account_info(
-            info,
-            scopes=[
-                "https://www.googleapis.com/auth/spreadsheets"
-            ],
-        )
+    credentials = Credentials.from_service_account_info(
+        service_account_info,
+        scopes=[
+            "https://www.googleapis.com/auth/spreadsheets"
+        ],
     )
 
     client = gspread.authorize(
         credentials
     )
 
-    return client.open_by_key(
-        st.secrets[
-            "spreadsheet_id"
-        ]
+    spreadsheet = client.open_by_key(
+        st.secrets["spreadsheet_id"]
+    )
+
+    return spreadsheet
+
+
+def activity_ws():
+    return connect_to_sheet().worksheet(
+        ACTIVITY_SHEET
     )
 
 
-def get_activity_sheet():
-
-    return (
-        get_spreadsheet()
-        .worksheet(
-            ACTIVITY_SHEET
-        )
-    )
-
-
-def get_master_sheet():
-
-    return (
-        get_spreadsheet()
-        .worksheet(
-            OUTLET_MASTER_SHEET
-        )
+def master_ws():
+    return connect_to_sheet().worksheet(
+        MASTER_SHEET
     )
 
 
@@ -1082,7 +990,7 @@ def get_master_sheet():
 # HELPERS
 # ============================================================
 
-def clean_number(value):
+def number(value):
 
     if value is None:
         return 0
@@ -1102,42 +1010,34 @@ def clean_number(value):
     if not match:
         return 0
 
-    number = float(
-        match.group()
-    )
+    result = float(match.group())
 
-    if number.is_integer():
-        return int(number)
+    if result.is_integer():
+        return int(result)
 
-    return number
+    return result
 
 
-def money(value):
+def rupees(value):
 
     try:
-
-        return (
-            f"₹{float(value):,.0f}"
-        )
+        return f"₹{float(value):,.0f}"
 
     except Exception:
-
         return "₹0"
 
 
 def normalize_date(value):
 
-    text = str(
-        value
-    ).strip()
+    value = str(value).strip()
 
-    if not text:
+    if not value:
         return ""
 
     formats = [
         "%Y-%m-%d",
-        "%d-%m-%Y",
         "%d/%m/%Y",
+        "%d-%m-%Y",
         "%m/%d/%Y",
         "%Y/%m/%d",
         "%d %b %Y",
@@ -1147,42 +1047,30 @@ def normalize_date(value):
     for fmt in formats:
 
         try:
-
-            return (
-                datetime.strptime(
-                    text,
-                    fmt,
-                )
-                .date()
-                .isoformat()
-            )
+            return datetime.strptime(
+                value,
+                fmt,
+            ).date().isoformat()
 
         except ValueError:
-
             pass
 
     try:
 
-        return (
-            pd.to_datetime(
-                text,
-                dayfirst=True,
-            )
-            .date()
-            .isoformat()
-        )
+        return pd.to_datetime(
+            value,
+            dayfirst=True,
+        ).date().isoformat()
 
     except Exception:
 
-        return text
+        return value
 
 
-def now_ist():
+def current_time():
 
     return datetime.now(
-        ZoneInfo(
-            "Asia/Kolkata"
-        )
+        ZoneInfo("Asia/Kolkata")
     ).strftime(
         "%Y-%m-%d %H:%M:%S"
     )
@@ -1192,47 +1080,28 @@ def now_ist():
 # OUTLET MASTER
 # ============================================================
 
-def load_outlet_master():
+def get_outlets():
 
-    worksheet = (
-        get_master_sheet()
-    )
-
-    values = worksheet.get(
-        "A:C"
-    )
+    values = master_ws().get("A:C")
 
     outlets = {}
 
     if len(values) < 2:
-
         return outlets
 
     for row in values[1:]:
 
-        row = (
-            row
-            + [""] * (
-                3 - len(row)
-            )
-        )
+        row = row + [""] * (3 - len(row))
 
-        code = str(
-            row[0]
-        ).strip().upper()
-
-        name = str(
-            row[1]
-        ).strip()
-
-        active = str(
-            row[2]
-        ).strip().lower()
+        code = str(row[0]).strip().upper()
+        name = str(row[1]).strip()
+        active = str(row[2]).strip().lower()
 
         if (
             code
             and name
-            and active in {
+            and active
+            in {
                 "yes",
                 "y",
                 "true",
@@ -1240,194 +1109,180 @@ def load_outlet_master():
                 "active",
             }
         ):
-
-            outlets[
-                code
-            ] = name
+            outlets[code] = name
 
     return outlets
 
 
 # ============================================================
-# WHATSAPP MESSAGE PARSER
+# FLEXIBLE WHATSAPP PARSER
 # ============================================================
 
-def extract_field(
+def clean_line(line):
+
+    # Removes:
+    # 1.
+    # 2)
+    # -
+    # *
+    # bullets
+    return re.sub(
+        r"^\s*(?:\d+\s*[\.\)]\s*|[-•*]\s*)",
+        "",
+        line,
+    ).strip()
+
+
+def get_message_value(
     text,
     labels,
 ):
 
-    for label in labels:
+    lines = text.splitlines()
 
-        pattern = (
-            rf"(?im)^\s*"
-            rf"{re.escape(label)}"
-            rf"\s*[:\-]\s*"
-            rf"(.*?)\s*$"
-        )
+    for raw_line in lines:
 
-        match = re.search(
-            pattern,
-            text,
-        )
+        line = clean_line(raw_line)
 
-        if match:
+        for label in labels:
 
-            return (
-                match.group(1)
-                .strip()
+            # Supports:
+            # Therapist: Gayatri
+            # Therapist - Gayatri
+            # Therapist Gayatri
+
+            pattern = (
+                rf"(?i)^\s*"
+                rf"{re.escape(label)}"
+                rf"\s*(?::|-)\s*"
+                rf"(.+?)\s*$"
             )
+
+            match = re.match(
+                pattern,
+                line,
+            )
+
+            if match:
+                return match.group(1).strip()
 
     return ""
 
 
-def detect_outlet(
+def identify_outlet(
     text,
     outlets,
 ):
 
-    upper = text.upper()
+    upper_text = text.upper()
 
-    # Search outlet code first.
-    for code, name in (
-        outlets.items()
-    ):
+    for code, name in outlets.items():
 
         if re.search(
             rf"(?<![A-Z0-9])"
             rf"{re.escape(code)}"
             rf"(?![A-Z0-9])",
-            upper,
+            upper_text,
         ):
 
-            return (
-                code,
-                name,
-            )
+            return code, name
 
-    # Search full outlet name.
-    for code, name in (
-        outlets.items()
-    ):
+    for code, name in outlets.items():
 
-        if (
-            name.upper()
-            in upper
-        ):
+        if name.upper() in upper_text:
+            return code, name
 
-            return (
-                code,
-                name,
-            )
-
-    return (
-        None,
-        None,
-    )
+    return None, None
 
 
-def parse_activity(
+def parse_whatsapp(
     text,
     outlets,
 ):
 
-    code, name = (
-        detect_outlet(
-            text,
-            outlets,
-        )
+    code, outlet_name = identify_outlet(
+        text,
+        outlets,
+    )
+
+    therapist = get_message_value(
+        text,
+        [
+            "Therapist",
+            "Therapist Name",
+            "Name of Therapist",
+        ],
+    )
+
+    shift = get_message_value(
+        text,
+        [
+            "Shift timings",
+            "Shift timing",
+            "Shift",
+            "Timings",
+            "Timing",
+        ],
+    )
+
+    guests_text = get_message_value(
+        text,
+        [
+            "Number of guests interacted",
+            "No of guests interacted",
+            "No. of guests interacted",
+            "Guests interacted",
+            "Guest interacted",
+            "Number of guests",
+            "Guests",
+        ],
+    )
+
+    conversions_text = get_message_value(
+        text,
+        [
+            "Number of conversions",
+            "No of conversions",
+            "No. of conversions",
+            "Conversions",
+            "Conversion",
+        ],
+    )
+
+    appointment_text = get_message_value(
+        text,
+        [
+            "Appointment value",
+            "Appointment amount",
+            "Appointment Value",
+            "Value",
+        ],
     )
 
     return {
-
-        "Outlet Code":
-            code,
-
-        "Outlet Name":
-            name,
-
-        "Therapist":
-            extract_field(
-                text,
-                [
-                    "Therapist",
-                    "Therapist Name",
-                    "Name of Therapist",
-                    "Staff",
-                ],
-            ),
-
-        "Shift Timings":
-            extract_field(
-                text,
-                [
-                    "Shift",
-                    "Shift Timing",
-                    "Shift Timings",
-                    "Timing",
-                    "Timings",
-                ],
-            ),
-
-        "Guests Interacted":
-            clean_number(
-                extract_field(
-                    text,
-                    [
-                        "Guests Interacted",
-                        "Guest Interacted",
-                        "Guests",
-                        "Guest",
-                        "No of Guests",
-                        "No. of Guests",
-                    ],
-                )
-            ),
-
-        "Conversions":
-            clean_number(
-                extract_field(
-                    text,
-                    [
-                        "Conversions",
-                        "Conversion",
-                        "Converted",
-                    ],
-                )
-            ),
-
-        "Appointment Value":
-            clean_number(
-                extract_field(
-                    text,
-                    [
-                        "Appointment Value",
-                        "Appointment Amount",
-                        "Appointment",
-                        "Value",
-                    ],
-                )
-            ),
+        "Outlet Code": code,
+        "Outlet Name": outlet_name,
+        "Therapist": therapist,
+        "Shift Timings": shift,
+        "Guests Interacted": number(guests_text),
+        "Conversions": number(conversions_text),
+        "Appointment Value": number(appointment_text),
     }
 
 
 # ============================================================
-# READ ACTIVITY SHEET
+# READ ACTIVITY
 # ============================================================
 
-def read_activity():
+def get_activity_records():
 
-    worksheet = (
-        get_activity_sheet()
-    )
+    ws = activity_ws()
 
-    values = worksheet.get(
-        "A:H"
-    )
+    values = ws.get("A:H")
 
     if not values:
 
-        worksheet.append_row(
+        ws.append_row(
             ACTIVITY_HEADERS
         )
 
@@ -1435,48 +1290,47 @@ def read_activity():
 
     records = []
 
-    for row_number, row in (
-        enumerate(
-            values[1:],
-            start=2,
-        )
+    # IMPORTANT:
+    # We do NOT use get_all_records().
+    # This avoids your previous duplicate-header error.
+
+    for sheet_row, row in enumerate(
+        values[1:],
+        start=2,
     ):
 
-        if not any(row):
-
+        if not any(
+            str(x).strip()
+            for x in row
+        ):
             continue
 
-        row = (
-            row
-            + [""] * (
-                8 - len(row)
-            )
-        )
+        row = row + [""] * (8 - len(row))
 
         record = {
-            ACTIVITY_HEADERS[i]:
-                row[i]
-            for i in range(8)
+            "Date": row[0],
+            "Outlet": row[1],
+            "Therapist": row[2],
+            "Shift Timings": row[3],
+            "Guests Interacted": row[4],
+            "Conversions": row[5],
+            "Appointment Value": row[6],
+            "Saved At": row[7],
+            "_row": sheet_row,
         }
 
-        record[
-            "_row"
-        ] = row_number
-
-        records.append(
-            record
-        )
+        records.append(record)
 
     return records
 
 
-def sheet_outlet_code(
-    value,
+def code_from_sheet(
+    outlet_value,
     outlets,
 ):
 
-    upper = str(
-        value
+    value = str(
+        outlet_value
     ).strip().upper()
 
     for code in outlets:
@@ -1485,160 +1339,101 @@ def sheet_outlet_code(
             rf"(?<![A-Z0-9])"
             rf"{re.escape(code)}"
             rf"(?![A-Z0-9])",
-            upper,
+            value,
         ):
-
             return code
 
-    for code, name in (
-        outlets.items()
-    ):
+    for code, name in outlets.items():
 
-        if (
-            name.upper()
-            == upper
-        ):
-
+        if name.upper() == value:
             return code
 
     return None
 
 
 # ============================================================
-# SAVE / UPDATE / DUPLICATE CONTROL
+# SAVE OR UPDATE
 # ============================================================
 
-def save_activity(
+def save_or_update(
     activity_date,
     parsed,
     outlets,
 ):
 
-    worksheet = (
-        get_activity_sheet()
-    )
+    ws = activity_ws()
 
-    records = (
-        read_activity()
-    )
+    records = get_activity_records()
 
-    target_date = (
-        activity_date
-        .isoformat()
-    )
+    target_date = activity_date.isoformat()
 
-    target_code = (
-        parsed[
-            "Outlet Code"
-        ]
-    )
+    target_code = parsed["Outlet Code"]
 
-    matches = []
+    matching_rows = []
 
     for record in records:
 
-        record_date = (
-            normalize_date(
-                record.get(
-                    "Date",
-                    "",
-                )
-            )
+        old_date = normalize_date(
+            record["Date"]
         )
 
-        record_code = (
-            sheet_outlet_code(
-                record.get(
-                    "Outlet",
-                    "",
-                ),
-                outlets,
-            )
+        old_code = code_from_sheet(
+            record["Outlet"],
+            outlets,
         )
 
         if (
-            record_date
-            == target_date
-            and record_code
-            == target_code
+            old_date == target_date
+            and old_code == target_code
         ):
-
-            matches.append(
-                record[
-                    "_row"
-                ]
+            matching_rows.append(
+                record["_row"]
             )
 
-    values = [
-
+    new_row = [
         target_date,
-
         f"{target_code}-Lobby",
-
-        parsed[
-            "Therapist"
-        ],
-
-        parsed[
-            "Shift Timings"
-        ],
-
-        parsed[
-            "Guests Interacted"
-        ],
-
-        parsed[
-            "Conversions"
-        ],
-
-        parsed[
-            "Appointment Value"
-        ],
-
-        now_ist(),
+        parsed["Therapist"],
+        parsed["Shift Timings"],
+        parsed["Guests Interacted"],
+        parsed["Conversions"],
+        parsed["Appointment Value"],
+        current_time(),
     ]
 
-    if matches:
+    if matching_rows:
 
-        main_row = (
-            matches[0]
-        )
+        # Update the first existing record.
+        row_to_update = matching_rows[0]
 
-        worksheet.update(
+        ws.update(
+            values=[new_row],
             range_name=(
-                f"A{main_row}:"
-                f"H{main_row}"
+                f"A{row_to_update}:"
+                f"H{row_to_update}"
             ),
-            values=[
-                values
-            ],
         )
 
-        duplicates = (
-            matches[1:]
-        )
+        # Delete any duplicate rows for the
+        # same outlet/date from bottom upward.
+        duplicate_rows = matching_rows[1:]
 
-        for row_number in sorted(
-            duplicates,
+        for duplicate_row in sorted(
+            duplicate_rows,
             reverse=True,
         ):
-
-            worksheet.delete_rows(
-                row_number
+            ws.delete_rows(
+                duplicate_row
             )
 
         return (
             "updated",
-            len(
-                duplicates
-            ),
+            len(duplicate_rows),
         )
 
-    worksheet.append_row(
-        values,
-        value_input_option=(
-            "USER_ENTERED"
-        ),
+    ws.append_row(
+        new_row,
+        value_input_option="USER_ENTERED",
     )
 
     return (
@@ -1648,463 +1443,289 @@ def save_activity(
 
 
 # ============================================================
-# UNIQUE DATA
+# DEDUPLICATED DATA
 # ============================================================
 
-def build_unique_activity(
-    outlets,
-):
+def unique_activity(outlets):
 
-    records = (
-        read_activity()
-    )
+    records = get_activity_records()
 
     unique = {}
 
-    duplicate_count = 0
+    duplicates = 0
 
     for record in records:
 
-        day = (
-            normalize_date(
-                record.get(
-                    "Date",
-                    "",
-                )
-            )
+        record_date = normalize_date(
+            record["Date"]
         )
 
-        code = (
-            sheet_outlet_code(
-                record.get(
-                    "Outlet",
-                    "",
-                ),
-                outlets,
-            )
+        code = code_from_sheet(
+            record["Outlet"],
+            outlets,
         )
 
-        if (
-            not day
-            or not code
-        ):
-
+        if not record_date or not code:
             continue
 
         key = (
-            day,
+            record_date,
             code,
         )
 
         if key in unique:
+            duplicates += 1
 
-            duplicate_count += 1
+        # latest sheet row wins
+        unique[key] = record
 
-        # Latest row wins.
-        unique[
-            key
-        ] = record
-
-    return (
-        unique,
-        duplicate_count,
-    )
+    return unique, duplicates
 
 
-def daily_activity(
+def get_daily(
     selected_date,
     outlets,
 ):
 
-    unique, duplicates = (
-        build_unique_activity(
-            outlets
-        )
+    unique, duplicates = unique_activity(
+        outlets
     )
 
-    target = (
-        selected_date
-        .isoformat()
-    )
+    target_date = selected_date.isoformat()
 
-    daily = {}
+    result = {}
 
-    for (
-        record_date,
-        code,
-    ), record in (
-        unique.items()
-    ):
+    for (record_date, code), record in unique.items():
 
-        if (
-            record_date
-            == target
-        ):
+        if record_date == target_date:
+            result[code] = record
 
-            daily[
-                code
-            ] = record
-
-    return (
-        daily,
-        duplicates,
-    )
+    return result, duplicates
 
 
 # ============================================================
-# PERIOD DATA
+# COMMON PROJECT HEADER
 # ============================================================
 
-def period_activity(
-    start_date,
-    end_date,
-    outlets,
+def project_header(
+    title,
+    description,
 ):
 
-    unique, duplicate_count = (
-        build_unique_activity(
-            outlets
-        )
-    )
-
-    all_dates = []
-
-    current = start_date
-
-    while (
-        current
-        <= end_date
-    ):
-
-        all_dates.append(
-            current
-        )
-
-        current += timedelta(
-            days=1
-        )
-
-    outlet_rows = []
-
-    daily_rows = []
-
-    for day in all_dates:
-
-        day_records = []
-
-        for code in outlets:
-
-            record = (
-                unique.get(
-                    (
-                        day.isoformat(),
-                        code,
-                    )
-                )
-            )
-
-            if record:
-
-                day_records.append(
-                    record
-                )
-
-        guests = sum(
-            clean_number(
-                r.get(
-                    "Guests Interacted",
-                    0,
-                )
-            )
-            for r in day_records
-        )
-
-        conversions = sum(
-            clean_number(
-                r.get(
-                    "Conversions",
-                    0,
-                )
-            )
-            for r in day_records
-        )
-
-        value = sum(
-            clean_number(
-                r.get(
-                    "Appointment Value",
-                    0,
-                )
-            )
-            for r in day_records
-        )
-
-        daily_rows.append(
-            {
-                "Date":
-                    day.strftime(
-                        "%d %b"
-                    ),
-
-                "Received":
-                    len(
-                        day_records
-                    ),
-
-                "Pending":
-                    len(outlets)
-                    - len(
-                        day_records
-                    ),
-
-                "Guests":
-                    guests,
-
-                "Conversions":
-                    conversions,
-
-                "Appointment Value":
-                    value,
-            }
-        )
-
-    for code, name in (
-        outlets.items()
-    ):
-
-        received_dates = []
-
-        missing_dates = []
-
-        guests = 0
-
-        conversions = 0
-
-        value = 0
-
-        for day in all_dates:
-
-            record = (
-                unique.get(
-                    (
-                        day.isoformat(),
-                        code,
-                    )
-                )
-            )
-
-            if record:
-
-                received_dates.append(
-                    day
-                )
-
-                guests += (
-                    clean_number(
-                        record.get(
-                            "Guests Interacted",
-                            0,
-                        )
-                    )
-                )
-
-                conversions += (
-                    clean_number(
-                        record.get(
-                            "Conversions",
-                            0,
-                        )
-                    )
-                )
-
-                value += (
-                    clean_number(
-                        record.get(
-                            "Appointment Value",
-                            0,
-                        )
-                    )
-                )
-
-            else:
-
-                missing_dates.append(
-                    day
-                )
-
-        outlet_rows.append(
-            {
-                "Code":
-                    code,
-
-                "Outlet":
-                    name,
-
-                "Received":
-                    len(
-                        received_dates
-                    ),
-
-                "Pending":
-                    len(
-                        missing_dates
-                    ),
-
-                "Guests":
-                    guests,
-
-                "Conversions":
-                    conversions,
-
-                "Appointment Value":
-                    value,
-
-                "Missing Dates":
-                    ", ".join(
-                        d.strftime(
-                            "%d-%b"
-                        )
-                        for d
-                        in missing_dates
-                    )
-                    if missing_dates
-                    else "Complete",
-            }
-        )
-
-    return (
-        pd.DataFrame(
-            outlet_rows
-        ),
-
-        pd.DataFrame(
-            daily_rows
-        ),
-
-        duplicate_count,
-    )
-
-
-# ============================================================
-# CONNECT TO FINORA DATA
-# ============================================================
-
-try:
-
-    outlets = (
-        load_outlet_master()
-    )
-
-    if not outlets:
-
-        st.error(
-            "No active outlets found "
-            "in Outlet Master."
-        )
-
-        st.stop()
-
-except Exception as error:
-
-    st.error(
-        "FINORA cannot connect "
-        "to Google Sheets."
-    )
-
-    with st.expander(
-        "Technical details"
-    ):
-
-        st.code(
-            str(error)
-        )
-
-    st.stop()
-
-
-# ============================================================
-# LOBBY ACTIVITY HERO
-# ============================================================
-
-st.markdown(
-    """
-<div class="page-hero">
-
-    <div class="hero-eyebrow">
-        FINORA WORKSPACE
-    </div>
-
-    <div class="hero-title">
-        Lobby Activity
-    </div>
-
-    <div class="hero-text">
-        Capture daily outlet activity,
-        monitor performance and follow up
-        pending submissions from one place.
-    </div>
-
-</div>
-""",
-    unsafe_allow_html=True,
-)
-
-
-# ============================================================
-# LOBBY NAVIGATION
-# ============================================================
-
-entry_tab, daily_tab, period_tab = (
-    st.tabs(
-        [
-            "✍️  Enter Activity",
-            "📊  Daily Dashboard",
-            "📅  Period Dashboard",
-        ]
-    )
-)
-
-
-# ============================================================
-# ENTER ACTIVITY
-# ============================================================
-
-with entry_tab:
-
     st.markdown(
-        """
-<div class="section-title">
-    Enter Lobby Activity
-</div>
+        f"""
+        <div class="project-header">
+            <div class="project-small">
+                FINORA WORKSPACE
+            </div>
 
-<div class="section-subtitle">
-    Paste the activity received from WhatsApp.
-    FINORA will identify the outlet and save
-    the information to the dashboard.
-</div>
-""",
+            <div class="project-title">
+                {title}
+            </div>
+
+            <div class="project-description">
+                {description}
+            </div>
+        </div>
+        """,
         unsafe_allow_html=True,
     )
 
-    left, right = (
-        st.columns(
+
+# ============================================================
+# PLACEHOLDER MODULE
+# ============================================================
+
+def module_placeholder(
+    icon,
+    title,
+    text,
+):
+
+    project_header(
+        title,
+        text,
+    )
+
+    st.markdown(
+        f"""
+        <div class="module-box">
+
+            <div class="module-icon">
+                {icon}
+            </div>
+
+            <div class="module-name">
+                {title}
+            </div>
+
+            <div class="module-text">
+                This FINORA project has its own
+                workspace. We will build and
+                connect this module separately.
+            </div>
+
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+# ============================================================
+# HOME
+# ============================================================
+
+if st.session_state.project == "Home":
+
+    project_header(
+        "Welcome to Finora 👋",
+        "Your Finance AI workspace for daily finance and operations automation.",
+    )
+
+    st.markdown(
+        """
+        <div class="page-title">
+            What should Finora do?
+        </div>
+
+        <div class="page-description">
+            Select a project from the left side.
+            Each project opens in its own workspace.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    c1, c2, c3 = st.columns(3)
+
+    with c1:
+
+        st.markdown(
+            """
+            <div class="card">
+                <div class="card-title">
+                    📊 Lobby Activity
+                </div>
+                Daily activity collection,
+                pending outlet monitoring and
+                performance dashboards.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with c2:
+
+        st.markdown(
+            """
+            <div class="card">
+                <div class="card-title">
+                    🧾 GST Returns
+                </div>
+                FINORA's GST return automation
+                project.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with c3:
+
+        st.markdown(
+            """
+            <div class="card">
+                <div class="card-title">
+                    📈 Zenoti Reports
+                </div>
+                FINORA's Zenoti reporting
+                automation project.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+# ============================================================
+# LOBBY ACTIVITY PROJECT
+# ============================================================
+
+elif st.session_state.project == "Lobby Activity":
+
+    try:
+
+        outlets = get_outlets()
+
+        if not outlets:
+
+            st.error(
+                "No active outlets found "
+                "in Outlet Master."
+            )
+
+            st.stop()
+
+    except Exception as error:
+
+        st.error(
+            "FINORA cannot connect "
+            "to Google Sheets."
+        )
+
+        with st.expander(
+            "Technical details"
+        ):
+            st.code(str(error))
+
+        st.stop()
+
+    project_header(
+        "Lobby Activity",
+        "Capture daily outlet activity, monitor performance and follow up pending submissions.",
+    )
+
+    enter_tab, daily_tab, period_tab = st.tabs(
+        [
+            "✍️ Enter Activity",
+            "📊 Daily Dashboard",
+            "📅 Period Dashboard",
+        ]
+    )
+
+
+    # ========================================================
+    # ENTER ACTIVITY
+    # ========================================================
+
+    with enter_tab:
+
+        st.markdown(
+            """
+            <div class="page-title">
+                Enter Lobby Activity
+            </div>
+
+            <div class="page-description">
+                Copy the activity message from
+                WhatsApp and paste it below.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        left, right = st.columns(
             [1, 2],
             gap="large",
         )
-    )
 
-    with left:
+        with left:
 
-        activity_date = (
-            st.date_input(
+            activity_date = st.date_input(
                 "Activity Date",
                 value=date.today(),
                 format="DD/MM/YYYY",
             )
-        )
 
-        uploaded_photo = (
-            st.file_uploader(
+            photo = st.file_uploader(
                 "Optional Photo",
                 type=[
                     "jpg",
@@ -2112,998 +1733,852 @@ with entry_tab:
                     "png",
                 ],
             )
-        )
-
-        if uploaded_photo:
-
-            st.info(
-                "Photo received temporarily. "
-                "FINORA does not save the photo "
-                "or a photo link."
-            )
-
-        else:
 
             st.caption(
                 "Photos are not stored by FINORA."
             )
 
-    with right:
+        with right:
 
-        whatsapp_text = (
-            st.text_area(
+            activity_text = st.text_area(
                 "Paste WhatsApp Activity",
-                height=230,
+                height=240,
                 placeholder=(
-                    "JIAL-Lobby Activity\n\n"
-                    "Therapist: Neha\n"
-                    "Shift Timings: 1 PM to 10 PM\n"
-                    "Guests Interacted: 5\n"
-                    "Conversions: 2\n"
-                    "Appointment Value: 7918"
+                    "JIAL-Lobby Activity\n"
+                    "1. Therapist: Gayatri\n"
+                    "2. Shift timings: 7AM to 4PM\n"
+                    "3. Number of guests interacted- 5\n"
+                    "4. Number of conversions: 2\n"
+                    "5. Appointment value:7064"
                 ),
             )
+
+        save_clicked = st.button(
+            "✨ Read & Save Activity",
+            type="primary",
+            use_container_width=True,
         )
 
-    if st.button(
-        "✨  Read & Save Activity",
-        type="primary",
-        use_container_width=True,
-    ):
+        if save_clicked:
 
-        if not (
-            whatsapp_text.strip()
-        ):
-
-            st.error(
-                "Please paste the WhatsApp "
-                "activity first."
-            )
-
-        else:
-
-            parsed = (
-                parse_activity(
-                    whatsapp_text,
-                    outlets,
-                )
-            )
-
-            if not (
-                parsed[
-                    "Outlet Code"
-                ]
-            ):
+            if not activity_text.strip():
 
                 st.error(
-                    "FINORA could not recognise "
-                    "the outlet. Please make sure "
-                    "the outlet code is included "
-                    "in the message."
+                    "Please paste the WhatsApp "
+                    "activity first."
                 )
 
             else:
 
-                action, removed = (
-                    save_activity(
-                        activity_date,
-                        parsed,
-                        outlets,
-                    )
+                parsed = parse_whatsapp(
+                    activity_text,
+                    outlets,
                 )
 
-                if (
-                    action
-                    == "saved"
-                ):
+                if not parsed["Outlet Code"]:
 
-                    st.success(
-                        "✅ Activity saved successfully — "
-                        f"{parsed['Outlet Code']} • "
-                        f"{parsed['Outlet Name']}"
+                    st.error(
+                        "FINORA could not recognise "
+                        "the outlet code."
                     )
 
                 else:
 
-                    st.success(
-                        "🔄 Existing activity updated — "
-                        f"{parsed['Outlet Code']} • "
-                        f"{parsed['Outlet Name']}"
+                    # Show exactly what FINORA read.
+                    st.markdown(
+                        "#### FINORA read:"
                     )
 
-                if removed:
+                    preview = pd.DataFrame(
+                        [
+                            {
+                                "Outlet":
+                                    parsed["Outlet Code"],
 
-                    st.info(
-                        f"{removed} duplicate "
-                        f"record(s) were removed."
-                    )
+                                "Therapist":
+                                    parsed["Therapist"],
 
-                a, b, c, d = (
-                    st.columns(4)
-                )
+                                "Shift":
+                                    parsed["Shift Timings"],
 
-                a.metric(
-                    "Outlet",
-                    parsed[
-                        "Outlet Code"
-                    ],
-                )
+                                "Guests":
+                                    parsed["Guests Interacted"],
 
-                b.metric(
-                    "Guests",
-                    parsed[
-                        "Guests Interacted"
-                    ],
-                )
+                                "Conversions":
+                                    parsed["Conversions"],
 
-                c.metric(
-                    "Conversions",
-                    parsed[
-                        "Conversions"
-                    ],
-                )
-
-                d.metric(
-                    "Appointment Value",
-                    money(
-                        parsed[
-                            "Appointment Value"
+                                "Appointment Value":
+                                    parsed["Appointment Value"],
+                            }
                         ]
-                    ),
-                )
+                    )
+
+                    st.dataframe(
+                        preview,
+                        use_container_width=True,
+                        hide_index=True,
+                    )
+
+                    missing = []
+
+                    if not parsed["Therapist"]:
+                        missing.append("Therapist")
+
+                    if not parsed["Shift Timings"]:
+                        missing.append("Shift Timings")
+
+                    if missing:
+
+                        st.error(
+                            "FINORA could not read: "
+                            + ", ".join(missing)
+                            + ". Please check the message."
+                        )
+
+                    else:
+
+                        try:
+
+                            action, duplicates_removed = (
+                                save_or_update(
+                                    activity_date,
+                                    parsed,
+                                    outlets,
+                                )
+                            )
+
+                            if action == "updated":
+
+                                st.success(
+                                    "🔄 Activity UPDATED successfully — "
+                                    f"{parsed['Outlet Code']} • "
+                                    f"{parsed['Outlet Name']}"
+                                )
+
+                            else:
+
+                                st.success(
+                                    "✅ New activity SAVED successfully — "
+                                    f"{parsed['Outlet Code']} • "
+                                    f"{parsed['Outlet Name']}"
+                                )
+
+                            if duplicates_removed:
+
+                                st.info(
+                                    f"{duplicates_removed} duplicate "
+                                    "record(s) were removed."
+                                )
+
+                            # Re-read Google Sheet immediately
+                            # and confirm what is actually saved.
+                            fresh_records = get_activity_records()
+
+                            saved_record = None
+
+                            for record in reversed(
+                                fresh_records
+                            ):
+
+                                if (
+                                    normalize_date(
+                                        record["Date"]
+                                    )
+                                    == activity_date.isoformat()
+                                    and
+                                    code_from_sheet(
+                                        record["Outlet"],
+                                        outlets,
+                                    )
+                                    == parsed["Outlet Code"]
+                                ):
+
+                                    saved_record = record
+                                    break
+
+                            if saved_record:
+
+                                st.markdown(
+                                    "#### Confirmed in Google Sheet"
+                                )
+
+                                st.dataframe(
+                                    pd.DataFrame(
+                                        [
+                                            {
+                                                "Date":
+                                                    saved_record["Date"],
+
+                                                "Outlet":
+                                                    saved_record["Outlet"],
+
+                                                "Therapist":
+                                                    saved_record["Therapist"],
+
+                                                "Shift":
+                                                    saved_record["Shift Timings"],
+
+                                                "Guests":
+                                                    saved_record["Guests Interacted"],
+
+                                                "Conversions":
+                                                    saved_record["Conversions"],
+
+                                                "Appointment Value":
+                                                    saved_record["Appointment Value"],
+                                            }
+                                        ]
+                                    ),
+                                    use_container_width=True,
+                                    hide_index=True,
+                                )
+
+                        except Exception as error:
+
+                            st.error(
+                                "FINORA recognised the activity, "
+                                "but Google Sheets could not be updated."
+                            )
+
+                            with st.expander(
+                                "Technical details"
+                            ):
+                                st.code(str(error))
 
 
-# ============================================================
-# DAILY DASHBOARD
-# ============================================================
+    # ========================================================
+    # DAILY DASHBOARD
+    # ========================================================
 
-with daily_tab:
+    with daily_tab:
 
-    st.markdown(
-        """
-<div class="section-title">
-    Daily Dashboard
-</div>
+        st.markdown(
+            """
+            <div class="page-title">
+                Daily Dashboard
+            </div>
 
-<div class="section-subtitle">
-    See today's submissions, performance
-    and the outlets requiring follow-up.
-</div>
-""",
-        unsafe_allow_html=True,
-    )
+            <div class="page-description">
+                Check received activity,
+                performance and pending outlets
+                for any selected date.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    date_col, spacer = (
-        st.columns(
+        date_col, blank = st.columns(
             [1, 3]
         )
-    )
 
-    with date_col:
+        with date_col:
 
-        selected_date = (
-            st.date_input(
-                "Select Date",
+            selected_date = st.date_input(
+                "Dashboard Date",
                 value=date.today(),
                 format="DD/MM/YYYY",
-                key="daily_date",
+                key="daily_dashboard_date",
             )
-        )
 
-    daily, duplicate_count = (
-        daily_activity(
+        daily, duplicate_count = get_daily(
             selected_date,
             outlets,
         )
-    )
 
-    received_codes = list(
-        daily.keys()
-    )
+        received_codes = list(
+            daily.keys()
+        )
 
-    pending_codes = [
-        code
-        for code in outlets
-        if code not in daily
-    ]
+        pending_codes = [
+            code
+            for code in outlets
+            if code not in daily
+        ]
 
-    total_guests = sum(
-        clean_number(
-            record.get(
-                "Guests Interacted",
-                0,
+        guests = sum(
+            number(
+                r["Guests Interacted"]
             )
+            for r in daily.values()
         )
-        for record
-        in daily.values()
-    )
 
-    total_conversions = sum(
-        clean_number(
-            record.get(
-                "Conversions",
-                0,
+        conversions = sum(
+            number(
+                r["Conversions"]
             )
+            for r in daily.values()
         )
-        for record
-        in daily.values()
-    )
 
-    total_value = sum(
-        clean_number(
-            record.get(
-                "Appointment Value",
-                0,
+        appointment_value = sum(
+            number(
+                r["Appointment Value"]
             )
-        )
-        for record
-        in daily.values()
-    )
-
-    conversion_rate = (
-        (
-            total_conversions
-            / total_guests
-        )
-        * 100
-        if total_guests
-        else 0
-    )
-
-    st.markdown(
-        f"""
-<div style="
-    font-size:19px;
-    font-weight:750;
-    color:#27445e;
-    margin:10px 0 14px 0;
-">
-    {selected_date.strftime('%d %B %Y')}
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    k1, k2, k3, k4, k5, k6, k7 = (
-        st.columns(7)
-    )
-
-    k1.metric(
-        "Total Outlets",
-        len(outlets),
-    )
-
-    k2.metric(
-        "Received",
-        len(received_codes),
-    )
-
-    k3.metric(
-        "Pending",
-        len(pending_codes),
-    )
-
-    k4.metric(
-        "Guests",
-        int(total_guests),
-    )
-
-    k5.metric(
-        "Conversions",
-        int(total_conversions),
-    )
-
-    k6.metric(
-        "Conversion %",
-        f"{conversion_rate:.1f}%",
-    )
-
-    k7.metric(
-        "Appointment Value",
-        money(
-            total_value
-        ),
-    )
-
-    st.write("")
-
-    # --------------------------------------------------------
-    # STATUS + PENDING
-    # --------------------------------------------------------
-
-    status_column, pending_column = (
-        st.columns(
-            [0.85, 2.15],
-            gap="large",
-        )
-    )
-
-    with status_column:
-
-        st.markdown(
-            f"""
-<div class="fin-card">
-
-    <div class="fin-card-title">
-        Submission Status
-    </div>
-
-    <div class="status-wrap">
-
-        <div class="received-card">
-
-            <div class="status-big"
-                 style="color:#087052;">
-                {len(received_codes)}
-            </div>
-
-            <div class="status-small"
-                 style="color:#087052;">
-                RECEIVED
-            </div>
-
-        </div>
-
-        <div class="pending-card">
-
-            <div class="status-big"
-                 style="color:#b23e3e;">
-                {len(pending_codes)}
-            </div>
-
-            <div class="status-small"
-                 style="color:#b23e3e;">
-                PENDING
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-""",
-            unsafe_allow_html=True,
-        )
-
-    with pending_column:
-
-        st.markdown(
-            """
-<div class="fin-card">
-
-    <div class="fin-card-title">
-        🔴 Pending Follow-up
-    </div>
-""",
-            unsafe_allow_html=True,
-        )
-
-        if pending_codes:
-
-            pending_html = "".join(
-                (
-                    '<span class="outlet-pill '
-                    'pending-pill">'
-                    f'{code} • {outlets[code]}'
-                    '</span>'
-                )
-                for code
-                in pending_codes
-            )
-
-            st.markdown(
-                pending_html,
-                unsafe_allow_html=True,
-            )
-
-        else:
-
-            st.success(
-                "All outlets have submitted. 🎉"
-            )
-
-        st.markdown(
-            "</div>",
-            unsafe_allow_html=True,
-        )
-
-    # --------------------------------------------------------
-    # RECEIVED OUTLETS
-    # --------------------------------------------------------
-
-    if received_codes:
-
-        st.markdown(
-            """
-<div class="fin-card">
-
-    <div class="fin-card-title">
-        🟢 Received Outlets
-    </div>
-""",
-            unsafe_allow_html=True,
-        )
-
-        received_html = "".join(
-            (
-                '<span class="outlet-pill '
-                'received-pill">'
-                f'{code} • {outlets[code]}'
-                '</span>'
-            )
-            for code
-            in received_codes
-        )
-
-        st.markdown(
-            received_html,
-            unsafe_allow_html=True,
-        )
-
-        st.markdown(
-            "</div>",
-            unsafe_allow_html=True,
-        )
-
-    # --------------------------------------------------------
-    # PERFORMANCE CHARTS
-    # --------------------------------------------------------
-
-    if daily:
-
-        performance_rows = []
-
-        for code, record in (
-            daily.items()
-        ):
-
-            performance_rows.append(
-                {
-                    "Outlet":
-                        code,
-
-                    "Guests":
-                        clean_number(
-                            record.get(
-                                "Guests Interacted",
-                                0,
-                            )
-                        ),
-
-                    "Conversions":
-                        clean_number(
-                            record.get(
-                                "Conversions",
-                                0,
-                            )
-                        ),
-
-                    "Appointment Value":
-                        clean_number(
-                            record.get(
-                                "Appointment Value",
-                                0,
-                            )
-                        ),
-                }
-            )
-
-        performance_df = (
-            pd.DataFrame(
-                performance_rows
-            )
-        )
-
-        chart1, chart2 = (
-            st.columns(
-                2,
-                gap="large",
-            )
-        )
-
-        with chart1:
-
-            st.markdown(
-                "### 👥 Guests vs Conversions"
-            )
-
-            st.bar_chart(
-                performance_df
-                .set_index(
-                    "Outlet"
-                )[
-                    [
-                        "Guests",
-                        "Conversions",
-                    ]
-                ],
-                height=280,
-            )
-
-        with chart2:
-
-            st.markdown(
-                "### 💰 Appointment Value"
-            )
-
-            value_df = (
-                performance_df[
-                    [
-                        "Outlet",
-                        "Appointment Value",
-                    ]
-                ]
-                .sort_values(
-                    "Appointment Value",
-                    ascending=False,
-                )
-                .set_index(
-                    "Outlet"
-                )
-            )
-
-            st.bar_chart(
-                value_df,
-                height=280,
-            )
-
-    # --------------------------------------------------------
-    # WHATSAPP FOLLOW-UP
-    # --------------------------------------------------------
-
-    st.markdown(
-        "### 💬 WhatsApp Follow-up"
-    )
-
-    pending_text = (
-        ", ".join(
-            pending_codes
-        )
-        if pending_codes
-        else "None"
-    )
-
-    summary = (
-        f"FINORA Lobby Activity | "
-        f"{selected_date.strftime('%d %b %Y')}\n"
-        f"Received: "
-        f"{len(received_codes)}/{len(outlets)} | "
-        f"Pending: {len(pending_codes)}\n"
-        f"Guests: {int(total_guests)} | "
-        f"Conversions: {int(total_conversions)} | "
-        f"Conversion: {conversion_rate:.1f}%\n"
-        f"Appointment Value: {money(total_value)}\n"
-        f"Pending Outlets: {pending_text}"
-    )
-
-    st.markdown(
-        f"""
-<div class="whatsapp-box">
-{summary}
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    # --------------------------------------------------------
-    # DETAILS
-    # --------------------------------------------------------
-
-    with st.expander(
-        "📋 View complete outlet-wise details"
-    ):
-
-        rows = []
-
-        for code, name in (
-            outlets.items()
-        ):
-
-            record = (
-                daily.get(
-                    code
-                )
-            )
-
-            if record:
-
-                rows.append(
-                    {
-                        "Code":
-                            code,
-
-                        "Outlet":
-                            name,
-
-                        "Status":
-                            "Received",
-
-                        "Therapist":
-                            record.get(
-                                "Therapist",
-                                "",
-                            ),
-
-                        "Shift":
-                            record.get(
-                                "Shift Timings",
-                                "",
-                            ),
-
-                        "Guests":
-                            clean_number(
-                                record.get(
-                                    "Guests Interacted",
-                                    0,
-                                )
-                            ),
-
-                        "Conversions":
-                            clean_number(
-                                record.get(
-                                    "Conversions",
-                                    0,
-                                )
-                            ),
-
-                        "Appointment Value":
-                            clean_number(
-                                record.get(
-                                    "Appointment Value",
-                                    0,
-                                )
-                            ),
-                    }
-                )
-
-            else:
-
-                rows.append(
-                    {
-                        "Code":
-                            code,
-
-                        "Outlet":
-                            name,
-
-                        "Status":
-                            "Pending",
-
-                        "Therapist":
-                            "",
-
-                        "Shift":
-                            "",
-
-                        "Guests":
-                            "",
-
-                        "Conversions":
-                            "",
-
-                        "Appointment Value":
-                            "",
-                    }
-                )
-
-        st.dataframe(
-            pd.DataFrame(
-                rows
-            ),
-            use_container_width=True,
-            hide_index=True,
-            height=470,
-        )
-
-    if duplicate_count:
-
-        st.caption(
-            f"FINORA ignored "
-            f"{duplicate_count} duplicate "
-            f"historical record(s) while "
-            f"calculating this dashboard."
-        )
-
-
-# ============================================================
-# PERIOD DASHBOARD
-# ============================================================
-
-with period_tab:
-
-    st.markdown(
-        """
-<div class="section-title">
-    Period Dashboard
-</div>
-
-<div class="section-subtitle">
-    Analyse lobby activity across a selected
-    period and identify the exact missing
-    dates for each outlet.
-</div>
-""",
-        unsafe_allow_html=True,
-    )
-
-    d1, d2, blank = (
-        st.columns(
-            [1, 1, 2]
-        )
-    )
-
-    with d1:
-
-        start_date = (
-            st.date_input(
-                "From Date",
-                value=date.today(),
-                format="DD/MM/YYYY",
-                key="period_from",
-            )
-        )
-
-    with d2:
-
-        end_date = (
-            st.date_input(
-                "To Date",
-                value=date.today(),
-                format="DD/MM/YYYY",
-                key="period_to",
-            )
-        )
-
-    if (
-        end_date
-        < start_date
-    ):
-
-        st.error(
-            "To Date cannot be "
-            "before From Date."
-        )
-
-    else:
-
-        (
-            outlet_df,
-            daily_df,
-            period_duplicates,
-        ) = period_activity(
-            start_date,
-            end_date,
-            outlets,
-        )
-
-        days = (
-            end_date
-            - start_date
-        ).days + 1
-
-        expected = (
-            days
-            * len(outlets)
-        )
-
-        received = int(
-            outlet_df[
-                "Received"
-            ].sum()
-        )
-
-        pending = (
-            expected
-            - received
-        )
-
-        guests = int(
-            outlet_df[
-                "Guests"
-            ].sum()
-        )
-
-        conversions = int(
-            outlet_df[
-                "Conversions"
-            ].sum()
-        )
-
-        total_value = float(
-            outlet_df[
-                "Appointment Value"
-            ].sum()
+            for r in daily.values()
         )
 
         conversion_rate = (
-            (
-                conversions
-                / guests
-            )
-            * 100
+            conversions / guests * 100
             if guests
             else 0
         )
 
-        p1, p2, p3, p4, p5, p6, p7 = (
-            st.columns(7)
+        m1, m2, m3, m4, m5, m6 = st.columns(6)
+
+        m1.metric(
+            "Total Outlets",
+            len(outlets),
         )
 
-        p1.metric(
-            "Days",
-            days,
-        )
-
-        p2.metric(
-            "Expected",
-            expected,
-        )
-
-        p3.metric(
+        m2.metric(
             "Received",
-            received,
+            len(received_codes),
         )
 
-        p4.metric(
+        m3.metric(
             "Pending",
-            pending,
+            len(pending_codes),
         )
 
-        p5.metric(
+        m4.metric(
             "Guests",
-            guests,
+            int(guests),
         )
 
-        p6.metric(
-            "Conversion %",
-            f"{conversion_rate:.1f}%",
+        m5.metric(
+            "Conversions",
+            int(conversions),
         )
 
-        p7.metric(
+        m6.metric(
             "Appointment Value",
-            money(
-                total_value
-            ),
+            rupees(appointment_value),
         )
 
-        # ----------------------------------------------------
-        # PERIOD CHARTS
-        # ----------------------------------------------------
+        st.write("")
 
-        if not daily_df.empty:
+        left, right = st.columns(
+            [1, 1],
+            gap="large",
+        )
 
-            chart1, chart2 = (
-                st.columns(
-                    2,
-                    gap="large",
-                )
+        with left:
+
+            st.markdown(
+                """
+                <div class="card">
+                    <div class="card-title">
+                        🟢 Received Outlets
+                    </div>
+                """,
+                unsafe_allow_html=True,
             )
 
-            with chart1:
+            if received_codes:
+
+                html = "".join(
+                    f'<span class="pill received">'
+                    f'{code} • {outlets[code]}'
+                    f'</span>'
+                    for code in received_codes
+                )
 
                 st.markdown(
-                    "### 📊 Submission Trend"
+                    html,
+                    unsafe_allow_html=True,
                 )
 
-                st.line_chart(
-                    daily_df
-                    .set_index(
-                        "Date"
-                    )[
-                        [
-                            "Received",
-                            "Pending",
-                        ]
-                    ],
-                    height=280,
+            else:
+
+                st.info(
+                    "No submissions received yet."
                 )
 
-            with chart2:
+            st.markdown(
+                "</div>",
+                unsafe_allow_html=True,
+            )
+
+        with right:
+
+            st.markdown(
+                """
+                <div class="card">
+                    <div class="card-title">
+                        🔴 Pending Follow-up
+                    </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+            if pending_codes:
+
+                html = "".join(
+                    f'<span class="pill pending">'
+                    f'{code} • {outlets[code]}'
+                    f'</span>'
+                    for code in pending_codes
+                )
 
                 st.markdown(
-                    "### 👥 Guests & Conversions"
+                    html,
+                    unsafe_allow_html=True,
                 )
 
-                st.line_chart(
-                    daily_df
-                    .set_index(
-                        "Date"
+            else:
+
+                st.success(
+                    "All outlets submitted 🎉"
+                )
+
+            st.markdown(
+                "</div>",
+                unsafe_allow_html=True,
+            )
+
+        if daily:
+
+            chart_rows = []
+
+            for code, record in daily.items():
+
+                chart_rows.append(
+                    {
+                        "Outlet": code,
+                        "Guests":
+                            number(
+                                record["Guests Interacted"]
+                            ),
+                        "Conversions":
+                            number(
+                                record["Conversions"]
+                            ),
+                        "Appointment Value":
+                            number(
+                                record["Appointment Value"]
+                            ),
+                    }
+                )
+
+            chart_df = pd.DataFrame(
+                chart_rows
+            )
+
+            c1, c2 = st.columns(
+                2,
+                gap="large",
+            )
+
+            with c1:
+
+                st.markdown(
+                    "### 👥 Guests vs Conversions"
+                )
+
+                st.bar_chart(
+                    chart_df.set_index(
+                        "Outlet"
                     )[
                         [
                             "Guests",
                             "Conversions",
                         ]
                     ],
-                    height=280,
+                    height=300,
                 )
 
-            st.markdown(
-                "### 💰 Appointment Value Trend"
-            )
+            with c2:
 
-            st.line_chart(
-                daily_df
-                .set_index(
-                    "Date"
-                )[
-                    [
-                        "Appointment Value"
-                    ]
-                ],
-                height=240,
-            )
+                st.markdown(
+                    "### 💰 Appointment Value"
+                )
 
-        # ----------------------------------------------------
-        # PENDING DETAILS
-        # ----------------------------------------------------
-
-        pending_df = (
-            outlet_df[
-                outlet_df[
-                    "Pending"
-                ] > 0
-            ]
-            .copy()
-        )
+                st.bar_chart(
+                    chart_df.set_index(
+                        "Outlet"
+                    )[
+                        ["Appointment Value"]
+                    ],
+                    height=300,
+                )
 
         st.markdown(
-            f"### 🔴 Follow-up Required "
-            f"({len(pending_df)} outlets)"
+            "### 💬 WhatsApp Follow-up Summary"
         )
 
-        if pending_df.empty:
+        pending_text = (
+            ", ".join(pending_codes)
+            if pending_codes
+            else "None"
+        )
 
-            st.success(
-                "All lobby activities are "
-                "complete for this period. 🎉"
+        st.code(
+            f"""FINORA Lobby Activity | {selected_date.strftime('%d %b %Y')}
+Received: {len(received_codes)}/{len(outlets)}
+Pending: {len(pending_codes)}
+Guests: {int(guests)}
+Conversions: {int(conversions)}
+Conversion Rate: {conversion_rate:.1f}%
+Appointment Value: {rupees(appointment_value)}
+Pending Outlets: {pending_text}"""
+        )
+
+        details = []
+
+        for code, name in outlets.items():
+
+            record = daily.get(code)
+
+            if record:
+
+                details.append(
+                    {
+                        "Code": code,
+                        "Outlet": name,
+                        "Status": "Received",
+                        "Therapist":
+                            record["Therapist"],
+                        "Shift":
+                            record["Shift Timings"],
+                        "Guests":
+                            number(
+                                record["Guests Interacted"]
+                            ),
+                        "Conversions":
+                            number(
+                                record["Conversions"]
+                            ),
+                        "Appointment Value":
+                            number(
+                                record["Appointment Value"]
+                            ),
+                    }
+                )
+
+            else:
+
+                details.append(
+                    {
+                        "Code": code,
+                        "Outlet": name,
+                        "Status": "Pending",
+                        "Therapist": "",
+                        "Shift": "",
+                        "Guests": "",
+                        "Conversions": "",
+                        "Appointment Value": "",
+                    }
+                )
+
+        with st.expander(
+            "📋 Complete outlet-wise details"
+        ):
+
+            st.dataframe(
+                pd.DataFrame(details),
+                use_container_width=True,
+                hide_index=True,
+                height=500,
+            )
+
+
+    # ========================================================
+    # PERIOD DASHBOARD
+    # ========================================================
+
+    with period_tab:
+
+        st.markdown(
+            """
+            <div class="page-title">
+                Period Dashboard
+            </div>
+
+            <div class="page-description">
+                Select a date range to see
+                submissions and exact pending dates
+                outlet by outlet.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        c1, c2, blank = st.columns(
+            [1, 1, 2]
+        )
+
+        with c1:
+
+            start_date = st.date_input(
+                "From Date",
+                value=date.today(),
+                format="DD/MM/YYYY",
+                key="period_start",
+            )
+
+        with c2:
+
+            end_date = st.date_input(
+                "To Date",
+                value=date.today(),
+                format="DD/MM/YYYY",
+                key="period_end",
+            )
+
+        if end_date < start_date:
+
+            st.error(
+                "To Date cannot be before From Date."
             )
 
         else:
 
-            st.dataframe(
-                pending_df[
+            unique, duplicates = unique_activity(
+                outlets
+            )
+
+            days = []
+
+            d = start_date
+
+            while d <= end_date:
+
+                days.append(d)
+
+                d += timedelta(days=1)
+
+            rows = []
+
+            for code, name in outlets.items():
+
+                received_days = []
+                missing_days = []
+
+                total_guests = 0
+                total_conversions = 0
+                total_value = 0
+
+                for day in days:
+
+                    record = unique.get(
+                        (
+                            day.isoformat(),
+                            code,
+                        )
+                    )
+
+                    if record:
+
+                        received_days.append(day)
+
+                        total_guests += number(
+                            record["Guests Interacted"]
+                        )
+
+                        total_conversions += number(
+                            record["Conversions"]
+                        )
+
+                        total_value += number(
+                            record["Appointment Value"]
+                        )
+
+                    else:
+
+                        missing_days.append(day)
+
+                rows.append(
+                    {
+                        "Code": code,
+                        "Outlet": name,
+                        "Received Days":
+                            len(received_days),
+                        "Pending Days":
+                            len(missing_days),
+                        "Guests":
+                            total_guests,
+                        "Conversions":
+                            total_conversions,
+                        "Appointment Value":
+                            total_value,
+                        "Missing Dates":
+                            ", ".join(
+                                x.strftime("%d-%b")
+                                for x in missing_days
+                            )
+                            if missing_days
+                            else "Complete",
+                    }
+                )
+
+            period_df = pd.DataFrame(rows)
+
+            expected = (
+                len(days)
+                * len(outlets)
+            )
+
+            received = int(
+                period_df[
+                    "Received Days"
+                ].sum()
+            )
+
+            pending = (
+                expected - received
+            )
+
+            total_guests = int(
+                period_df[
+                    "Guests"
+                ].sum()
+            )
+
+            total_conversions = int(
+                period_df[
+                    "Conversions"
+                ].sum()
+            )
+
+            total_value = period_df[
+                "Appointment Value"
+            ].sum()
+
+            p1, p2, p3, p4, p5, p6 = st.columns(6)
+
+            p1.metric(
+                "Days",
+                len(days),
+            )
+
+            p2.metric(
+                "Expected",
+                expected,
+            )
+
+            p3.metric(
+                "Received",
+                received,
+            )
+
+            p4.metric(
+                "Pending",
+                pending,
+            )
+
+            p5.metric(
+                "Guests",
+                total_guests,
+            )
+
+            p6.metric(
+                "Appointment Value",
+                rupees(total_value),
+            )
+
+            st.markdown(
+                "### 🔴 Pending Outlet / Date Follow-up"
+            )
+
+            pending_df = period_df[
+                period_df["Pending Days"] > 0
+            ]
+
+            if pending_df.empty:
+
+                st.success(
+                    "All outlets are complete "
+                    "for this period 🎉"
+                )
+
+            else:
+
+                st.dataframe(
+                    pending_df[
+                        [
+                            "Code",
+                            "Outlet",
+                            "Received Days",
+                            "Pending Days",
+                            "Missing Dates",
+                        ]
+                    ],
+                    use_container_width=True,
+                    hide_index=True,
+                    height=420,
+                )
+
+            st.markdown(
+                "### 📊 Outlet Performance"
+            )
+
+            st.bar_chart(
+                period_df.set_index(
+                    "Code"
+                )[
                     [
-                        "Code",
-                        "Outlet",
-                        "Received",
-                        "Pending",
-                        "Missing Dates",
+                        "Guests",
+                        "Conversions",
                     ]
                 ],
-                use_container_width=True,
-                hide_index=True,
-                height=360,
+                height=320,
             )
 
-        with st.expander(
-            "📋 View complete period performance"
-        ):
+            with st.expander(
+                "📋 Complete period report"
+            ):
 
-            st.dataframe(
-                outlet_df,
-                use_container_width=True,
-                hide_index=True,
-                height=470,
-            )
-
-        if period_duplicates:
-
-            st.caption(
-                f"FINORA ignored "
-                f"{period_duplicates} duplicate "
-                f"historical record(s)."
-            )
+                st.dataframe(
+                    period_df,
+                    use_container_width=True,
+                    hide_index=True,
+                    height=500,
+                )
 
 
 # ============================================================
-# FOOTER
+# OTHER FINORA PROJECTS
 # ============================================================
 
-st.markdown(
-    """
-<div class="finora-footer">
-    FINORA • Your Finance AI • Lobby Activity Intelligence
-</div>
-""",
-    unsafe_allow_html=True,
-)
+elif st.session_state.project == "GST Returns":
+
+    module_placeholder(
+        "🧾",
+        "GST Returns",
+        "GST return download and processing automation.",
+    )
+
+
+elif st.session_state.project == "Zenoti Reports":
+
+    module_placeholder(
+        "📈",
+        "Zenoti Reports",
+        "Automated Zenoti organisation report downloads.",
+    )
+
+
+elif st.session_state.project == "Cash Reconciliation":
+
+    module_placeholder(
+        "💰",
+        "Cash Reconciliation",
+        "Cash sales versus cash deposit reconciliation.",
+    )
+
+
+elif st.session_state.project == "Files":
+
+    module_placeholder(
+        "📁",
+        "Files",
+        "FINORA file and report centre.",
+    )
+
+
+elif st.session_state.project == "Settings":
+
+    module_placeholder(
+        "⚙️",
+        "Settings",
+        "FINORA administration and configuration.",
+    )
