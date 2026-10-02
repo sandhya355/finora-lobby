@@ -9,7 +9,7 @@ from google.oauth2.service_account import Credentials
 
 
 # ============================================================
-# FINORA CONFIGURATION
+# PAGE SETUP
 # ============================================================
 
 st.set_page_config(
@@ -35,358 +35,257 @@ ACTIVITY_HEADERS = [
 
 
 # ============================================================
-# DESIGN
-# ============================================================
-
-# ============================================================
-# PREMIUM FINORA DESIGN
+# PREMIUM UI
 # ============================================================
 
 st.markdown(
     """
 <style>
 
-/* ==========================================================
-   PAGE
-   ========================================================== */
+/* ---------- PAGE ---------- */
+
+html, body, [class*="css"] {
+    font-family: Inter, Arial, sans-serif;
+}
 
 .stApp {
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(15, 118, 110, 0.08),
-            transparent 30%
-        ),
-        linear-gradient(
-            180deg,
-            #f8fbfd 0%,
-            #ffffff 42%,
-            #f7fafc 100%
-        );
+    background: #f5f8fb;
 }
 
 .block-container {
-    max-width: 1450px;
-    padding-top: 1.3rem;
-    padding-left: 2.5rem;
-    padding-right: 2.5rem;
-    padding-bottom: 3rem;
+    max-width: 1380px;
+    padding-top: 24px;
+    padding-left: 32px;
+    padding-right: 32px;
+    padding-bottom: 50px;
 }
 
 
-/* ==========================================================
-   FINORA HERO HEADER
-   ========================================================== */
+/* ---------- HEADER ---------- */
 
-.finora-header {
-    position: relative;
-    overflow: hidden;
+.finora-hero {
+    width: 100%;
+    box-sizing: border-box;
 
     background:
         linear-gradient(
             120deg,
-            #071c33 0%,
-            #0b3650 48%,
-            #08736f 100%
+            #08233d 0%,
+            #0b3d55 55%,
+            #08766f 100%
         );
 
-    padding: 34px 30px;
-    border-radius: 24px;
+    border-radius: 22px;
 
-    margin-top: 4px;
-    margin-bottom: 22px;
+    padding: 34px 30px 30px 30px;
 
     text-align: center;
 
+    margin-bottom: 18px;
+
     box-shadow:
-        0 16px 40px
-        rgba(7, 28, 51, 0.14);
+        0 12px 30px
+        rgba(8, 35, 61, 0.14);
 }
 
-.finora-header::before {
-    content: "";
-    position: absolute;
-
-    width: 230px;
-    height: 230px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(255,255,255,0.05);
-
-    top: -150px;
-    right: -40px;
+.finora-logo {
+    color: #ffffff !important;
+    font-size: 44px !important;
+    font-weight: 800 !important;
+    letter-spacing: 4px !important;
+    line-height: 1.1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.finora-header::after {
-    content: "";
-    position: absolute;
-
-    width: 170px;
-    height: 170px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(53, 211, 190, 0.08);
-
-    bottom: -120px;
-    left: 40px;
-}
-
-.finora-title {
-    position: relative;
-
-    color: #ffffff;
-
-    font-size: 46px;
-    line-height: 1.05;
-
-    font-weight: 850;
-    letter-spacing: 3px;
-
-    margin: 0;
-}
-
-.finora-subtitle {
-    position: relative;
-
-    color: #d8f5f0;
-
-    font-size: 17px;
-    font-weight: 450;
-
-    margin-top: 10px;
-
-    letter-spacing: 0.3px;
+.finora-tagline {
+    color: #d7f5ef !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    margin-top: 10px !important;
 }
 
 
-/* ==========================================================
-   TYPOGRAPHY
-   ========================================================== */
+/* ---------- SECTION TITLES ---------- */
 
-h1, h2, h3 {
+.page-title {
     color: #102a43;
-    letter-spacing: -0.3px;
+    font-size: 28px;
+    font-weight: 750;
+    margin-top: 15px;
+    margin-bottom: 4px;
 }
 
-h2 {
-    font-size: 27px !important;
-    font-weight: 750 !important;
-}
-
-h3 {
-    font-size: 21px !important;
-    font-weight: 700 !important;
-}
-
-p, label {
-    color: #334e68;
+.page-subtitle {
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 20px;
 }
 
 
-/* ==========================================================
-   TABS
-   ========================================================== */
+/* ---------- TABS ---------- */
+
+div[data-baseweb="tab-list"] {
+    gap: 8px;
+    border-bottom: 1px solid #dfe7ed;
+}
 
 button[data-baseweb="tab"] {
-    height: 54px;
-
-    padding-left: 22px !important;
-    padding-right: 22px !important;
-
-    border-radius: 12px 12px 0 0;
-
-    font-size: 15px !important;
+    height: 50px;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    border-radius: 10px 10px 0 0;
+    font-size: 14px !important;
     font-weight: 650 !important;
 }
 
 button[data-baseweb="tab"][aria-selected="true"] {
-    background:
-        linear-gradient(
-            180deg,
-            #edf9f7,
-            #ffffff
-        );
-
-    color: #08736f !important;
-}
-
-div[data-baseweb="tab-list"] {
-    gap: 8px;
+    color: #08766f !important;
+    background: #eaf6f4 !important;
 }
 
 
-/* ==========================================================
-   INPUTS
-   ========================================================== */
+/* ---------- FORM CARDS ---------- */
+
+.form-card {
+    background: white;
+    border: 1px solid #e1e8ee;
+    border-radius: 18px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+
+    box-shadow:
+        0 4px 14px
+        rgba(15, 40, 65, 0.05);
+}
+
+
+/* ---------- INPUTS ---------- */
 
 div[data-baseweb="input"] {
-    border-radius: 12px !important;
+    border-radius: 10px !important;
 }
 
 textarea {
-    border-radius: 14px !important;
-
+    border-radius: 12px !important;
     font-size: 15px !important;
-
-    padding: 14px !important;
-
-    background: #fbfdff !important;
 }
 
-div[data-testid="stFileUploader"] {
-    border-radius: 14px;
+div[data-testid="stFileUploader"] section {
+    border-radius: 12px;
 }
 
 
-/* ==========================================================
-   PRIMARY BUTTON
-   ========================================================== */
+/* ---------- BUTTON ---------- */
 
 div.stButton > button[kind="primary"] {
+    width: 100%;
+    min-height: 50px;
 
-    min-height: 52px;
-
-    border: 0;
-    border-radius: 14px;
+    border: none;
+    border-radius: 12px;
 
     background:
         linear-gradient(
-            100deg,
-            #08736f,
-            #0d8f83
+            90deg,
+            #08766f,
+            #11988d
         );
 
     color: white;
 
-    font-size: 16px;
-    font-weight: 750;
+    font-size: 15px;
+    font-weight: 700;
 
     box-shadow:
-        0 8px 20px
-        rgba(8, 115, 111, 0.20);
-
-    transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease;
+        0 7px 16px
+        rgba(8, 118, 111, 0.18);
 }
 
 div.stButton > button[kind="primary"]:hover {
-
-    transform:
-        translateY(-1px);
-
-    box-shadow:
-        0 11px 25px
-        rgba(8, 115, 111, 0.28);
-
     color: white;
+    border: none;
+    background:
+        linear-gradient(
+            90deg,
+            #066861,
+            #0d877d
+        );
 }
 
 
-/* ==========================================================
-   KPI CARDS
-   ========================================================== */
+/* ---------- KPI CARDS ---------- */
 
 div[data-testid="stMetric"] {
-
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #f8fbfc
-        );
+    background: #ffffff;
 
     border:
-        1px solid #e3edf2;
-
-    padding:
-        16px 17px;
+        1px solid #e1e8ee;
 
     border-radius:
-        16px;
+        15px;
+
+    padding:
+        14px 15px;
 
     min-height:
-        105px;
+        100px;
 
     box-shadow:
-        0 5px 16px
-        rgba(22, 50, 72, 0.055);
+        0 4px 12px
+        rgba(15, 40, 65, 0.045);
 }
 
 div[data-testid="stMetricLabel"] {
-
-    font-size:
-        13px;
-
-    font-weight:
-        650;
-
-    color:
-        #627d98;
+    color: #718096;
+    font-size: 12px;
+    font-weight: 650;
 }
 
 div[data-testid="stMetricValue"] {
-
-    font-size:
-        27px;
-
-    font-weight:
-        800;
-
-    color:
-        #102a43;
+    color: #102a43;
+    font-size: 25px;
+    font-weight: 750;
 }
 
 
-/* ==========================================================
-   STATUS CARDS
-   ========================================================== */
+/* ---------- DASHBOARD CARDS ---------- */
 
-.status-box {
-
-    background:
-        rgba(255,255,255,0.94);
+.dashboard-card {
+    background: white;
 
     border:
-        1px solid #e4ebf0;
+        1px solid #e1e8ee;
 
     border-radius:
-        16px;
+        17px;
 
     padding:
-        17px;
+        18px;
+
+    margin-top:
+        8px;
 
     margin-bottom:
         12px;
 
     box-shadow:
-        0 5px 16px
-        rgba(22, 50, 72, 0.05);
+        0 4px 14px
+        rgba(15, 40, 65, 0.045);
 }
 
-.pending-box {
-    border-left:
-        5px solid #e45858;
-}
-
-.received-box {
-    border-left:
-        5px solid #1ca47a;
+.card-title {
+    color: #102a43;
+    font-size: 17px;
+    font-weight: 750;
+    margin-bottom: 10px;
 }
 
 
-/* ==========================================================
-   OUTLET PILLS
-   ========================================================== */
+/* ---------- STATUS PILLS ---------- */
 
-.code-pill {
-
-    display:
-        inline-block;
+.outlet-pill {
+    display: inline-block;
 
     padding:
         6px 10px;
@@ -397,15 +296,6 @@ div[data-testid="stMetricValue"] {
     border-radius:
         20px;
 
-    background:
-        #edf5f7;
-
-    border:
-        1px solid #dcebed;
-
-    color:
-        #153b4b;
-
     font-size:
         12px;
 
@@ -413,76 +303,116 @@ div[data-testid="stMetricValue"] {
         650;
 }
 
+.pending-pill {
+    color: #9b2c2c;
+    background: #fff1f1;
+    border: 1px solid #ffd5d5;
+}
 
-/* ==========================================================
-   DATA TABLES
-   ========================================================== */
+.received-pill {
+    color: #12664f;
+    background: #eaf8f3;
+    border: 1px solid #c9ecdf;
+}
+
+
+/* ---------- STATUS COUNTERS ---------- */
+
+.status-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.status-stat {
+    padding: 17px;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.status-received {
+    background: #eaf8f3;
+    color: #12664f;
+}
+
+.status-pending {
+    background: #fff1f1;
+    color: #a33939;
+}
+
+.status-number {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.status-label {
+    font-size: 12px;
+    font-weight: 650;
+    margin-top: 6px;
+}
+
+
+/* ---------- TABLE ---------- */
 
 div[data-testid="stDataFrame"] {
-
-    background:
-        white;
-
     border:
-        1px solid #e5edf2;
+        1px solid #e1e8ee;
 
     border-radius:
-        15px;
+        14px;
 
     overflow:
         hidden;
-
-    box-shadow:
-        0 5px 15px
-        rgba(22, 50, 72, 0.04);
 }
 
 
-/* ==========================================================
-   EXPANDERS
-   ========================================================== */
-
-div[data-testid="stExpander"] {
-
-    background:
-        white;
-
-    border:
-        1px solid #e4ebf0;
-
-    border-radius:
-        14px;
-}
-
-
-/* ==========================================================
-   INFO / SUCCESS / ERROR
-   ========================================================== */
+/* ---------- ALERT ---------- */
 
 div[data-testid="stAlert"] {
-
-    border-radius:
-        14px;
+    border-radius: 12px;
 }
 
 
-/* ==========================================================
-   CODE / WHATSAPP SUMMARY
-   ========================================================== */
+/* ---------- EXPANDER ---------- */
 
-div[data-testid="stCode"] {
-
-    border-radius:
-        14px;
-
-    border:
-        1px solid #e1eaee;
+div[data-testid="stExpander"] {
+    background: white;
+    border: 1px solid #e1e8ee;
+    border-radius: 14px;
 }
 
 
-/* ==========================================================
-   REMOVE STREAMLIT BRANDING
-   ========================================================== */
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 800px) {
+
+    .block-container {
+        padding-left: 14px;
+        padding-right: 14px;
+        padding-top: 14px;
+    }
+
+    .finora-hero {
+        padding: 27px 16px;
+        border-radius: 16px;
+    }
+
+    .finora-logo {
+        font-size: 35px !important;
+    }
+
+    .finora-tagline {
+        font-size: 13px !important;
+    }
+
+    .status-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ---------- HIDE STREAMLIT BRANDING ---------- */
 
 #MainMenu {
     visibility: hidden;
@@ -492,59 +422,24 @@ footer {
     visibility: hidden;
 }
 
-
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
-
-@media (max-width: 900px) {
-
-    .block-container {
-
-        padding-left:
-            1rem;
-
-        padding-right:
-            1rem;
-    }
-
-    .finora-header {
-
-        padding:
-            25px 16px;
-    }
-
-    .finora-title {
-
-        font-size:
-            36px;
-    }
-
-    .finora-subtitle {
-
-        font-size:
-            14px;
-    }
-}
-
 </style>
 """,
     unsafe_allow_html=True,
 )
 
 
+# ============================================================
+# HEADER
+# ============================================================
+
 st.markdown(
     """
-<div class="finora-header">
-
-    <div class="finora-title">
-        FINORA
+<div class="finora-hero">
+    <div class="finora-logo">FINORA</div>
+    <div class="finora-tagline">
+        Lobby Activity Intelligence &nbsp;•&nbsp;
+        Performance &nbsp;•&nbsp; Monitoring
     </div>
-
-    <div class="finora-subtitle">
-        Lobby Activity Intelligence • Outlet Performance & Monitoring
-    </div>
-
 </div>
 """,
     unsafe_allow_html=True,
@@ -552,39 +447,55 @@ st.markdown(
 
 
 # ============================================================
-# GOOGLE SHEETS
+# GOOGLE SHEETS CONNECTION
 # ============================================================
 
 @st.cache_resource
 def get_spreadsheet():
 
     info = dict(
-        st.secrets["google_service_account"]
+        st.secrets[
+            "google_service_account"
+        ]
     )
 
-    credentials = Credentials.from_service_account_info(
-        info,
-        scopes=[
-            "https://www.googleapis.com/auth/spreadsheets"
-        ],
+    credentials = (
+        Credentials.from_service_account_info(
+            info,
+            scopes=[
+                "https://www.googleapis.com/auth/spreadsheets"
+            ],
+        )
     )
 
-    client = gspread.authorize(credentials)
+    client = gspread.authorize(
+        credentials
+    )
 
     return client.open_by_key(
-        st.secrets["spreadsheet_id"]
+        st.secrets[
+            "spreadsheet_id"
+        ]
     )
 
 
 def get_activity_sheet():
-    return get_spreadsheet().worksheet(
-        ACTIVITY_SHEET
+
+    return (
+        get_spreadsheet()
+        .worksheet(
+            ACTIVITY_SHEET
+        )
     )
 
 
 def get_master_sheet():
-    return get_spreadsheet().worksheet(
-        OUTLET_MASTER_SHEET
+
+    return (
+        get_spreadsheet()
+        .worksheet(
+            OUTLET_MASTER_SHEET
+        )
     )
 
 
@@ -612,26 +523,32 @@ def clean_number(value):
     if not match:
         return 0
 
-    number = float(match.group())
-
-    return (
-        int(number)
-        if number.is_integer()
-        else number
+    number = float(
+        match.group()
     )
+
+    if number.is_integer():
+        return int(number)
+
+    return number
 
 
 def money(value):
 
     try:
-        return f"₹{float(value):,.0f}"
+        return (
+            f"₹{float(value):,.0f}"
+        )
+
     except Exception:
         return "₹0"
 
 
 def normalize_date(value):
 
-    text = str(value).strip()
+    text = str(
+        value
+    ).strip()
 
     if not text:
         return ""
@@ -649,19 +566,27 @@ def normalize_date(value):
     for fmt in formats:
 
         try:
-            return datetime.strptime(
-                text,
-                fmt,
-            ).date().isoformat()
+            return (
+                datetime.strptime(
+                    text,
+                    fmt,
+                )
+                .date()
+                .isoformat()
+            )
 
         except ValueError:
             pass
 
     try:
-        return pd.to_datetime(
-            text,
-            dayfirst=True,
-        ).date().isoformat()
+        return (
+            pd.to_datetime(
+                text,
+                dayfirst=True,
+            )
+            .date()
+            .isoformat()
+        )
 
     except Exception:
         return text
@@ -670,7 +595,9 @@ def normalize_date(value):
 def now_ist():
 
     return datetime.now(
-        ZoneInfo("Asia/Kolkata")
+        ZoneInfo(
+            "Asia/Kolkata"
+        )
     ).strftime(
         "%Y-%m-%d %H:%M:%S"
     )
@@ -682,10 +609,13 @@ def now_ist():
 
 def load_outlet_master():
 
-    worksheet = get_master_sheet()
+    worksheet = (
+        get_master_sheet()
+    )
 
-    # Only A:C are required.
-    values = worksheet.get("A:C")
+    values = worksheet.get(
+        "A:C"
+    )
 
     outlets = {}
 
@@ -694,8 +624,11 @@ def load_outlet_master():
 
     for row in values[1:]:
 
-        row = row + [""] * (
-            3 - len(row)
+        row = (
+            row
+            + [""] * (
+                3 - len(row)
+            )
         )
 
         code = str(
@@ -713,8 +646,7 @@ def load_outlet_master():
         if (
             code
             and name
-            and active
-            in {
+            and active in {
                 "yes",
                 "y",
                 "true",
@@ -722,23 +654,30 @@ def load_outlet_master():
                 "active",
             }
         ):
-            outlets[code] = name
+
+            outlets[
+                code
+            ] = name
 
     return outlets
 
 
 # ============================================================
-# WHATSAPP PARSER
+# MESSAGE PARSER
 # ============================================================
 
-def extract_field(text, labels):
+def extract_field(
+    text,
+    labels,
+):
 
     for label in labels:
 
         pattern = (
             rf"(?im)^\s*"
             rf"{re.escape(label)}"
-            rf"\s*[:\-]\s*(.*?)\s*$"
+            rf"\s*[:\-]\s*"
+            rf"(.*?)\s*$"
         )
 
         match = re.search(
@@ -747,6 +686,7 @@ def extract_field(text, labels):
         )
 
         if match:
+
             return (
                 match.group(1)
                 .strip()
@@ -755,12 +695,16 @@ def extract_field(text, labels):
     return ""
 
 
-def detect_outlet(text, outlets):
+def detect_outlet(
+    text,
+    outlets,
+):
 
     upper = text.upper()
 
-    # Detect outlet code first
-    for code, name in outlets.items():
+    for code, name in (
+        outlets.items()
+    ):
 
         if re.search(
             rf"(?<![A-Z0-9])"
@@ -768,95 +712,126 @@ def detect_outlet(text, outlets):
             rf"(?![A-Z0-9])",
             upper,
         ):
-            return code, name
 
-    # Then outlet name
-    for code, name in outlets.items():
+            return (
+                code,
+                name,
+            )
 
-        if name.upper() in upper:
-            return code, name
+    for code, name in (
+        outlets.items()
+    ):
 
-    return None, None
+        if (
+            name.upper()
+            in upper
+        ):
+
+            return (
+                code,
+                name,
+            )
+
+    return (
+        None,
+        None,
+    )
 
 
-def parse_activity(text, outlets):
+def parse_activity(
+    text,
+    outlets,
+):
 
-    code, name = detect_outlet(
-        text,
-        outlets,
+    code, name = (
+        detect_outlet(
+            text,
+            outlets,
+        )
     )
 
     return {
-        "Outlet Code": code,
-        "Outlet Name": name,
 
-        "Therapist": extract_field(
-            text,
-            [
-                "Therapist",
-                "Therapist Name",
-                "Name of Therapist",
-                "Staff",
-            ],
-        ),
+        "Outlet Code":
+            code,
 
-        "Shift Timings": extract_field(
-            text,
-            [
-                "Shift",
-                "Shift Timing",
-                "Shift Timings",
-                "Timing",
-                "Timings",
-            ],
-        ),
+        "Outlet Name":
+            name,
 
-        "Guests Interacted": clean_number(
+        "Therapist":
             extract_field(
                 text,
                 [
-                    "Guests Interacted",
-                    "Guest Interacted",
-                    "Guests",
-                    "Guest",
-                    "No of Guests",
-                    "No. of Guests",
+                    "Therapist",
+                    "Therapist Name",
+                    "Name of Therapist",
+                    "Staff",
                 ],
-            )
-        ),
+            ),
 
-        "Conversions": clean_number(
+        "Shift Timings":
             extract_field(
                 text,
                 [
-                    "Conversions",
-                    "Conversion",
-                    "Converted",
+                    "Shift",
+                    "Shift Timing",
+                    "Shift Timings",
+                    "Timing",
+                    "Timings",
                 ],
-            )
-        ),
+            ),
 
-        "Appointment Value": clean_number(
-            extract_field(
-                text,
-                [
-                    "Appointment Value",
-                    "Appointment Amount",
-                    "Appointment",
-                    "Value",
-                ],
-            )
-        ),
+        "Guests Interacted":
+            clean_number(
+                extract_field(
+                    text,
+                    [
+                        "Guests Interacted",
+                        "Guest Interacted",
+                        "Guests",
+                        "Guest",
+                        "No of Guests",
+                        "No. of Guests",
+                    ],
+                )
+            ),
+
+        "Conversions":
+            clean_number(
+                extract_field(
+                    text,
+                    [
+                        "Conversions",
+                        "Conversion",
+                        "Converted",
+                    ],
+                )
+            ),
+
+        "Appointment Value":
+            clean_number(
+                extract_field(
+                    text,
+                    [
+                        "Appointment Value",
+                        "Appointment Amount",
+                        "Appointment",
+                        "Value",
+                    ],
+                )
+            ),
     }
 
 
 # ============================================================
-# ACTIVITY SHEET
+# ACTIVITY DATA
 # ============================================================
 
 def read_activity():
 
-    worksheet = get_activity_sheet()
+    worksheet = (
+        get_activity_sheet()
+    )
 
     values = worksheet.get(
         "A:H"
@@ -867,32 +842,41 @@ def read_activity():
         worksheet.append_row(
             ACTIVITY_HEADERS
         )
+
         return []
 
     records = []
 
-    # Use our fixed expected column order instead of
-    # depending on blank/duplicate Sheet headers.
-    for row_number, row in enumerate(
-        values[1:],
-        start=2,
+    for row_number, row in (
+        enumerate(
+            values[1:],
+            start=2,
+        )
     ):
 
         if not any(row):
             continue
 
-        row = row + [""] * (
-            8 - len(row)
+        row = (
+            row
+            + [""] * (
+                8 - len(row)
+            )
         )
 
         record = {
-            ACTIVITY_HEADERS[i]: row[i]
+            ACTIVITY_HEADERS[i]:
+                row[i]
             for i in range(8)
         }
 
-        record["_row"] = row_number
+        record[
+            "_row"
+        ] = row_number
 
-        records.append(record)
+        records.append(
+            record
+        )
 
     return records
 
@@ -914,18 +898,25 @@ def sheet_outlet_code(
             rf"(?![A-Z0-9])",
             upper,
         ):
+
             return code
 
-    for code, name in outlets.items():
+    for code, name in (
+        outlets.items()
+    ):
 
-        if name.upper() == upper:
+        if (
+            name.upper()
+            == upper
+        ):
+
             return code
 
     return None
 
 
 # ============================================================
-# SAVE / UPDATE / DUPLICATE CONTROL
+# SAVE ACTIVITY
 # ============================================================
 
 def save_activity(
@@ -934,35 +925,46 @@ def save_activity(
     outlets,
 ):
 
-    worksheet = get_activity_sheet()
-
-    records = read_activity()
-
-    target_date = (
-        activity_date.isoformat()
+    worksheet = (
+        get_activity_sheet()
     )
 
-    target_code = parsed[
-        "Outlet Code"
-    ]
+    records = (
+        read_activity()
+    )
+
+    target_date = (
+        activity_date
+        .isoformat()
+    )
+
+    target_code = (
+        parsed[
+            "Outlet Code"
+        ]
+    )
 
     matches = []
 
     for record in records:
 
-        record_date = normalize_date(
-            record.get(
-                "Date",
-                "",
+        record_date = (
+            normalize_date(
+                record.get(
+                    "Date",
+                    "",
+                )
             )
         )
 
-        record_code = sheet_outlet_code(
-            record.get(
-                "Outlet",
-                "",
-            ),
-            outlets,
+        record_code = (
+            sheet_outlet_code(
+                record.get(
+                    "Outlet",
+                    "",
+                ),
+                outlets,
+            )
         )
 
         if (
@@ -971,46 +973,70 @@ def save_activity(
             and record_code
             == target_code
         ):
+
             matches.append(
-                record["_row"]
+                record[
+                    "_row"
+                ]
             )
 
     values = [
         target_date,
         f"{target_code}-Lobby",
-        parsed["Therapist"],
-        parsed["Shift Timings"],
-        parsed["Guests Interacted"],
-        parsed["Conversions"],
-        parsed["Appointment Value"],
+        parsed[
+            "Therapist"
+        ],
+        parsed[
+            "Shift Timings"
+        ],
+        parsed[
+            "Guests Interacted"
+        ],
+        parsed[
+            "Conversions"
+        ],
+        parsed[
+            "Appointment Value"
+        ],
         now_ist(),
     ]
 
     if matches:
 
-        main_row = matches[0]
+        main_row = (
+            matches[0]
+        )
 
         worksheet.update(
             range_name=(
-                f"A{main_row}:H{main_row}"
+                f"A{main_row}:"
+                f"H{main_row}"
             ),
-            values=[values],
+            values=[
+                values
+            ],
         )
 
-        duplicates = matches[1:]
+        duplicates = (
+            matches[1:]
+        )
 
-        # Delete from bottom upwards.
-        for row_number in sorted(
-            duplicates,
-            reverse=True,
+        for row_number in (
+            sorted(
+                duplicates,
+                reverse=True,
+            )
         ):
+
             worksheet.delete_rows(
                 row_number
             )
 
         return (
             "updated",
-            len(duplicates),
+            len(
+                duplicates
+            ),
         )
 
     worksheet.append_row(
@@ -1020,20 +1046,27 @@ def save_activity(
         ),
     )
 
-    return "saved", 0
+    return (
+        "saved",
+        0,
+    )
 
 
 # ============================================================
-# DEDUPED ACTIVITY
+# UNIQUE ACTIVITY
 # ============================================================
 
-def build_unique_activity(outlets):
+def build_unique_activity(
+    outlets,
+):
 
-    records = read_activity()
+    records = (
+        read_activity()
+    )
 
     unique = {}
 
-    duplicates = 0
+    duplicate_count = 0
 
     for record in records:
 
@@ -1044,15 +1077,20 @@ def build_unique_activity(outlets):
             )
         )
 
-        code = sheet_outlet_code(
-            record.get(
-                "Outlet",
-                "",
-            ),
-            outlets,
+        code = (
+            sheet_outlet_code(
+                record.get(
+                    "Outlet",
+                    "",
+                ),
+                outlets,
+            )
         )
 
-        if not day or not code:
+        if (
+            not day
+            or not code
+        ):
             continue
 
         key = (
@@ -1061,12 +1099,16 @@ def build_unique_activity(outlets):
         )
 
         if key in unique:
-            duplicates += 1
+            duplicate_count += 1
 
-        # Later row wins.
-        unique[key] = record
+        unique[
+            key
+        ] = record
 
-    return unique, duplicates
+    return (
+        unique,
+        duplicate_count,
+    )
 
 
 def daily_activity(
@@ -1081,7 +1123,8 @@ def daily_activity(
     )
 
     target = (
-        selected_date.isoformat()
+        selected_date
+        .isoformat()
     )
 
     daily = {}
@@ -1089,16 +1132,27 @@ def daily_activity(
     for (
         record_date,
         code,
-    ), record in unique.items():
+    ), record in (
+        unique.items()
+    ):
 
-        if record_date == target:
-            daily[code] = record
+        if (
+            record_date
+            == target
+        ):
 
-    return daily, duplicates
+            daily[
+                code
+            ] = record
+
+    return (
+        daily,
+        duplicates,
+    )
 
 
 # ============================================================
-# PERIOD DATA
+# PERIOD ACTIVITY
 # ============================================================
 
 def period_activity(
@@ -1117,7 +1171,10 @@ def period_activity(
 
     current = start_date
 
-    while current <= end_date:
+    while (
+        current
+        <= end_date
+    ):
 
         all_dates.append(
             current
@@ -1128,28 +1185,26 @@ def period_activity(
         )
 
     outlet_rows = []
-
     daily_rows = []
 
     for day in all_dates:
 
-        day_key = (
-            day.isoformat()
-        )
-
-        day_records = []
+        records = []
 
         for code in outlets:
 
-            record = unique.get(
-                (
-                    day_key,
-                    code,
+            record = (
+                unique.get(
+                    (
+                        day.isoformat(),
+                        code,
+                    )
                 )
             )
 
             if record:
-                day_records.append(
+
+                records.append(
                     record
                 )
 
@@ -1160,7 +1215,7 @@ def period_activity(
                     0,
                 )
             )
-            for r in day_records
+            for r in records
         )
 
         conversions = sum(
@@ -1170,17 +1225,17 @@ def period_activity(
                     0,
                 )
             )
-            for r in day_records
+            for r in records
         )
 
-        appointment = sum(
+        value = sum(
             clean_number(
                 r.get(
                     "Appointment Value",
                     0,
                 )
             )
-            for r in day_records
+            for r in records
         )
 
         daily_rows.append(
@@ -1189,44 +1244,50 @@ def period_activity(
                     day.strftime(
                         "%d %b"
                     ),
+
                 "Received":
-                    len(day_records),
+                    len(records),
+
                 "Pending":
                     len(outlets)
-                    - len(day_records),
+                    - len(records),
+
                 "Guests":
                     guests,
+
                 "Conversions":
                     conversions,
+
                 "Appointment Value":
-                    appointment,
+                    value,
             }
         )
 
-    for code, name in outlets.items():
+    for code, name in (
+        outlets.items()
+    ):
 
-        received_dates = []
-
-        missing_dates = []
+        received = 0
+        missing = []
 
         guests = 0
         conversions = 0
-        appointment = 0
+        value = 0
 
         for day in all_dates:
 
-            record = unique.get(
-                (
-                    day.isoformat(),
-                    code,
+            record = (
+                unique.get(
+                    (
+                        day.isoformat(),
+                        code,
+                    )
                 )
             )
 
             if record:
 
-                received_dates.append(
-                    day
-                )
+                received += 1
 
                 guests += clean_number(
                     record.get(
@@ -1242,7 +1303,7 @@ def period_activity(
                     )
                 )
 
-                appointment += clean_number(
+                value += clean_number(
                     record.get(
                         "Appointment Value",
                         0,
@@ -1251,33 +1312,41 @@ def period_activity(
 
             else:
 
-                missing_dates.append(
+                missing.append(
                     day
                 )
 
         outlet_rows.append(
             {
-                "Code": code,
-                "Outlet": name,
+                "Code":
+                    code,
+
+                "Outlet":
+                    name,
+
                 "Received":
-                    len(received_dates),
+                    received,
+
                 "Pending":
-                    len(missing_dates),
+                    len(missing),
+
                 "Guests":
                     guests,
+
                 "Conversions":
                     conversions,
+
                 "Appointment Value":
-                    appointment,
+                    value,
+
                 "Missing Dates":
                     ", ".join(
                         d.strftime(
                             "%d-%b"
                         )
-                        for d
-                        in missing_dates
+                        for d in missing
                     )
-                    if missing_dates
+                    if missing
                     else "Complete",
             }
         )
@@ -1294,19 +1363,22 @@ def period_activity(
 
 
 # ============================================================
-# CONNECTION
+# CONNECT
 # ============================================================
 
 try:
 
-    outlets = load_outlet_master()
+    outlets = (
+        load_outlet_master()
+    )
 
     if not outlets:
 
         st.error(
-            "No active outlets found "
-            "in 'Outlet Master'."
+            "No active outlets "
+            "found in Outlet Master."
         )
+
         st.stop()
 
 except Exception as error:
@@ -1319,21 +1391,26 @@ except Exception as error:
     with st.expander(
         "Technical details"
     ):
-        st.code(str(error))
+
+        st.code(
+            str(error)
+        )
 
     st.stop()
 
 
 # ============================================================
-# TABS
+# NAVIGATION
 # ============================================================
 
-entry_tab, daily_tab, period_tab = st.tabs(
-    [
-        "📝 Enter Activity",
-        "📊 Daily Dashboard",
-        "📅 Period Dashboard",
-    ]
+entry_tab, daily_tab, period_tab = (
+    st.tabs(
+        [
+            "✍️  Enter Activity",
+            "📊  Daily Dashboard",
+            "📅  Period Dashboard",
+        ]
+    )
 )
 
 
@@ -1343,12 +1420,25 @@ entry_tab, daily_tab, period_tab = st.tabs(
 
 with entry_tab:
 
-    st.subheader(
-        "Enter Lobby Activity"
+    st.markdown(
+        """
+<div class="page-title">
+    Enter Lobby Activity
+</div>
+<div class="page-subtitle">
+    Paste the outlet's WhatsApp activity.
+    FINORA will recognise the outlet and
+    update the dashboard automatically.
+</div>
+""",
+        unsafe_allow_html=True,
     )
 
-    left, right = st.columns(
-        [1, 2]
+    left, right = (
+        st.columns(
+            [1, 2],
+            gap="large",
+        )
     )
 
     with left:
@@ -1372,20 +1462,17 @@ with entry_tab:
             )
         )
 
-        if uploaded_photo:
-
-            st.caption(
-                "The photo is temporary. "
-                "FINORA does not save the "
-                "photo or photo link."
-            )
+        st.caption(
+            "Photos are not saved "
+            "by FINORA."
+        )
 
     with right:
 
         whatsapp_text = (
             st.text_area(
-                "Paste WhatsApp Activity",
-                height=190,
+                "WhatsApp Activity",
+                height=205,
                 placeholder=(
                     "JIAL-Lobby Activity\n\n"
                     "Therapist: Neha\n"
@@ -1398,7 +1485,7 @@ with entry_tab:
         )
 
     if st.button(
-        "✨ Read & Save Activity",
+        "Read & Save Activity",
         type="primary",
         use_container_width=True,
     ):
@@ -1408,26 +1495,28 @@ with entry_tab:
         ):
 
             st.error(
-                "Paste the WhatsApp "
-                "activity first."
+                "Please paste "
+                "the activity."
             )
 
         else:
 
-            parsed = parse_activity(
-                whatsapp_text,
-                outlets,
+            parsed = (
+                parse_activity(
+                    whatsapp_text,
+                    outlets,
+                )
             )
 
-            if not parsed[
-                "Outlet Code"
-            ]:
+            if not (
+                parsed[
+                    "Outlet Code"
+                ]
+            ):
 
                 st.error(
                     "FINORA could not "
-                    "recognise the outlet. "
-                    "Check that the outlet "
-                    "code is in the message."
+                    "recognise the outlet code."
                 )
 
             else:
@@ -1440,22 +1529,22 @@ with entry_tab:
                     )
                 )
 
-                if action == "saved":
+                if (
+                    action
+                    == "saved"
+                ):
 
                     st.success(
-                        "✅ Activity saved — "
-                        f"{parsed['Outlet Code']} "
-                        f"| "
+                        "Activity saved successfully — "
+                        f"{parsed['Outlet Code']} | "
                         f"{parsed['Outlet Name']}"
                     )
 
                 else:
 
                     st.success(
-                        "🔄 Existing activity "
-                        "updated — "
-                        f"{parsed['Outlet Code']} "
-                        f"| "
+                        "Existing activity updated — "
+                        f"{parsed['Outlet Code']} | "
                         f"{parsed['Outlet Name']}"
                     )
 
@@ -1507,15 +1596,30 @@ with entry_tab:
 
 with daily_tab:
 
-    top1, top2 = st.columns(
-        [1, 3]
+    st.markdown(
+        """
+<div class="page-title">
+    Daily Lobby Dashboard
+</div>
+<div class="page-subtitle">
+    Daily submission status,
+    outlet performance and pending follow-up.
+</div>
+""",
+        unsafe_allow_html=True,
     )
 
-    with top1:
+    date_col, blank = (
+        st.columns(
+            [1, 3]
+        )
+    )
+
+    with date_col:
 
         selected_date = (
             st.date_input(
-                "Dashboard Date",
+                "Select Date",
                 value=date.today(),
                 format="DD/MM/YYYY",
                 key="daily_date",
@@ -1541,32 +1645,38 @@ with daily_tab:
 
     total_guests = sum(
         clean_number(
-            r.get(
+            record.get(
                 "Guests Interacted",
                 0,
             )
         )
-        for r in daily.values()
+        for record in (
+            daily.values()
+        )
     )
 
     total_conversions = sum(
         clean_number(
-            r.get(
+            record.get(
                 "Conversions",
                 0,
             )
         )
-        for r in daily.values()
+        for record in (
+            daily.values()
+        )
     )
 
     total_value = sum(
         clean_number(
-            r.get(
+            record.get(
                 "Appointment Value",
                 0,
             )
         )
-        for r in daily.values()
+        for record in (
+            daily.values()
+        )
     )
 
     conversion_rate = (
@@ -1577,11 +1687,6 @@ with daily_tab:
         else 0
     )
 
-    st.markdown(
-        f"### {selected_date.strftime('%d %B %Y')}"
-    )
-
-    # Compact KPI row
     k1, k2, k3, k4, k5, k6, k7 = (
         st.columns(7)
     )
@@ -1612,62 +1717,82 @@ with daily_tab:
     )
 
     k6.metric(
-        "Conversion %",
+        "Conversion",
         f"{conversion_rate:.1f}%",
     )
 
     k7.metric(
-        "Appt. Value",
+        "Appointment",
         money(total_value),
     )
 
-    # --------------------------------------------------------
-    # RECEIVED / PENDING VISUAL
-    # --------------------------------------------------------
+    st.write("")
 
-    left, right = st.columns(
-        [1, 2]
+    status_col, follow_col = (
+        st.columns(
+            [0.8, 2.2],
+            gap="large",
+        )
     )
 
-    with left:
+    with status_col:
 
         st.markdown(
-            "#### Submission Status"
+            """
+<div class="dashboard-card">
+<div class="card-title">
+Submission Status
+</div>
+""",
+            unsafe_allow_html=True,
         )
-
-        status_df = pd.DataFrame(
-            {
-                "Status": [
-                    "Received",
-                    "Pending",
-                ],
-                "Outlets": [
-                    len(received_codes),
-                    len(pending_codes),
-                ],
-            }
-        ).set_index(
-            "Status"
-        )
-
-        # Small compact chart
-        st.bar_chart(
-            status_df,
-            height=210,
-        )
-
-    with right:
 
         st.markdown(
-            f"#### 🔴 Pending Today "
-            f"({len(pending_codes)})"
+            f"""
+<div class="status-grid">
+
+<div class="status-stat status-received">
+<div class="status-number">
+{len(received_codes)}
+</div>
+<div class="status-label">
+RECEIVED
+</div>
+</div>
+
+<div class="status-stat status-pending">
+<div class="status-number">
+{len(pending_codes)}
+</div>
+<div class="status-label">
+PENDING
+</div>
+</div>
+
+</div>
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+    with follow_col:
+
+        st.markdown(
+            f"""
+<div class="dashboard-card">
+<div class="card-title">
+Pending Follow-up
+</div>
+""",
+            unsafe_allow_html=True,
         )
 
         if pending_codes:
 
-            pending_html = "".join(
+            pills = "".join(
                 (
-                    '<span class="code-pill">'
+                    '<span class="outlet-pill '
+                    'pending-pill">'
                     f'{code} · {outlets[code]}'
                     '</span>'
                 )
@@ -1676,68 +1801,36 @@ with daily_tab:
             )
 
             st.markdown(
-                (
-                    '<div class="status-box '
-                    'pending-box">'
-                    f'{pending_html}'
-                    '</div>'
-                ),
+                pills,
                 unsafe_allow_html=True,
             )
 
         else:
 
             st.success(
-                "All outlets have "
-                "submitted. 🎉"
+                "All outlets have submitted."
             )
 
         st.markdown(
-            f"#### 🟢 Received "
-            f"({len(received_codes)})"
+            "</div>",
+            unsafe_allow_html=True,
         )
 
-        if received_codes:
-
-            received_html = "".join(
-                (
-                    '<span class="code-pill">'
-                    f'{code} · {outlets[code]}'
-                    '</span>'
-                )
-                for code
-                in received_codes
-            )
-
-            st.markdown(
-                (
-                    '<div class="status-box '
-                    'received-box">'
-                    f'{received_html}'
-                    '</div>'
-                ),
-                unsafe_allow_html=True,
-            )
-
-        else:
-
-            st.caption(
-                "No submissions yet."
-            )
-
-    # --------------------------------------------------------
-    # PERFORMANCE CHARTS
-    # --------------------------------------------------------
+    # ---------------- PERFORMANCE ----------------
 
     if daily:
 
         performance = []
 
-        for code, record in daily.items():
+        for code, record in (
+            daily.items()
+        ):
 
             performance.append(
                 {
-                    "Outlet": code,
+                    "Outlet":
+                        code,
+
                     "Guests":
                         clean_number(
                             record.get(
@@ -1745,6 +1838,7 @@ with daily_tab:
                                 0,
                             )
                         ),
+
                     "Conversions":
                         clean_number(
                             record.get(
@@ -1752,6 +1846,7 @@ with daily_tab:
                                 0,
                             )
                         ),
+
                     "Appointment Value":
                         clean_number(
                             record.get(
@@ -1768,11 +1863,14 @@ with daily_tab:
             )
         )
 
-        chart1, chart2 = st.columns(
-            2
+        chart_left, chart_right = (
+            st.columns(
+                2,
+                gap="large",
+            )
         )
 
-        with chart1:
+        with chart_left:
 
             st.markdown(
                 "#### Guests vs Conversions"
@@ -1788,16 +1886,16 @@ with daily_tab:
                         "Conversions",
                     ]
                 ],
-                height=260,
+                height=250,
             )
 
-        with chart2:
+        with chart_right:
 
             st.markdown(
                 "#### Appointment Value"
             )
 
-            value_chart = (
+            value_df = (
                 performance_df[
                     [
                         "Outlet",
@@ -1814,16 +1912,14 @@ with daily_tab:
             )
 
             st.bar_chart(
-                value_chart,
-                height=260,
+                value_df,
+                height=250,
             )
 
-    # --------------------------------------------------------
-    # WHATSAPP READY SUMMARY
-    # --------------------------------------------------------
+    # ---------------- WHATSAPP SUMMARY ----------------
 
     st.markdown(
-        "#### 📱 WhatsApp Status"
+        "#### WhatsApp Follow-up"
     )
 
     pending_text = (
@@ -1834,31 +1930,31 @@ with daily_tab:
         else "None"
     )
 
-    whatsapp_summary = (
-        f"FINORA - Lobby Activity | "
-        f"{selected_date.strftime('%d %b %Y')}\n"
+    summary = (
+        f"FINORA Lobby Activity | "
+        f"{selected_date.strftime('%d %b %Y')}\n\n"
         f"Received: "
-        f"{len(received_codes)}/{len(outlets)} | "
-        f"Pending: {len(pending_codes)} | "
-        f"Guests: {int(total_guests)} | "
-        f"Conversions: {int(total_conversions)} | "
-        f"Conversion: {conversion_rate:.1f}% | "
-        f"Appointment Value: {money(total_value)}\n"
-        f"Pending: {pending_text}"
+        f"{len(received_codes)}/{len(outlets)}\n"
+        f"Pending: {len(pending_codes)}\n"
+        f"Guests: {int(total_guests)}\n"
+        f"Conversions: {int(total_conversions)}\n"
+        f"Conversion Rate: "
+        f"{conversion_rate:.1f}%\n"
+        f"Appointment Value: "
+        f"{money(total_value)}\n\n"
+        f"Pending Outlets: "
+        f"{pending_text}"
     )
 
     st.code(
-        whatsapp_summary,
+        summary,
         language=None,
     )
 
-    # --------------------------------------------------------
-    # DETAILS
-    # --------------------------------------------------------
+    # ---------------- DETAILS ----------------
 
     with st.expander(
-        "View outlet-wise details",
-        expanded=False,
+        "View outlet-wise details"
     ):
 
         rows = []
@@ -1867,48 +1963,53 @@ with daily_tab:
             outlets.items()
         ):
 
-            record = daily.get(
-                code
+            record = (
+                daily.get(
+                    code
+                )
             )
 
             if record:
 
-                guests = clean_number(
-                    record.get(
-                        "Guests Interacted",
-                        0,
-                    )
-                )
-
-                conversions = (
-                    clean_number(
-                        record.get(
-                            "Conversions",
-                            0,
-                        )
-                    )
-                )
-
                 rows.append(
                     {
-                        "Code": code,
-                        "Outlet": name,
+                        "Code":
+                            code,
+
+                        "Outlet":
+                            name,
+
                         "Status":
                             "Received",
+
                         "Therapist":
                             record.get(
                                 "Therapist",
                                 "",
                             ),
+
                         "Shift":
                             record.get(
                                 "Shift Timings",
                                 "",
                             ),
+
                         "Guests":
-                            guests,
+                            clean_number(
+                                record.get(
+                                    "Guests Interacted",
+                                    0,
+                                )
+                            ),
+
                         "Conversions":
-                            conversions,
+                            clean_number(
+                                record.get(
+                                    "Conversions",
+                                    0,
+                                )
+                            ),
+
                         "Appointment Value":
                             clean_number(
                                 record.get(
@@ -1923,20 +2024,36 @@ with daily_tab:
 
                 rows.append(
                     {
-                        "Code": code,
-                        "Outlet": name,
+                        "Code":
+                            code,
+
+                        "Outlet":
+                            name,
+
                         "Status":
                             "Pending",
-                        "Therapist": "",
-                        "Shift": "",
-                        "Guests": "",
-                        "Conversions": "",
-                        "Appointment Value": "",
+
+                        "Therapist":
+                            "",
+
+                        "Shift":
+                            "",
+
+                        "Guests":
+                            "",
+
+                        "Conversions":
+                            "",
+
+                        "Appointment Value":
+                            "",
                     }
                 )
 
         st.dataframe(
-            pd.DataFrame(rows),
+            pd.DataFrame(
+                rows
+            ),
             use_container_width=True,
             hide_index=True,
             height=430,
@@ -1945,10 +2062,9 @@ with daily_tab:
     if duplicate_count:
 
         st.caption(
-            f"FINORA ignored "
             f"{duplicate_count} duplicate "
-            f"historical record(s) while "
-            f"calculating the dashboard."
+            f"historical record(s) were "
+            f"ignored in the totals."
         )
 
 
@@ -1958,37 +2074,55 @@ with daily_tab:
 
 with period_tab:
 
-    st.subheader(
-        "Period Dashboard"
+    st.markdown(
+        """
+<div class="page-title">
+    Period Dashboard
+</div>
+<div class="page-subtitle">
+    Review outlet submissions and performance
+    across a selected date range.
+</div>
+""",
+        unsafe_allow_html=True,
     )
 
-    d1, d2, spacer = st.columns(
-        [1, 1, 2]
+    d1, d2, blank = (
+        st.columns(
+            [1, 1, 2]
+        )
     )
 
     with d1:
 
-        start_date = st.date_input(
-            "From",
-            value=date.today(),
-            format="DD/MM/YYYY",
-            key="period_from",
+        start_date = (
+            st.date_input(
+                "From Date",
+                value=date.today(),
+                format="DD/MM/YYYY",
+                key="period_from",
+            )
         )
 
     with d2:
 
-        end_date = st.date_input(
-            "To",
-            value=date.today(),
-            format="DD/MM/YYYY",
-            key="period_to",
+        end_date = (
+            st.date_input(
+                "To Date",
+                value=date.today(),
+                format="DD/MM/YYYY",
+                key="period_to",
+            )
         )
 
-    if end_date < start_date:
+    if (
+        end_date
+        < start_date
+    ):
 
         st.error(
-            "The To date cannot be "
-            "before the From date."
+            "To Date cannot be "
+            "before From Date."
         )
 
     else:
@@ -2036,7 +2170,7 @@ with period_tab:
             ].sum()
         )
 
-        value = float(
+        total_value = float(
             outlet_df[
                 "Appointment Value"
             ].sum()
@@ -2075,30 +2209,35 @@ with period_tab:
         )
 
         p5.metric(
-            "Conversion %",
+            "Conversion",
             f"{rate:.1f}%",
         )
 
         p6.metric(
-            "Appt. Value",
-            money(value),
+            "Appointment",
+            money(
+                total_value
+            ),
         )
 
-        # Daily trend charts
         if not daily_df.empty:
 
-            c1, c2 = st.columns(
-                2
+            trend1, trend2 = (
+                st.columns(
+                    2,
+                    gap="large",
+                )
             )
 
-            with c1:
+            with trend1:
 
                 st.markdown(
                     "#### Submission Trend"
                 )
 
                 st.line_chart(
-                    daily_df.set_index(
+                    daily_df
+                    .set_index(
                         "Date"
                     )[
                         [
@@ -2106,17 +2245,18 @@ with period_tab:
                             "Pending",
                         ]
                     ],
-                    height=250,
+                    height=260,
                 )
 
-            with c2:
+            with trend2:
 
                 st.markdown(
-                    "#### Guests & Conversions"
+                    "#### Guests vs Conversions"
                 )
 
                 st.line_chart(
-                    daily_df.set_index(
+                    daily_df
+                    .set_index(
                         "Date"
                     )[
                         [
@@ -2124,40 +2264,26 @@ with period_tab:
                             "Conversions",
                         ]
                     ],
-                    height=250,
+                    height=260,
                 )
 
-            st.markdown(
-                "#### Appointment Value Trend"
-            )
-
-            st.line_chart(
-                daily_df.set_index(
-                    "Date"
-                )[
-                    [
-                        "Appointment Value"
-                    ]
-                ],
-                height=220,
-            )
-
-        # Pending follow-up
-        pending_df = outlet_df[
+        pending_df = (
             outlet_df[
-                "Pending"
-            ] > 0
-        ].copy()
+                outlet_df[
+                    "Pending"
+                ] > 0
+            ]
+        )
 
         st.markdown(
-            f"#### 🔴 Follow-up Required "
+            f"#### Pending Follow-up "
             f"({len(pending_df)} outlets)"
         )
 
         if pending_df.empty:
 
             st.success(
-                "No pending lobby activity "
+                "No pending activity "
                 "for this period."
             )
 
@@ -2175,7 +2301,7 @@ with period_tab:
                 ],
                 use_container_width=True,
                 hide_index=True,
-                height=320,
+                height=330,
             )
 
         with st.expander(
@@ -2192,9 +2318,9 @@ with period_tab:
         if period_duplicates:
 
             st.caption(
-                f"FINORA ignored "
-                f"{period_duplicates} duplicate "
-                f"historical record(s)."
+                f"{period_duplicates} "
+                f"duplicate historical "
+                f"record(s) were ignored."
             )
 
 
@@ -2202,6 +2328,17 @@ with period_tab:
 # FOOTER
 # ============================================================
 
-st.caption(
-    "FINORA • Lobby Activity Management"
+st.markdown(
+    """
+<br>
+<div style="
+    text-align:center;
+    color:#94a3b8;
+    font-size:12px;
+    padding:15px;
+">
+    FINORA • Lobby Activity Intelligence
+</div>
+""",
+    unsafe_allow_html=True,
 )
