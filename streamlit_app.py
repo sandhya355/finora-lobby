@@ -9,14 +9,14 @@ from google.oauth2.service_account import Credentials
 
 
 # ============================================================
-# PAGE SETUP
+# FINORA - PAGE CONFIG
 # ============================================================
 
 st.set_page_config(
-    page_title="FINORA | Lobby Activity",
+    page_title="FINORA | Your Finance AI",
     page_icon="💠",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 ACTIVITY_SHEET = "Activity"
@@ -35,450 +35,712 @@ ACTIVITY_HEADERS = [
 
 
 # ============================================================
-# PREMIUM UI
+# PREMIUM FINORA DESIGN
 # ============================================================
 
 st.markdown(
     """
 <style>
-/* ==========================================================
-   FINORA PREMIUM VISUAL UPGRADE
-   ========================================================== */
 
-/* ---------- BODY FONT SIZE ---------- */
+/* ----------------------------------------------------------
+   GLOBAL
+---------------------------------------------------------- */
 
-/* Normal page text */
-.stApp p,
-.stApp span,
-.stApp label {
-    font-size: 16px;
+html, body, [class*="css"] {
+    font-family: "Segoe UI", Arial, sans-serif;
 }
-
-/* Form labels */
-div[data-testid="stWidgetLabel"] p {
-    font-size: 16px !important;
-    font-weight: 650 !important;
-    color: #243b53 !important;
-}
-
-/* Captions */
-div[data-testid="stCaptionContainer"] p {
-    font-size: 14px !important;
-    color: #718096 !important;
-}
-
-/* Inputs */
-input {
-    font-size: 16px !important;
-}
-
-textarea {
-    font-size: 16px !important;
-    line-height: 1.6 !important;
-}
-
-/* File uploader text */
-div[data-testid="stFileUploader"] {
-    font-size: 15px !important;
-}
-
-/* Tabs */
-button[data-baseweb="tab"] {
-    font-size: 16px !important;
-    font-weight: 700 !important;
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-}
-
-/* Do NOT enlarge FINORA heading */
-.finora-logo {
-    font-size: 44px !important;
-}
-
-.finora-tagline {
-    font-size: 16px !important;
-}
-
-
-/* ==========================================================
-   PAGE BACKGROUND
-   ========================================================== */
 
 .stApp {
     background:
-        radial-gradient(
-            circle at 8% 8%,
-            rgba(29, 139, 214, 0.08),
-            transparent 25%
-        ),
-        radial-gradient(
-            circle at 92% 15%,
-            rgba(111, 76, 255, 0.07),
-            transparent 25%
-        ),
-        radial-gradient(
-            circle at 50% 100%,
-            rgba(15, 157, 137, 0.07),
-            transparent 30%
-        ),
+        radial-gradient(circle at 95% 5%,
+            rgba(93, 91, 255, 0.06),
+            transparent 24%),
         #f7f9fc;
 }
 
+.block-container {
+    max-width: 1500px;
+    padding-top: 1.1rem;
+    padding-left: 2.2rem;
+    padding-right: 2.2rem;
+    padding-bottom: 3rem;
+}
 
-/* ==========================================================
-   HEADER
-   ========================================================== */
 
-.finora-hero {
+/* ----------------------------------------------------------
+   SIDEBAR
+---------------------------------------------------------- */
+
+section[data-testid="stSidebar"] {
     background:
         linear-gradient(
-            115deg,
-            #071d35 0%,
-            #0b4160 38%,
-            #08786f 70%,
-            #4b55a5 100%
+            180deg,
+            #081d38 0%,
+            #0b2948 100%
         );
-
-    border:
-        1px solid rgba(255,255,255,0.10);
-
-    box-shadow:
-        0 18px 45px
-        rgba(12, 39, 67, 0.18);
+    border-right: 1px solid #173b5d;
 }
 
-
-/* ==========================================================
-   TABS
-   ========================================================== */
-
-div[data-baseweb="tab-list"] {
-    background: #ffffff;
-
-    padding:
-        6px 8px 0 8px;
-
-    border-radius:
-        14px 14px 0 0;
-
-    box-shadow:
-        0 4px 14px
-        rgba(20, 45, 75, 0.04);
+section[data-testid="stSidebar"] > div {
+    padding-top: 18px;
 }
 
-button[data-baseweb="tab"] {
-    color:
-        #52667a !important;
+section[data-testid="stSidebar"] * {
+    color: #ffffff;
 }
 
-button[data-baseweb="tab"][aria-selected="true"] {
+.sidebar-brand {
+    padding: 14px 8px 24px 8px;
+    text-align: left;
+}
 
-    color:
-        #08766f !important;
+.sidebar-logo-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.sidebar-logo-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 30px;
 
     background:
         linear-gradient(
             135deg,
-            #e9faf6,
-            #edf6ff
+            #26d3a5,
+            #16a7bc
+        );
+
+    box-shadow:
+        0 8px 20px
+        rgba(0, 0, 0, 0.18);
+}
+
+.sidebar-finora {
+    color: white !important;
+    font-size: 29px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1px;
+    line-height: 1;
+}
+
+.sidebar-tagline {
+    color: #9db5ca !important;
+    font-size: 14px !important;
+    margin-top: 6px;
+}
+
+.sidebar-section {
+    color: #6f8aa4 !important;
+    font-size: 12px !important;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    margin: 20px 5px 10px 5px;
+}
+
+.sidebar-menu {
+    padding: 12px 14px;
+    margin: 6px 0;
+
+    border-radius: 11px;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    color: #cbd9e6 !important;
+}
+
+.sidebar-menu-active {
+    padding: 12px 14px;
+    margin: 6px 0;
+
+    border-radius: 11px;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    color: white !important;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(39, 211, 170, 0.22),
+            rgba(62, 129, 232, 0.18)
+        );
+
+    border-left:
+        4px solid #2ad4a6;
+}
+
+.sidebar-status {
+    margin-top: 28px;
+
+    padding: 15px;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    border:
+        1px solid rgba(255,255,255,0.08);
+
+    border-radius:
+        13px;
+}
+
+.status-dot {
+    display: inline-block;
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: #2dd79b;
+
+    margin-right: 7px;
+
+    box-shadow:
+        0 0 8px
+        rgba(45, 215, 155, 0.8);
+}
+
+
+/* ----------------------------------------------------------
+   TOP BRAND
+---------------------------------------------------------- */
+
+.top-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    margin-bottom: 17px;
+}
+
+.top-logo {
+    width: 58px;
+    height: 58px;
+
+    border-radius: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 32px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #27d3a8,
+            #18a7c4
+        );
+
+    box-shadow:
+        0 8px 20px
+        rgba(19, 167, 175, 0.20);
+}
+
+.top-finora {
+    font-size: 34px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+
+    color: #092a55 !important;
+
+    margin: 0 !important;
+}
+
+.top-tagline {
+    color: #73859a !important;
+    font-size: 16px !important;
+    margin-top: 6px;
+}
+
+
+/* ----------------------------------------------------------
+   PAGE HERO
+---------------------------------------------------------- */
+
+.page-hero {
+    position: relative;
+    overflow: hidden;
+
+    padding: 25px 28px;
+
+    margin-top: 10px;
+    margin-bottom: 20px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            120deg,
+            #092747 0%,
+            #105b73 60%,
+            #119486 100%
+        );
+
+    box-shadow:
+        0 12px 28px
+        rgba(8, 39, 72, 0.13);
+}
+
+.page-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -60px;
+    top: -100px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,0.08);
+}
+
+.hero-eyebrow {
+    color: #7debd1 !important;
+    font-size: 13px !important;
+    font-weight: 750;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    color: white !important;
+
+    font-size: 31px !important;
+    font-weight: 800 !important;
+
+    margin-top: 5px;
+}
+
+.hero-text {
+    color: #d9eef1 !important;
+
+    font-size: 16px !important;
+
+    margin-top: 5px;
+}
+
+
+/* ----------------------------------------------------------
+   TABS
+---------------------------------------------------------- */
+
+div[data-baseweb="tab-list"] {
+
+    gap: 8px;
+
+    background: white;
+
+    padding: 7px;
+
+    border-radius: 14px;
+
+    border: 1px solid #e1e8ef;
+
+    box-shadow:
+        0 5px 16px
+        rgba(17, 44, 74, 0.045);
+}
+
+button[data-baseweb="tab"] {
+
+    height: 51px;
+
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+
+    border-radius: 10px !important;
+
+    font-size: 16px !important;
+    font-weight: 650 !important;
+
+    color: #52677d !important;
+}
+
+button[data-baseweb="tab"][aria-selected="true"] {
+
+    color: #5b57f6 !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #efefff,
+            #eef8ff
         ) !important;
 }
 
 
-/* ==========================================================
-   INPUT AREAS
-   ========================================================== */
+/* ----------------------------------------------------------
+   NORMAL BODY TEXT
+---------------------------------------------------------- */
 
-div[data-baseweb="input"],
+.stApp p {
+    font-size: 16px;
+}
+
+div[data-testid="stWidgetLabel"] p {
+
+    font-size: 16px !important;
+    font-weight: 650 !important;
+
+    color: #334e68 !important;
+}
+
+div[data-testid="stCaptionContainer"] p {
+
+    font-size: 14px !important;
+
+    color: #718096 !important;
+}
+
+
+/* ----------------------------------------------------------
+   SECTION TITLE
+---------------------------------------------------------- */
+
+.section-title {
+
+    font-size: 26px !important;
+
+    font-weight: 800 !important;
+
+    color: #102a43 !important;
+
+    margin-top: 18px;
+    margin-bottom: 3px;
+}
+
+.section-subtitle {
+
+    font-size: 16px !important;
+
+    color: #718096 !important;
+
+    margin-bottom: 20px;
+}
+
+
+/* ----------------------------------------------------------
+   INPUTS
+---------------------------------------------------------- */
+
+div[data-baseweb="input"] {
+
+    min-height: 48px;
+
+    border-radius: 11px !important;
+
+    background: white !important;
+
+    border: 1px solid #dce5ec !important;
+}
+
+input {
+
+    font-size: 16px !important;
+}
+
 textarea {
 
-    background:
-        #ffffff !important;
+    font-size: 16px !important;
 
-    border:
-        1px solid #dce6ed !important;
+    line-height: 1.55 !important;
 
-    box-shadow:
-        0 3px 10px
-        rgba(20, 45, 75, 0.035);
+    min-height: 210px !important;
+
+    border-radius: 13px !important;
+
+    background: white !important;
+
+    border: 1px solid #dce5ec !important;
 }
-
-div[data-baseweb="input"]:focus-within {
-
-    border:
-        1px solid #0d9488 !important;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(13, 148, 136, 0.10);
-}
-
-
-/* ==========================================================
-   FILE UPLOAD AREA
-   ========================================================== */
 
 div[data-testid="stFileUploader"] section {
 
     background:
         linear-gradient(
             135deg,
-            #f3f9ff,
-            #f1fbf8
+            #f1f8ff,
+            #effbf8
         );
 
     border:
-        1px dashed #8eb9c5;
-
-    padding:
-        16px;
+        1px dashed #9bbdca;
 
     border-radius:
-        14px;
+        13px;
+
+    padding: 17px;
 }
 
 
-/* ==========================================================
+/* ----------------------------------------------------------
    PRIMARY BUTTON
-   ========================================================== */
+---------------------------------------------------------- */
 
 div.stButton > button[kind="primary"] {
 
-    min-height:
-        55px;
+    min-height: 55px;
 
-    font-size:
-        17px !important;
+    border: none;
 
-    letter-spacing:
-        0.2px;
+    border-radius: 12px;
+
+    color: white;
+
+    font-size: 17px !important;
+    font-weight: 750 !important;
 
     background:
         linear-gradient(
-            100deg,
-            #08766f 0%,
-            #11988d 48%,
-            #2878b8 100%
+            90deg,
+            #5d5cf6 0%,
+            #5575ef 45%,
+            #19a997 100%
         );
 
     box-shadow:
-        0 9px 22px
-        rgba(10, 118, 120, 0.22);
+        0 8px 20px
+        rgba(78, 93, 230, 0.20);
+}
+
+div.stButton > button[kind="primary"]:hover {
+
+    color: white;
+
+    border: none;
+
+    transform:
+        translateY(-1px);
 }
 
 
-/* ==========================================================
+/* ----------------------------------------------------------
    KPI CARDS
-   ========================================================== */
+---------------------------------------------------------- */
 
 div[data-testid="stMetric"] {
 
-    position:
-        relative;
+    position: relative;
 
-    overflow:
-        hidden;
+    overflow: hidden;
 
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #f8fbff
-        );
+    min-height: 112px;
 
-    border:
-        1px solid #dfe8ef;
+    padding: 16px 17px;
 
-    min-height:
-        112px;
+    background: white;
+
+    border: 1px solid #e0e7ee;
+
+    border-radius: 16px;
 
     box-shadow:
-        0 7px 20px
-        rgba(25, 50, 80, 0.07);
+        0 6px 18px
+        rgba(15, 42, 72, 0.055);
 }
 
-/* Metric label */
 div[data-testid="stMetricLabel"] p {
 
-    font-size:
-        15px !important;
+    font-size: 14px !important;
 
-    font-weight:
-        700 !important;
+    font-weight: 700 !important;
 
-    color:
-        #52677b !important;
+    color: #66788b !important;
 }
 
-/* Metric number */
 div[data-testid="stMetricValue"] {
 
-    font-size:
-        29px !important;
+    font-size: 27px !important;
 
-    font-weight:
-        800 !important;
+    font-weight: 800 !important;
 
-    color:
-        #102a43 !important;
+    color: #102a43 !important;
 }
 
 
-/* ==========================================================
-   GIVE KPI CARDS DIFFERENT ACCENTS
-   ========================================================== */
+/* ----------------------------------------------------------
+   CUSTOM CARDS
+---------------------------------------------------------- */
 
-div[data-testid="stMetric"]:nth-of-type(1) {
-    border-top:
-        4px solid #2878b8;
-}
+.fin-card {
 
-div[data-testid="stMetric"]:nth-of-type(2) {
-    border-top:
-        4px solid #18a57b;
-}
-
-div[data-testid="stMetric"]:nth-of-type(3) {
-    border-top:
-        4px solid #ef6464;
-}
-
-
-/* ==========================================================
-   DASHBOARD CARDS
-   ========================================================== */
-
-.dashboard-card {
-
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #fbfdff
-        );
+    background: white;
 
     border:
-        1px solid #dfe8ef;
+        1px solid #e1e8ef;
 
-    box-shadow:
-        0 8px 22px
-        rgba(20, 45, 75, 0.065);
+    border-radius:
+        17px;
 
     padding:
-        21px;
+        20px;
+
+    box-shadow:
+        0 6px 18px
+        rgba(15, 42, 72, 0.055);
+
+    margin-bottom:
+        14px;
 }
 
-.card-title {
+.fin-card-title {
 
     font-size:
         19px !important;
 
+    font-weight:
+        800;
+
     color:
-        #183b56;
+        #173b5e !important;
+
+    margin-bottom:
+        12px;
 }
 
 
-/* ==========================================================
+/* ----------------------------------------------------------
    RECEIVED / PENDING
-   ========================================================== */
+---------------------------------------------------------- */
 
-.status-received {
+.status-wrap {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 13px;
+}
+
+.received-card {
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    text-align: center;
 
     background:
         linear-gradient(
             135deg,
-            #ddf8ed,
+            #dff9ee,
             #effcf7
         );
 
     border:
-        1px solid #bcebd8;
-
-    color:
-        #087052;
+        1px solid #b9ead7;
 }
 
-.status-pending {
+.pending-card {
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    text-align: center;
 
     background:
         linear-gradient(
             135deg,
-            #ffebeb,
-            #fff6f3
+            #ffeded,
+            #fff7f3
         );
 
     border:
-        1px solid #ffd0cb;
-
-    color:
-        #b33b3b;
+        1px solid #ffd0c9;
 }
 
-.status-number {
+.status-big {
 
     font-size:
-        38px !important;
+        35px !important;
+
+    font-weight:
+        850;
 }
 
-.status-label {
+.status-small {
 
     font-size:
-        14px !important;
+        13px !important;
+
+    font-weight:
+        750;
+
+    letter-spacing:
+        0.6px;
 }
 
 
-/* ==========================================================
+/* ----------------------------------------------------------
    OUTLET PILLS
-   ========================================================== */
+---------------------------------------------------------- */
 
 .outlet-pill {
 
+    display: inline-block;
+
     padding:
-        7px 12px;
+        7px 11px;
 
     margin:
         5px 4px;
 
+    border-radius:
+        20px;
+
     font-size:
         14px !important;
+
+    font-weight:
+        650;
 }
 
 .pending-pill {
 
+    color:
+        #a23a3a;
+
     background:
-        linear-gradient(
-            135deg,
-            #fff0ef,
-            #fff7f4
-        );
+        #fff0ef;
 
     border:
         1px solid #ffc9c4;
-
-    color:
-        #a83c3c;
 }
 
 .received-pill {
 
-    background:
-        linear-gradient(
-            135deg,
-            #e2f8ef,
-            #f0fcf8
-        );
-
-    border:
-        1px solid #bfe8d8;
-
     color:
         #087052;
+
+    background:
+        #e4f9f0;
+
+    border:
+        1px solid #bce9d7;
 }
 
 
-/* ==========================================================
-   TABLES
-   ========================================================== */
+/* ----------------------------------------------------------
+   TABLES / EXPANDERS
+---------------------------------------------------------- */
 
 div[data-testid="stDataFrame"] {
 
@@ -486,33 +748,29 @@ div[data-testid="stDataFrame"] {
         white;
 
     border:
-        1px solid #dfe8ef;
+        1px solid #e0e7ee;
+
+    border-radius:
+        14px;
+
+    overflow:
+        hidden;
 
     box-shadow:
-        0 7px 20px
-        rgba(20, 45, 75, 0.055);
+        0 5px 16px
+        rgba(15, 42, 72, 0.045);
 }
-
-
-/* ==========================================================
-   EXPANDERS
-   ========================================================== */
 
 div[data-testid="stExpander"] {
 
     background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #fafcff
-        );
+        white;
 
     border:
-        1px solid #dfe8ef;
+        1px solid #e0e7ee;
 
-    box-shadow:
-        0 4px 12px
-        rgba(20, 45, 75, 0.04);
+    border-radius:
+        14px;
 }
 
 div[data-testid="stExpander"] summary p {
@@ -525,40 +783,15 @@ div[data-testid="stExpander"] summary p {
 }
 
 
-/* ==========================================================
-   WHATSAPP SUMMARY
-   ========================================================== */
+/* ----------------------------------------------------------
+   ALERTS
+---------------------------------------------------------- */
 
-div[data-testid="stCode"] {
+div[data-testid="stAlert"] {
 
-    background:
-        linear-gradient(
-            135deg,
-            #f0faf6,
-            #f3f8ff
-        ) !important;
-
-    border:
-        1px solid #cfe4dd;
-
-    box-shadow:
-        0 5px 15px
-        rgba(20, 70, 60, 0.05);
+    border-radius:
+        13px;
 }
-
-div[data-testid="stCode"] code {
-
-    font-size:
-        15px !important;
-
-    line-height:
-        1.6 !important;
-}
-
-
-/* ==========================================================
-   SUCCESS / WARNING / ERROR
-   ========================================================== */
 
 div[data-testid="stAlert"] p {
 
@@ -567,421 +800,68 @@ div[data-testid="stAlert"] p {
 }
 
 
-/* ==========================================================
-   EXTRA SCREEN SPACE
-   ========================================================== */
+/* ----------------------------------------------------------
+   WHATSAPP BOX
+---------------------------------------------------------- */
 
-.block-container {
+.whatsapp-box {
 
-    max-width:
-        1480px;
-
-    padding-left:
-        38px;
-
-    padding-right:
-        38px;
-
-    padding-bottom:
-        55px;
-}
-
-
-/* ==========================================================
-   MOBILE
-   ========================================================== */
-
-@media (max-width: 850px) {
-
-    .block-container {
-
-        padding-left:
-            15px;
-
-        padding-right:
-            15px;
-    }
-
-    .stApp p,
-    .stApp span,
-    .stApp label {
-
-        font-size:
-            15px;
-    }
-}
-
-/* ---------- PAGE ---------- */
-
-html, body, [class*="css"] {
-    font-family: Inter, Arial, sans-serif;
-}
-
-.stApp {
-    background: #f5f8fb;
-}
-
-.block-container {
-    max-width: 1380px;
-    padding-top: 24px;
-    padding-left: 32px;
-    padding-right: 32px;
-    padding-bottom: 50px;
-}
-
-
-/* ---------- HEADER ---------- */
-
-.finora-hero {
-    width: 100%;
-    box-sizing: border-box;
-
-    background:
-        linear-gradient(
-            120deg,
-            #08233d 0%,
-            #0b3d55 55%,
-            #08766f 100%
-        );
-
-    border-radius: 22px;
-
-    padding: 34px 30px 30px 30px;
-
-    text-align: center;
-
-    margin-bottom: 18px;
-
-    box-shadow:
-        0 12px 30px
-        rgba(8, 35, 61, 0.14);
-}
-
-.finora-logo {
-    color: #ffffff !important;
-    font-size: 44px !important;
-    font-weight: 800 !important;
-    letter-spacing: 4px !important;
-    line-height: 1.1 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.finora-tagline {
-    color: #d7f5ef !important;
-    font-size: 16px !important;
-    font-weight: 500 !important;
-    margin-top: 10px !important;
-}
-
-
-/* ---------- SECTION TITLES ---------- */
-
-.page-title {
-    color: #102a43;
-    font-size: 28px;
-    font-weight: 750;
-    margin-top: 15px;
-    margin-bottom: 4px;
-}
-
-.page-subtitle {
-    color: #718096;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-
-/* ---------- TABS ---------- */
-
-div[data-baseweb="tab-list"] {
-    gap: 8px;
-    border-bottom: 1px solid #dfe7ed;
-}
-
-button[data-baseweb="tab"] {
-    height: 50px;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    border-radius: 10px 10px 0 0;
-    font-size: 14px !important;
-    font-weight: 650 !important;
-}
-
-button[data-baseweb="tab"][aria-selected="true"] {
-    color: #08766f !important;
-    background: #eaf6f4 !important;
-}
-
-
-/* ---------- FORM CARDS ---------- */
-
-.form-card {
-    background: white;
-    border: 1px solid #e1e8ee;
-    border-radius: 18px;
-    padding: 20px 22px;
-    margin-bottom: 16px;
-
-    box-shadow:
-        0 4px 14px
-        rgba(15, 40, 65, 0.05);
-}
-
-
-/* ---------- INPUTS ---------- */
-
-div[data-baseweb="input"] {
-    border-radius: 10px !important;
-}
-
-textarea {
-    border-radius: 12px !important;
-    font-size: 15px !important;
-}
-
-div[data-testid="stFileUploader"] section {
-    border-radius: 12px;
-}
-
-
-/* ---------- BUTTON ---------- */
-
-div.stButton > button[kind="primary"] {
-    width: 100%;
-    min-height: 50px;
-
-    border: none;
-    border-radius: 12px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #08766f,
-            #11988d
-        );
-
-    color: white;
-
-    font-size: 15px;
-    font-weight: 700;
-
-    box-shadow:
-        0 7px 16px
-        rgba(8, 118, 111, 0.18);
-}
-
-div.stButton > button[kind="primary"]:hover {
-    color: white;
-    border: none;
-    background:
-        linear-gradient(
-            90deg,
-            #066861,
-            #0d877d
-        );
-}
-
-
-/* ---------- KPI CARDS ---------- */
-
-div[data-testid="stMetric"] {
-    background: #ffffff;
-
-    border:
-        1px solid #e1e8ee;
+    padding:
+        18px 20px;
 
     border-radius:
         15px;
 
-    padding:
-        14px 15px;
-
-    min-height:
-        100px;
-
-    box-shadow:
-        0 4px 12px
-        rgba(15, 40, 65, 0.045);
-}
-
-div[data-testid="stMetricLabel"] {
-    color: #718096;
-    font-size: 12px;
-    font-weight: 650;
-}
-
-div[data-testid="stMetricValue"] {
-    color: #102a43;
-    font-size: 25px;
-    font-weight: 750;
-}
-
-
-/* ---------- DASHBOARD CARDS ---------- */
-
-.dashboard-card {
-    background: white;
+    background:
+        linear-gradient(
+            135deg,
+            #eafaf3,
+            #eef8ff
+        );
 
     border:
-        1px solid #e1e8ee;
+        1px solid #cbe7db;
 
-    border-radius:
-        17px;
-
-    padding:
-        18px;
-
-    margin-top:
-        8px;
-
-    margin-bottom:
-        12px;
-
-    box-shadow:
-        0 4px 14px
-        rgba(15, 40, 65, 0.045);
-}
-
-.card-title {
-    color: #102a43;
-    font-size: 17px;
-    font-weight: 750;
-    margin-bottom: 10px;
-}
-
-
-/* ---------- STATUS PILLS ---------- */
-
-.outlet-pill {
-    display: inline-block;
-
-    padding:
-        6px 10px;
-
-    margin:
-        4px 3px;
-
-    border-radius:
-        20px;
+    color:
+        #173b4f;
 
     font-size:
-        12px;
+        16px !important;
 
-    font-weight:
-        650;
-}
+    line-height:
+        1.65;
 
-.pending-pill {
-    color: #9b2c2c;
-    background: #fff1f1;
-    border: 1px solid #ffd5d5;
-}
-
-.received-pill {
-    color: #12664f;
-    background: #eaf8f3;
-    border: 1px solid #c9ecdf;
+    white-space:
+        pre-line;
 }
 
 
-/* ---------- STATUS COUNTERS ---------- */
+/* ----------------------------------------------------------
+   FOOTER
+---------------------------------------------------------- */
 
-.status-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
+.finora-footer {
 
-.status-stat {
-    padding: 17px;
-    border-radius: 14px;
-    text-align: center;
-}
+    text-align:
+        center;
 
-.status-received {
-    background: #eaf8f3;
-    color: #12664f;
-}
+    color:
+        #94a3b8 !important;
 
-.status-pending {
-    background: #fff1f1;
-    color: #a33939;
-}
+    font-size:
+        13px !important;
 
-.status-number {
-    font-size: 32px;
-    font-weight: 800;
-    line-height: 1;
-}
+    margin-top:
+        35px;
 
-.status-label {
-    font-size: 12px;
-    font-weight: 650;
-    margin-top: 6px;
+    padding:
+        15px;
 }
 
 
-/* ---------- TABLE ---------- */
-
-div[data-testid="stDataFrame"] {
-    border:
-        1px solid #e1e8ee;
-
-    border-radius:
-        14px;
-
-    overflow:
-        hidden;
-}
-
-
-/* ---------- ALERT ---------- */
-
-div[data-testid="stAlert"] {
-    border-radius: 12px;
-}
-
-
-/* ---------- EXPANDER ---------- */
-
-div[data-testid="stExpander"] {
-    background: white;
-    border: 1px solid #e1e8ee;
-    border-radius: 14px;
-}
-
-
-/* ---------- MOBILE ---------- */
-
-@media (max-width: 800px) {
-
-    .block-container {
-        padding-left: 14px;
-        padding-right: 14px;
-        padding-top: 14px;
-    }
-
-    .finora-hero {
-        padding: 27px 16px;
-        border-radius: 16px;
-    }
-
-    .finora-logo {
-        font-size: 35px !important;
-    }
-
-    .finora-tagline {
-        font-size: 13px !important;
-    }
-
-    .status-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-
-/* ---------- HIDE STREAMLIT BRANDING ---------- */
+/* ----------------------------------------------------------
+   HIDE STREAMLIT DEFAULTS
+---------------------------------------------------------- */
 
 #MainMenu {
     visibility: hidden;
@@ -991,6 +871,35 @@ footer {
     visibility: hidden;
 }
 
+
+/* ----------------------------------------------------------
+   MOBILE
+---------------------------------------------------------- */
+
+@media (max-width: 900px) {
+
+    .block-container {
+
+        padding-left:
+            14px;
+
+        padding-right:
+            14px;
+    }
+
+    .top-finora {
+
+        font-size:
+            28px !important;
+    }
+
+    .status-wrap {
+
+        grid-template-columns:
+            1fr;
+    }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
@@ -998,17 +907,118 @@ footer {
 
 
 # ============================================================
-# HEADER
+# SIDEBAR - FINORA PLATFORM
+# ============================================================
+
+with st.sidebar:
+
+    st.markdown(
+        """
+<div class="sidebar-brand">
+
+    <div class="sidebar-logo-row">
+
+        <div class="sidebar-logo-icon">
+            F
+        </div>
+
+        <div>
+
+            <div class="sidebar-finora">
+                FINORA
+            </div>
+
+            <div class="sidebar-tagline">
+                Your Finance AI
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="sidebar-section">
+    WORKSPACE
+</div>
+
+<div class="sidebar-menu">
+    🏠 &nbsp; Home
+</div>
+
+<div class="sidebar-menu-active">
+    📊 &nbsp; Lobby Activity
+</div>
+
+<div class="sidebar-menu">
+    🧾 &nbsp; GST Returns
+</div>
+
+<div class="sidebar-menu">
+    📈 &nbsp; Zenoti Reports
+</div>
+
+<div class="sidebar-menu">
+    💰 &nbsp; Cash Reconciliation
+</div>
+
+<div class="sidebar-menu">
+    📁 &nbsp; Files
+</div>
+
+<div class="sidebar-menu">
+    ⚙️ &nbsp; Settings
+</div>
+
+<div class="sidebar-status">
+
+    <div style="
+        color:#8da8bf;
+        font-size:12px;
+        font-weight:700;
+        margin-bottom:8px;
+    ">
+        SYSTEM STATUS
+    </div>
+
+    <div style="
+        color:white;
+        font-size:15px;
+    ">
+        <span class="status-dot"></span>
+        FINORA Online
+    </div>
+
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+
+
+# ============================================================
+# TOP BRAND
 # ============================================================
 
 st.markdown(
     """
-<div class="finora-hero">
-    <div class="finora-logo">FINORA</div>
-    <div class="finora-tagline">
-        Lobby Activity Intelligence &nbsp;•&nbsp;
-        Performance &nbsp;•&nbsp; Monitoring
+<div class="top-brand">
+
+    <div class="top-logo">
+        F
     </div>
+
+    <div>
+
+        <div class="top-finora">
+            Finora
+        </div>
+
+        <div class="top-tagline">
+            Your Finance AI
+        </div>
+
+    </div>
+
 </div>
 """,
     unsafe_allow_html=True,
@@ -1016,7 +1026,7 @@ st.markdown(
 
 
 # ============================================================
-# GOOGLE SHEETS CONNECTION
+# GOOGLE SHEETS
 # ============================================================
 
 @st.cache_resource
@@ -1105,11 +1115,13 @@ def clean_number(value):
 def money(value):
 
     try:
+
         return (
             f"₹{float(value):,.0f}"
         )
 
     except Exception:
+
         return "₹0"
 
 
@@ -1135,6 +1147,7 @@ def normalize_date(value):
     for fmt in formats:
 
         try:
+
             return (
                 datetime.strptime(
                     text,
@@ -1145,9 +1158,11 @@ def normalize_date(value):
             )
 
         except ValueError:
+
             pass
 
     try:
+
         return (
             pd.to_datetime(
                 text,
@@ -1158,6 +1173,7 @@ def normalize_date(value):
         )
 
     except Exception:
+
         return text
 
 
@@ -1189,6 +1205,7 @@ def load_outlet_master():
     outlets = {}
 
     if len(values) < 2:
+
         return outlets
 
     for row in values[1:]:
@@ -1232,7 +1249,7 @@ def load_outlet_master():
 
 
 # ============================================================
-# MESSAGE PARSER
+# WHATSAPP MESSAGE PARSER
 # ============================================================
 
 def extract_field(
@@ -1271,6 +1288,7 @@ def detect_outlet(
 
     upper = text.upper()
 
+    # Search outlet code first.
     for code, name in (
         outlets.items()
     ):
@@ -1287,6 +1305,7 @@ def detect_outlet(
                 name,
             )
 
+    # Search full outlet name.
     for code, name in (
         outlets.items()
     ):
@@ -1393,7 +1412,7 @@ def parse_activity(
 
 
 # ============================================================
-# ACTIVITY DATA
+# READ ACTIVITY SHEET
 # ============================================================
 
 def read_activity():
@@ -1424,6 +1443,7 @@ def read_activity():
     ):
 
         if not any(row):
+
             continue
 
         row = (
@@ -1485,7 +1505,7 @@ def sheet_outlet_code(
 
 
 # ============================================================
-# SAVE ACTIVITY
+# SAVE / UPDATE / DUPLICATE CONTROL
 # ============================================================
 
 def save_activity(
@@ -1550,23 +1570,31 @@ def save_activity(
             )
 
     values = [
+
         target_date,
+
         f"{target_code}-Lobby",
+
         parsed[
             "Therapist"
         ],
+
         parsed[
             "Shift Timings"
         ],
+
         parsed[
             "Guests Interacted"
         ],
+
         parsed[
             "Conversions"
         ],
+
         parsed[
             "Appointment Value"
         ],
+
         now_ist(),
     ]
 
@@ -1590,11 +1618,9 @@ def save_activity(
             matches[1:]
         )
 
-        for row_number in (
-            sorted(
-                duplicates,
-                reverse=True,
-            )
+        for row_number in sorted(
+            duplicates,
+            reverse=True,
         ):
 
             worksheet.delete_rows(
@@ -1622,7 +1648,7 @@ def save_activity(
 
 
 # ============================================================
-# UNIQUE ACTIVITY
+# UNIQUE DATA
 # ============================================================
 
 def build_unique_activity(
@@ -1639,10 +1665,12 @@ def build_unique_activity(
 
     for record in records:
 
-        day = normalize_date(
-            record.get(
-                "Date",
-                "",
+        day = (
+            normalize_date(
+                record.get(
+                    "Date",
+                    "",
+                )
             )
         )
 
@@ -1660,6 +1688,7 @@ def build_unique_activity(
             not day
             or not code
         ):
+
             continue
 
         key = (
@@ -1668,8 +1697,10 @@ def build_unique_activity(
         )
 
         if key in unique:
+
             duplicate_count += 1
 
+        # Latest row wins.
         unique[
             key
         ] = record
@@ -1721,7 +1752,7 @@ def daily_activity(
 
 
 # ============================================================
-# PERIOD ACTIVITY
+# PERIOD DATA
 # ============================================================
 
 def period_activity(
@@ -1754,11 +1785,12 @@ def period_activity(
         )
 
     outlet_rows = []
+
     daily_rows = []
 
     for day in all_dates:
 
-        records = []
+        day_records = []
 
         for code in outlets:
 
@@ -1773,7 +1805,7 @@ def period_activity(
 
             if record:
 
-                records.append(
+                day_records.append(
                     record
                 )
 
@@ -1784,7 +1816,7 @@ def period_activity(
                     0,
                 )
             )
-            for r in records
+            for r in day_records
         )
 
         conversions = sum(
@@ -1794,7 +1826,7 @@ def period_activity(
                     0,
                 )
             )
-            for r in records
+            for r in day_records
         )
 
         value = sum(
@@ -1804,7 +1836,7 @@ def period_activity(
                     0,
                 )
             )
-            for r in records
+            for r in day_records
         )
 
         daily_rows.append(
@@ -1815,11 +1847,15 @@ def period_activity(
                     ),
 
                 "Received":
-                    len(records),
+                    len(
+                        day_records
+                    ),
 
                 "Pending":
                     len(outlets)
-                    - len(records),
+                    - len(
+                        day_records
+                    ),
 
                 "Guests":
                     guests,
@@ -1836,11 +1872,14 @@ def period_activity(
         outlets.items()
     ):
 
-        received = 0
-        missing = []
+        received_dates = []
+
+        missing_dates = []
 
         guests = 0
+
         conversions = 0
+
         value = 0
 
         for day in all_dates:
@@ -1856,32 +1895,40 @@ def period_activity(
 
             if record:
 
-                received += 1
+                received_dates.append(
+                    day
+                )
 
-                guests += clean_number(
-                    record.get(
-                        "Guests Interacted",
-                        0,
+                guests += (
+                    clean_number(
+                        record.get(
+                            "Guests Interacted",
+                            0,
+                        )
                     )
                 )
 
-                conversions += clean_number(
-                    record.get(
-                        "Conversions",
-                        0,
+                conversions += (
+                    clean_number(
+                        record.get(
+                            "Conversions",
+                            0,
+                        )
                     )
                 )
 
-                value += clean_number(
-                    record.get(
-                        "Appointment Value",
-                        0,
+                value += (
+                    clean_number(
+                        record.get(
+                            "Appointment Value",
+                            0,
+                        )
                     )
                 )
 
             else:
 
-                missing.append(
+                missing_dates.append(
                     day
                 )
 
@@ -1894,10 +1941,14 @@ def period_activity(
                     name,
 
                 "Received":
-                    received,
+                    len(
+                        received_dates
+                    ),
 
                 "Pending":
-                    len(missing),
+                    len(
+                        missing_dates
+                    ),
 
                 "Guests":
                     guests,
@@ -1913,9 +1964,10 @@ def period_activity(
                         d.strftime(
                             "%d-%b"
                         )
-                        for d in missing
+                        for d
+                        in missing_dates
                     )
-                    if missing
+                    if missing_dates
                     else "Complete",
             }
         )
@@ -1924,15 +1976,17 @@ def period_activity(
         pd.DataFrame(
             outlet_rows
         ),
+
         pd.DataFrame(
             daily_rows
         ),
+
         duplicate_count,
     )
 
 
 # ============================================================
-# CONNECT
+# CONNECT TO FINORA DATA
 # ============================================================
 
 try:
@@ -1944,8 +1998,8 @@ try:
     if not outlets:
 
         st.error(
-            "No active outlets "
-            "found in Outlet Master."
+            "No active outlets found "
+            "in Outlet Master."
         )
 
         st.stop()
@@ -1969,7 +2023,35 @@ except Exception as error:
 
 
 # ============================================================
-# NAVIGATION
+# LOBBY ACTIVITY HERO
+# ============================================================
+
+st.markdown(
+    """
+<div class="page-hero">
+
+    <div class="hero-eyebrow">
+        FINORA WORKSPACE
+    </div>
+
+    <div class="hero-title">
+        Lobby Activity
+    </div>
+
+    <div class="hero-text">
+        Capture daily outlet activity,
+        monitor performance and follow up
+        pending submissions from one place.
+    </div>
+
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+
+# ============================================================
+# LOBBY NAVIGATION
 # ============================================================
 
 entry_tab, daily_tab, period_tab = (
@@ -1991,13 +2073,14 @@ with entry_tab:
 
     st.markdown(
         """
-<div class="page-title">
+<div class="section-title">
     Enter Lobby Activity
 </div>
-<div class="page-subtitle">
-    Paste the outlet's WhatsApp activity.
-    FINORA will recognise the outlet and
-    update the dashboard automatically.
+
+<div class="section-subtitle">
+    Paste the activity received from WhatsApp.
+    FINORA will identify the outlet and save
+    the information to the dashboard.
 </div>
 """,
         unsafe_allow_html=True,
@@ -2022,7 +2105,7 @@ with entry_tab:
 
         uploaded_photo = (
             st.file_uploader(
-                "Optional photo",
+                "Optional Photo",
                 type=[
                     "jpg",
                     "jpeg",
@@ -2031,17 +2114,26 @@ with entry_tab:
             )
         )
 
-        st.caption(
-            "Photos are not saved "
-            "by FINORA."
-        )
+        if uploaded_photo:
+
+            st.info(
+                "Photo received temporarily. "
+                "FINORA does not save the photo "
+                "or a photo link."
+            )
+
+        else:
+
+            st.caption(
+                "Photos are not stored by FINORA."
+            )
 
     with right:
 
         whatsapp_text = (
             st.text_area(
-                "WhatsApp Activity",
-                height=205,
+                "Paste WhatsApp Activity",
+                height=230,
                 placeholder=(
                     "JIAL-Lobby Activity\n\n"
                     "Therapist: Neha\n"
@@ -2054,7 +2146,7 @@ with entry_tab:
         )
 
     if st.button(
-        "Read & Save Activity",
+        "✨  Read & Save Activity",
         type="primary",
         use_container_width=True,
     ):
@@ -2064,8 +2156,8 @@ with entry_tab:
         ):
 
             st.error(
-                "Please paste "
-                "the activity."
+                "Please paste the WhatsApp "
+                "activity first."
             )
 
         else:
@@ -2084,8 +2176,10 @@ with entry_tab:
             ):
 
                 st.error(
-                    "FINORA could not "
-                    "recognise the outlet code."
+                    "FINORA could not recognise "
+                    "the outlet. Please make sure "
+                    "the outlet code is included "
+                    "in the message."
                 )
 
             else:
@@ -2104,16 +2198,16 @@ with entry_tab:
                 ):
 
                     st.success(
-                        "Activity saved successfully — "
-                        f"{parsed['Outlet Code']} | "
+                        "✅ Activity saved successfully — "
+                        f"{parsed['Outlet Code']} • "
                         f"{parsed['Outlet Name']}"
                     )
 
                 else:
 
                     st.success(
-                        "Existing activity updated — "
-                        f"{parsed['Outlet Code']} | "
+                        "🔄 Existing activity updated — "
+                        f"{parsed['Outlet Code']} • "
                         f"{parsed['Outlet Name']}"
                     )
 
@@ -2121,7 +2215,7 @@ with entry_tab:
 
                     st.info(
                         f"{removed} duplicate "
-                        f"record(s) removed."
+                        f"record(s) were removed."
                     )
 
                 a, b, c, d = (
@@ -2167,18 +2261,19 @@ with daily_tab:
 
     st.markdown(
         """
-<div class="page-title">
-    Daily Lobby Dashboard
+<div class="section-title">
+    Daily Dashboard
 </div>
-<div class="page-subtitle">
-    Daily submission status,
-    outlet performance and pending follow-up.
+
+<div class="section-subtitle">
+    See today's submissions, performance
+    and the outlets requiring follow-up.
 </div>
 """,
         unsafe_allow_html=True,
     )
 
-    date_col, blank = (
+    date_col, spacer = (
         st.columns(
             [1, 3]
         )
@@ -2219,9 +2314,8 @@ with daily_tab:
                 0,
             )
         )
-        for record in (
-            daily.values()
-        )
+        for record
+        in daily.values()
     )
 
     total_conversions = sum(
@@ -2231,9 +2325,8 @@ with daily_tab:
                 0,
             )
         )
-        for record in (
-            daily.values()
-        )
+        for record
+        in daily.values()
     )
 
     total_value = sum(
@@ -2243,17 +2336,32 @@ with daily_tab:
                 0,
             )
         )
-        for record in (
-            daily.values()
-        )
+        for record
+        in daily.values()
     )
 
     conversion_rate = (
-        total_conversions
-        / total_guests
+        (
+            total_conversions
+            / total_guests
+        )
         * 100
         if total_guests
         else 0
+    )
+
+    st.markdown(
+        f"""
+<div style="
+    font-size:19px;
+    font-weight:750;
+    color:#27445e;
+    margin:10px 0 14px 0;
+">
+    {selected_date.strftime('%d %B %Y')}
+</div>
+""",
+        unsafe_allow_html=True,
     )
 
     k1, k2, k3, k4, k5, k6, k7 = (
@@ -2261,7 +2369,7 @@ with daily_tab:
     )
 
     k1.metric(
-        "Outlets",
+        "Total Outlets",
         len(outlets),
     )
 
@@ -2286,83 +2394,97 @@ with daily_tab:
     )
 
     k6.metric(
-        "Conversion",
+        "Conversion %",
         f"{conversion_rate:.1f}%",
     )
 
     k7.metric(
-        "Appointment",
-        money(total_value),
+        "Appointment Value",
+        money(
+            total_value
+        ),
     )
 
     st.write("")
 
-    status_col, follow_col = (
+    # --------------------------------------------------------
+    # STATUS + PENDING
+    # --------------------------------------------------------
+
+    status_column, pending_column = (
         st.columns(
-            [0.8, 2.2],
+            [0.85, 2.15],
             gap="large",
         )
     )
 
-    with status_col:
+    with status_column:
+
+        st.markdown(
+            f"""
+<div class="fin-card">
+
+    <div class="fin-card-title">
+        Submission Status
+    </div>
+
+    <div class="status-wrap">
+
+        <div class="received-card">
+
+            <div class="status-big"
+                 style="color:#087052;">
+                {len(received_codes)}
+            </div>
+
+            <div class="status-small"
+                 style="color:#087052;">
+                RECEIVED
+            </div>
+
+        </div>
+
+        <div class="pending-card">
+
+            <div class="status-big"
+                 style="color:#b23e3e;">
+                {len(pending_codes)}
+            </div>
+
+            <div class="status-small"
+                 style="color:#b23e3e;">
+                PENDING
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+""",
+            unsafe_allow_html=True,
+        )
+
+    with pending_column:
 
         st.markdown(
             """
-<div class="dashboard-card">
-<div class="card-title">
-Submission Status
-</div>
-""",
-            unsafe_allow_html=True,
-        )
+<div class="fin-card">
 
-        st.markdown(
-            f"""
-<div class="status-grid">
-
-<div class="status-stat status-received">
-<div class="status-number">
-{len(received_codes)}
-</div>
-<div class="status-label">
-RECEIVED
-</div>
-</div>
-
-<div class="status-stat status-pending">
-<div class="status-number">
-{len(pending_codes)}
-</div>
-<div class="status-label">
-PENDING
-</div>
-</div>
-
-</div>
-</div>
-""",
-            unsafe_allow_html=True,
-        )
-
-    with follow_col:
-
-        st.markdown(
-            f"""
-<div class="dashboard-card">
-<div class="card-title">
-Pending Follow-up
-</div>
+    <div class="fin-card-title">
+        🔴 Pending Follow-up
+    </div>
 """,
             unsafe_allow_html=True,
         )
 
         if pending_codes:
 
-            pills = "".join(
+            pending_html = "".join(
                 (
                     '<span class="outlet-pill '
                     'pending-pill">'
-                    f'{code} · {outlets[code]}'
+                    f'{code} • {outlets[code]}'
                     '</span>'
                 )
                 for code
@@ -2370,14 +2492,14 @@ Pending Follow-up
             )
 
             st.markdown(
-                pills,
+                pending_html,
                 unsafe_allow_html=True,
             )
 
         else:
 
             st.success(
-                "All outlets have submitted."
+                "All outlets have submitted. 🎉"
             )
 
         st.markdown(
@@ -2385,17 +2507,57 @@ Pending Follow-up
             unsafe_allow_html=True,
         )
 
-    # ---------------- PERFORMANCE ----------------
+    # --------------------------------------------------------
+    # RECEIVED OUTLETS
+    # --------------------------------------------------------
+
+    if received_codes:
+
+        st.markdown(
+            """
+<div class="fin-card">
+
+    <div class="fin-card-title">
+        🟢 Received Outlets
+    </div>
+""",
+            unsafe_allow_html=True,
+        )
+
+        received_html = "".join(
+            (
+                '<span class="outlet-pill '
+                'received-pill">'
+                f'{code} • {outlets[code]}'
+                '</span>'
+            )
+            for code
+            in received_codes
+        )
+
+        st.markdown(
+            received_html,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            "</div>",
+            unsafe_allow_html=True,
+        )
+
+    # --------------------------------------------------------
+    # PERFORMANCE CHARTS
+    # --------------------------------------------------------
 
     if daily:
 
-        performance = []
+        performance_rows = []
 
         for code, record in (
             daily.items()
         ):
 
-            performance.append(
+            performance_rows.append(
                 {
                     "Outlet":
                         code,
@@ -2428,21 +2590,21 @@ Pending Follow-up
 
         performance_df = (
             pd.DataFrame(
-                performance
+                performance_rows
             )
         )
 
-        chart_left, chart_right = (
+        chart1, chart2 = (
             st.columns(
                 2,
                 gap="large",
             )
         )
 
-        with chart_left:
+        with chart1:
 
             st.markdown(
-                "#### Guests vs Conversions"
+                "### 👥 Guests vs Conversions"
             )
 
             st.bar_chart(
@@ -2455,13 +2617,13 @@ Pending Follow-up
                         "Conversions",
                     ]
                 ],
-                height=250,
+                height=280,
             )
 
-        with chart_right:
+        with chart2:
 
             st.markdown(
-                "#### Appointment Value"
+                "### 💰 Appointment Value"
             )
 
             value_df = (
@@ -2482,13 +2644,15 @@ Pending Follow-up
 
             st.bar_chart(
                 value_df,
-                height=250,
+                height=280,
             )
 
-    # ---------------- WHATSAPP SUMMARY ----------------
+    # --------------------------------------------------------
+    # WHATSAPP FOLLOW-UP
+    # --------------------------------------------------------
 
     st.markdown(
-        "#### WhatsApp Follow-up"
+        "### 💬 WhatsApp Follow-up"
     )
 
     pending_text = (
@@ -2501,29 +2665,32 @@ Pending Follow-up
 
     summary = (
         f"FINORA Lobby Activity | "
-        f"{selected_date.strftime('%d %b %Y')}\n\n"
+        f"{selected_date.strftime('%d %b %Y')}\n"
         f"Received: "
-        f"{len(received_codes)}/{len(outlets)}\n"
+        f"{len(received_codes)}/{len(outlets)} | "
         f"Pending: {len(pending_codes)}\n"
-        f"Guests: {int(total_guests)}\n"
-        f"Conversions: {int(total_conversions)}\n"
-        f"Conversion Rate: "
-        f"{conversion_rate:.1f}%\n"
-        f"Appointment Value: "
-        f"{money(total_value)}\n\n"
-        f"Pending Outlets: "
-        f"{pending_text}"
+        f"Guests: {int(total_guests)} | "
+        f"Conversions: {int(total_conversions)} | "
+        f"Conversion: {conversion_rate:.1f}%\n"
+        f"Appointment Value: {money(total_value)}\n"
+        f"Pending Outlets: {pending_text}"
     )
 
-    st.code(
-        summary,
-        language=None,
+    st.markdown(
+        f"""
+<div class="whatsapp-box">
+{summary}
+</div>
+""",
+        unsafe_allow_html=True,
     )
 
-    # ---------------- DETAILS ----------------
+    # --------------------------------------------------------
+    # DETAILS
+    # --------------------------------------------------------
 
     with st.expander(
-        "View outlet-wise details"
+        "📋 View complete outlet-wise details"
     ):
 
         rows = []
@@ -2625,15 +2792,16 @@ Pending Follow-up
             ),
             use_container_width=True,
             hide_index=True,
-            height=430,
+            height=470,
         )
 
     if duplicate_count:
 
         st.caption(
+            f"FINORA ignored "
             f"{duplicate_count} duplicate "
-            f"historical record(s) were "
-            f"ignored in the totals."
+            f"historical record(s) while "
+            f"calculating this dashboard."
         )
 
 
@@ -2645,12 +2813,14 @@ with period_tab:
 
     st.markdown(
         """
-<div class="page-title">
+<div class="section-title">
     Period Dashboard
 </div>
-<div class="page-subtitle">
-    Review outlet submissions and performance
-    across a selected date range.
+
+<div class="section-subtitle">
+    Analyse lobby activity across a selected
+    period and identify the exact missing
+    dates for each outlet.
 </div>
 """,
         unsafe_allow_html=True,
@@ -2745,16 +2915,18 @@ with period_tab:
             ].sum()
         )
 
-        rate = (
-            conversions
-            / guests
+        conversion_rate = (
+            (
+                conversions
+                / guests
+            )
             * 100
             if guests
             else 0
         )
 
-        p1, p2, p3, p4, p5, p6 = (
-            st.columns(6)
+        p1, p2, p3, p4, p5, p6, p7 = (
+            st.columns(7)
         )
 
         p1.metric(
@@ -2778,30 +2950,39 @@ with period_tab:
         )
 
         p5.metric(
-            "Conversion",
-            f"{rate:.1f}%",
+            "Guests",
+            guests,
         )
 
         p6.metric(
-            "Appointment",
+            "Conversion %",
+            f"{conversion_rate:.1f}%",
+        )
+
+        p7.metric(
+            "Appointment Value",
             money(
                 total_value
             ),
         )
 
+        # ----------------------------------------------------
+        # PERIOD CHARTS
+        # ----------------------------------------------------
+
         if not daily_df.empty:
 
-            trend1, trend2 = (
+            chart1, chart2 = (
                 st.columns(
                     2,
                     gap="large",
                 )
             )
 
-            with trend1:
+            with chart1:
 
                 st.markdown(
-                    "#### Submission Trend"
+                    "### 📊 Submission Trend"
                 )
 
                 st.line_chart(
@@ -2814,13 +2995,13 @@ with period_tab:
                             "Pending",
                         ]
                     ],
-                    height=260,
+                    height=280,
                 )
 
-            with trend2:
+            with chart2:
 
                 st.markdown(
-                    "#### Guests vs Conversions"
+                    "### 👥 Guests & Conversions"
                 )
 
                 st.line_chart(
@@ -2833,8 +3014,28 @@ with period_tab:
                             "Conversions",
                         ]
                     ],
-                    height=260,
+                    height=280,
                 )
+
+            st.markdown(
+                "### 💰 Appointment Value Trend"
+            )
+
+            st.line_chart(
+                daily_df
+                .set_index(
+                    "Date"
+                )[
+                    [
+                        "Appointment Value"
+                    ]
+                ],
+                height=240,
+            )
+
+        # ----------------------------------------------------
+        # PENDING DETAILS
+        # ----------------------------------------------------
 
         pending_df = (
             outlet_df[
@@ -2842,18 +3043,19 @@ with period_tab:
                     "Pending"
                 ] > 0
             ]
+            .copy()
         )
 
         st.markdown(
-            f"#### Pending Follow-up "
+            f"### 🔴 Follow-up Required "
             f"({len(pending_df)} outlets)"
         )
 
         if pending_df.empty:
 
             st.success(
-                "No pending activity "
-                "for this period."
+                "All lobby activities are "
+                "complete for this period. 🎉"
             )
 
         else:
@@ -2870,26 +3072,26 @@ with period_tab:
                 ],
                 use_container_width=True,
                 hide_index=True,
-                height=330,
+                height=360,
             )
 
         with st.expander(
-            "View complete period details"
+            "📋 View complete period performance"
         ):
 
             st.dataframe(
                 outlet_df,
                 use_container_width=True,
                 hide_index=True,
-                height=430,
+                height=470,
             )
 
         if period_duplicates:
 
             st.caption(
-                f"{period_duplicates} "
-                f"duplicate historical "
-                f"record(s) were ignored."
+                f"FINORA ignored "
+                f"{period_duplicates} duplicate "
+                f"historical record(s)."
             )
 
 
@@ -2899,14 +3101,8 @@ with period_tab:
 
 st.markdown(
     """
-<br>
-<div style="
-    text-align:center;
-    color:#94a3b8;
-    font-size:12px;
-    padding:15px;
-">
-    FINORA • Lobby Activity Intelligence
+<div class="finora-footer">
+    FINORA • Your Finance AI • Lobby Activity Intelligence
 </div>
 """,
     unsafe_allow_html=True,
